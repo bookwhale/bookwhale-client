@@ -6,6 +6,7 @@ import com.example.bookwhale.util.provider.ResourcesProvider
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val appModule = module {
@@ -19,5 +20,12 @@ val appModule = module {
 
     //ResourcesProvider
     single<ResourcesProvider> { DefaultResourcesProvider(androidApplication()) }
+
+    //Retrofit
+    single(named("article")) { provideArticleRetrofit(get(), get()) }
+    single { provideArticleApiService(get(qualifier = named("article"))) }
+    single { provideGsonConvertFactory() }
+    single { buildOkHttpClient() }
+
 
 }
