@@ -9,6 +9,7 @@ import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.util.mapper.ModelViewHolderMapper
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
+import com.example.bookwhale.widget.listener.main.ArticleListListener
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
 
 class ModelRecyclerAdapter<M: Model, VM: BaseViewModel>(
