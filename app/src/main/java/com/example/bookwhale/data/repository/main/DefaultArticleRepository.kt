@@ -16,7 +16,7 @@ class DefaultArticleRepository(
             ArticleEntity(
                 postId = 1,
                 postImage = "",
-                postTitle = "글 제목: 코틀린",
+                postTitle = "상태 좋은 책 팝니다",
                 postPrice = "1000원",
                 postStatus = "판매중",
                 bookTitle = "책 제목",
