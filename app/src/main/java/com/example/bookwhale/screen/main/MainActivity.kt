@@ -2,15 +2,11 @@ package com.example.bookwhale.screen.main
 
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityMainBinding
-import com.example.bookwhale.model.main.ArticleModel
 import com.example.bookwhale.screen.base.BaseActivity
-import com.example.bookwhale.util.provider.ResourcesProvider
-import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
-import com.example.bookwhale.widget.listener.main.ArticleListListener
-import org.koin.android.ext.android.inject
+import com.example.bookwhale.screen.main.home.HomeFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
@@ -18,35 +14,18 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
-    private val resourcesProvider by inject<ResourcesProvider>()
-
-    private val adapter by lazy {
-        ModelRecyclerAdapter<ArticleModel, MainViewModel>(
-            listOf(),
-            viewModel,
-            resourcesProvider,
-            adapterListener = object : ArticleListListener {
-                override fun onClickItem(model: ArticleModel) {
-                    Toast.makeText(this@MainActivity,model.postPrice,Toast.LENGTH_SHORT).show()
-                }
-
-            }
-        )
-    }
-
     override fun initViews(): Unit = with(binding) {
         setSupportActionBar(toolBar)
+        initBottomNav()
+        showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         supportActionBar?.let {
             title = null
         }
-
-        recyclerView.adapter = adapter
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater = menuInflater
-        menuInflater.inflate(R.menu.toolbar, menu)
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
     }
 
@@ -60,15 +39,49 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun initBottomNav() = with(binding) {
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.menu_home -> {
+                    showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
+                    true
+                }
+                R.id.menu_heart -> {
+                    true
+                }
+                R.id.menu_my -> {
+                    true
+                }
+                R.id.menu_chat -> {
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun showFragment(fragment: Fragment, tag: String) {
+        val findFragment = supportFragmentManager.findFragmentByTag(tag)
+        supportFragmentManager.fragments.forEach { fm ->
+            supportFragmentManager.beginTransaction().hide(fm).commitAllowingStateLoss()
+        }
+
+        findFragment?.let {
+            supportFragmentManager.beginTransaction().show(it).commitAllowingStateLoss()
+        } ?: kotlin.run {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragmentContainer, fragment, tag)
+                .commitAllowingStateLoss()
+        }
+    }
+
     private fun handleSearch() {}
     private fun handleNotification() {}
 
 
 
     override fun observeData()  {
-        viewModel.articleListLiveData.observe(this) {
-            adapter.submitList(it)
-        }
+
     }
 
 
