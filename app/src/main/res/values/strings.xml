@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">bookwhale</string>
+
+    <!-- AppBar -->
+    <string name="search">Search</string>
+    <string name="notification">Notification</string>
 </resources>
