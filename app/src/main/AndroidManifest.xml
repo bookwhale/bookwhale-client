@@ -11,10 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bookwhale">
         <activity
-            android:name=".screen.main.MainActivity"
+            android:name=".screen.test.TestActivity"
             android:exported="false" />
         <activity
-            android:name=".screen.test.TestActivity"
+            android:name=".screen.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

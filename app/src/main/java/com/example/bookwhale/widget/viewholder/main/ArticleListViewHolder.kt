@@ -28,7 +28,12 @@ class ArticleListViewHolder(
     override fun bindData(model: ArticleModel) {
         super.bindData(model)
         with(binding) {
-            textView.text = model.postTitle
+            titleTextView.text = model.postTitle
+            priceTextView.text = model.postPrice
+            locationTextView.text = model.sellingLocation
+            timeTextView.text = model.beforeTime
+            chatTextView.text = model.viewCount.toString()
+            heartTextView.text = model.likeCount.toString()
         }
     }
 
