@@ -1,7 +1,7 @@
 package com.example.bookwhale.screen.main.home
 
 import com.example.bookwhale.databinding.FragmentHomeBinding
-import com.example.bookwhale.model.main.ArticleModel
+import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter

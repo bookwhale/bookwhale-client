@@ -1,19 +1,15 @@
-package com.example.bookwhale.data.repository.main
+package com.example.bookwhale.data.repository
 
 import com.example.bookwhale.data.entity.ArticleEntity
 import com.example.bookwhale.data.entity.LikeArticleEntity
-import com.example.bookwhale.data.network.ArticleApiService
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
+import com.example.bookwhale.data.repository.main.ArticleRepository
 
-class DefaultArticleRepository(
-    private val apiService: ArticleApiService,
-    private val ioDispatcher: CoroutineDispatcher
-) : ArticleRepository {
+class FakeArticleRepository : ArticleRepository {
 
-    override suspend fun getArticleList(page: Int, size: Int): List<ArticleEntity> = withContext(ioDispatcher) {
 
-        return@withContext listOf(
+    override suspend fun getArticleList(page: Int, size: Int): List<ArticleEntity> {
+
+        return listOf(
             ArticleEntity(
                 postId = 1,
                 postImage = "",
@@ -29,12 +25,11 @@ class DefaultArticleRepository(
                 beforeTime = "10분 전"
             )
         )
-
     }
 
-    override suspend fun getLikeArticleList(): List<LikeArticleEntity> = withContext(ioDispatcher) {
+    override suspend fun getLikeArticleList(): List<LikeArticleEntity> {
 
-        return@withContext listOf(
+        return listOf(
             LikeArticleEntity(
                 likeId = 0,
                 postResponse = ArticleEntity(
@@ -53,5 +48,8 @@ class DefaultArticleRepository(
                 )
             )
         )
+
     }
+
+
 }

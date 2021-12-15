@@ -4,6 +4,7 @@ import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.main.DefaultArticleRepository
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.screen.main.home.HomeViewModel
+import com.example.bookwhale.screen.main.lielist.LikeListViewModel
 import com.example.bookwhale.screen.test.TestViewModel
 import com.example.bookwhale.util.provider.DefaultResourcesProvider
 import com.example.bookwhale.util.provider.ResourcesProvider
@@ -18,6 +19,7 @@ val appModule = module {
     viewModel { MainViewModel() }
     viewModel { HomeViewModel(get()) }
     viewModel { TestViewModel() }
+    viewModel { LikeListViewModel(get()) }
 
     single<ArticleRepository> { DefaultArticleRepository(get(), get()) }
 
