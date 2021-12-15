@@ -1,4 +1,4 @@
-package com.example.bookwhale.model.main
+package com.example.bookwhale.model.main.home
 
 import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.Model

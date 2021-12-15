@@ -3,7 +3,7 @@ package com.example.bookwhale.screen.main.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.repository.main.ArticleRepository
-import com.example.bookwhale.model.main.ArticleModel
+import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseViewModel
 import kotlinx.coroutines.launch
 

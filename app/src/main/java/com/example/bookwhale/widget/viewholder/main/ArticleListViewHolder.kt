@@ -1,7 +1,7 @@
 package com.example.bookwhale.widget.viewholder.main
 
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
-import com.example.bookwhale.model.main.ArticleModel
+import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
