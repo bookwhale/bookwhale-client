@@ -35,7 +35,7 @@ class FakeArticleRepository : ArticleRepository {
                 postResponse = ArticleEntity(
                     postId = 1,
                     postImage = "",
-                    postTitle = "상태 좋은 책 팝니다",
+                    postTitle = "상태 그닥 안좋은 책 팝니다",
                     postPrice = "1000원",
                     postStatus = "판매중",
                     bookTitle = "책 제목",
