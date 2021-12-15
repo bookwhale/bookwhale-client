@@ -7,6 +7,7 @@ import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityMainBinding
 import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.screen.main.home.HomeFragment
+import com.example.bookwhale.screen.main.lielist.LikeListFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
@@ -47,6 +48,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     true
                 }
                 R.id.menu_heart -> {
+                    showFragment(LikeListFragment.newInstance(), LikeListFragment.TAG)
                     true
                 }
                 R.id.menu_my -> {

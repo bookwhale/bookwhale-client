@@ -1,5 +1,6 @@
 package com.example.bookwhale.model
 
 enum class CellType {
-    ARTICLE_LIST
+    ARTICLE_LIST,
+    LIKE_LIST
 }
