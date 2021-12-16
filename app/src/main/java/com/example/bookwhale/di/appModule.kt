@@ -2,6 +2,7 @@ package com.example.bookwhale.di
 
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.main.DefaultArticleRepository
+import com.example.bookwhale.screen.login.LoginViewModel
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.screen.main.home.HomeViewModel
 import com.example.bookwhale.screen.main.lielist.LikeListViewModel
@@ -20,6 +21,7 @@ val appModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { TestViewModel() }
     viewModel { LikeListViewModel(get()) }
+    viewModel { LoginViewModel() }
 
     single<ArticleRepository> { DefaultArticleRepository(get(), get()) }
 
