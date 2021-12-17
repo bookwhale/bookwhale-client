@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.example.bookwhale"
         minSdk 21
-        targetSdk 31
+        targetSdk 30
         versionCode 1
         versionName "1.0"
 
@@ -43,6 +43,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation 'com.google.android.gms:play-services-base:18.0.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -80,4 +81,12 @@ dependencies {
     testImplementation "org.koin:koin-test:2.1.5"
     testImplementation 'org.mockito:mockito-inline:3.4.0'
     testImplementation "android.arch.core:core-testing:1.1.1"
+
+    //네이버 로그인
+    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
+
+    // naveridlogin dependencies
+    implementation "androidx.legacy:legacy-support-core-utils:1.0.0"
+    implementation "androidx.browser:browser:1.4.0"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
 }
