@@ -1,5 +1,7 @@
 package com.example.bookwhale.screen.main
 
+import android.content.Context
+import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
@@ -8,6 +10,7 @@ import com.example.bookwhale.databinding.ActivityMainBinding
 import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.screen.main.home.HomeFragment
 import com.example.bookwhale.screen.main.lielist.LikeListFragment
+import com.example.bookwhale.screen.main.my.MyFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
@@ -52,6 +55,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     true
                 }
                 R.id.menu_my -> {
+                    showFragment(MyFragment.newInstance(), MyFragment.TAG)
                     true
                 }
                 R.id.menu_chat -> {
@@ -81,9 +85,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     private fun handleNotification() {}
 
 
-
     override fun observeData()  {
 
+    }
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
 
 

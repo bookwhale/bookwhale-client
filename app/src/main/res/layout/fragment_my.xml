@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="82dp"
+        android:layout_height="82dp"
+        android:layout_marginTop="96dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/profileTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/profileImageView"
+        app:layout_constraintStart_toStartOf="@id/profileImageView"
+        app:layout_constraintTop_toBottomOf="@id/profileImageView"
+        tools:text="책 고 래" />
+
+    <ImageButton
+        android:id="@+id/editNameImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/ic_post"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toEndOf="@id/profileTextView"
+        app:layout_constraintTop_toTopOf="@id/profileTextView"
+        app:layout_constraintBottom_toBottomOf="@id/profileTextView"/>
+
+    <TextView
+        android:id="@+id/logoutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="135dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="52dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/divider"
+        tools:text="로그아웃" />
+
+    <TextView
+        android:id="@+id/withdrawTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="135dp"
+        android:layout_marginBottom="52dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/divider"
+        tools:text="회원탈퇴" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="12dp"
+        android:layout_marginBottom="52dp"
+        android:background="@color/primary_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@ import com.example.bookwhale.screen.base.BaseActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 import android.widget.TextView
 import com.example.bookwhale.R
+import com.example.bookwhale.screen.main.MainActivity
 import com.google.android.gms.common.SignInButton
 
 class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
@@ -16,6 +17,9 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
 
         setGooglePlusButtonText(googleLoginButton,getString(R.string.signInGoogle))
 
+        naverLoginButton.setOnClickListener {
+            startActivity(MainActivity.newIntent(this@LoginActivity))
+        }
     }
 
     private fun setGooglePlusButtonText(signInButton: SignInButton, buttonText: String?) {

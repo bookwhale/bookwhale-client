@@ -2,6 +2,10 @@ package com.example.bookwhale.di
 
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.main.DefaultArticleRepository
+import com.example.bookwhale.data.repository.main.my.DefaultMyRepository
+import com.example.bookwhale.data.repository.main.my.MyRepository
+import com.example.bookwhale.screen.main.my.MyViewModel
+import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.login.LoginViewModel
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.screen.main.home.HomeViewModel
@@ -22,8 +26,10 @@ val appModule = module {
     viewModel { TestViewModel() }
     viewModel { LikeListViewModel(get()) }
     viewModel { LoginViewModel() }
+    viewModel { MyViewModel(get()) }
 
     single<ArticleRepository> { DefaultArticleRepository(get(), get()) }
+    single<MyRepository> { DefaultMyRepository(get(), get())}
 
     single { Dispatchers.IO }
     single { Dispatchers.Main }
@@ -37,6 +43,5 @@ val appModule = module {
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }
-
 
 }
