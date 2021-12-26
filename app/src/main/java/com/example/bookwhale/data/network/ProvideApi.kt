@@ -1,7 +1,6 @@
-package com.example.bookwhale.di
+package com.example.bookwhale.data.network
 
 import com.example.bookwhale.BuildConfig
-import com.example.bookwhale.data.network.ArticleApiService
 import com.example.bookwhale.data.url.Url
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
