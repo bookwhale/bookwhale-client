@@ -54,11 +54,14 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     showFragment(LikeListFragment.newInstance(), LikeListFragment.TAG)
                     true
                 }
-                R.id.menu_my -> {
-                    showFragment(MyFragment.newInstance(), MyFragment.TAG)
+                R.id.menu_myPost -> {
                     true
                 }
                 R.id.menu_chat -> {
+                    true
+                }
+                R.id.menu_my -> {
+                    showFragment(MyFragment.newInstance(), MyFragment.TAG)
                     true
                 }
                 else -> false

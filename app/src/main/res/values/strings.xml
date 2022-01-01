@@ -8,8 +8,9 @@
     <!-- BottomMenu -->
     <string name="menu_home">홈</string>
     <string name="menu_heart">찜 목록</string>
-    <string name="menu_my">내 판매글</string>
+    <string name="menu_myPost">내 판매글</string>
     <string name="menu_chat">채팅</string>
+    <string name="menu_my">내 정보</string>
 
     <!-- Login -->
     <string name="appName_hangul">책 고 래</string>
