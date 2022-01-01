@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "182698765865",
+    "project_id": "bookwhale-d9417",
+    "storage_bucket": "bookwhale-d9417.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182698765865:android:e80ea7305f5316ed003638",
+        "android_client_info": {
+          "package_name": "com.example.bookwhale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182698765865-1jd4kjurvk7sdj33lkdcdhedm7p7eemi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bookwhale",
+            "certificate_hash": "9f97269a90f43ed2dcc78b61449e466761e5c814"
+          }
+        },
+        {
+          "client_id": "182698765865-vrd5oo2p51f263q6l0si6h3lja43sa5p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFggnmtI6N1aSnqUU3Uphy5W-IPMVXCJo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182698765865-vrd5oo2p51f263q6l0si6h3lja43sa5p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

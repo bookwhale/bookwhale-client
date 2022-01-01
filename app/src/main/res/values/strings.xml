@@ -16,7 +16,7 @@
     <string name="signInGoogle">Google 계정으로 로그인</string>
 
     <!-- Naver -->
-    <string name="naver_client_id">ZpsG4j7_nry7qJQeIazv</string>
-    <string name="naver_client_secret">FPBj8PS_sn</string>
-    <string name="naver_client_name">책고래</string>
+    <string name="naver_client_id">f4OhIa4pTWzbQ8Wj6Abp</string>
+    <string name="naver_client_secret">BaUIGzZHAu</string>
+    <string name="naver_client_name">bookwhale</string>
 </resources>

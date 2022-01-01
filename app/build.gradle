@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -89,4 +90,10 @@ dependencies {
     implementation "androidx.legacy:legacy-support-core-utils:1.0.0"
     implementation "androidx.browser:browser:1.4.0"
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.android.gms:play-services-auth:20.0.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.3'
 }

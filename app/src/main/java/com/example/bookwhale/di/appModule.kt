@@ -4,6 +4,9 @@ import com.example.bookwhale.data.network.buildOkHttpClient
 import com.example.bookwhale.data.network.provideArticleApiService
 import com.example.bookwhale.data.network.provideArticleRetrofit
 import com.example.bookwhale.data.network.provideGsonConvertFactory
+import com.example.bookwhale.data.preference.MyPreferenceManager
+import com.example.bookwhale.data.repository.login.DefaultLoginRepository
+import com.example.bookwhale.data.repository.login.LoginRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.main.DefaultArticleRepository
 import com.example.bookwhale.data.repository.main.my.DefaultMyRepository
@@ -28,17 +31,21 @@ val appModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { TestViewModel() }
     viewModel { LikeListViewModel(get()) }
-    viewModel { LoginViewModel() }
+    viewModel { LoginViewModel(get(), get()) }
     viewModel { MyViewModel(get()) }
 
     single<ArticleRepository> { DefaultArticleRepository(get(), get()) }
     single<MyRepository> { DefaultMyRepository(get(), get())}
+    single<LoginRepository> { DefaultLoginRepository(get(), get())}
 
     single { Dispatchers.IO }
     single { Dispatchers.Main }
 
     //ResourcesProvider
     single<ResourcesProvider> { DefaultResourcesProvider(androidApplication()) }
+
+    //SharedPreference
+    single { MyPreferenceManager(androidApplication()) }
 
     //Retrofit
     single(named("article")) { provideArticleRetrofit(get(), get()) }

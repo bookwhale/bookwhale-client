@@ -87,4 +87,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <Button
+        android:id="@+id/naverLogout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="임시 네이버 로그아웃"
+        app:layout_constraintStart_toStartOf="@id/googleLoginButton"
+        app:layout_constraintEnd_toEndOf="@id/googleLoginButton"
+        app:layout_constraintTop_toBottomOf="@id/naverLoginButton"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
