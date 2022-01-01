@@ -2,12 +2,12 @@ package com.example.bookwhale.data.repository.main
 
 import com.example.bookwhale.data.entity.ArticleEntity
 import com.example.bookwhale.data.entity.LikeArticleEntity
-import com.example.bookwhale.data.network.ArticleApiService
+import com.example.bookwhale.data.network.ServerApiService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 class DefaultArticleRepository(
-    private val apiService: ArticleApiService,
+    private val apiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher
 ) : ArticleRepository {
 
