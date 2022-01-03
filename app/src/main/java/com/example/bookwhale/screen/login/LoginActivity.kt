@@ -30,10 +30,50 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
 
     private lateinit var mOAuthLoginModule : OAuthLogin
 
+    private val gso: GoogleSignInOptions by lazy {
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestServerAuthCode("1042391167372-hks49suv33nb0v6licmhnffr1cvv1k88.apps.googleusercontent.com")
+            .build()
+    }
+
+    private val gsc by lazy { GoogleSignIn.getClient(this, gso) }
+
+    private val loginLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                task.getResult(ApiException::class.java)?.let { account ->
+                    Log.e("serverauthCode",account.serverAuthCode!!)
+                    viewModel.getGoogleAccesToken(account.serverAuthCode!!)
+                }
+            } catch (e: Exception) {
+                Log.e("idToken2","ididididid")
+                e.printStackTrace()
+            }
+        } else {
+            Log.e("idToken3",result.data.toString())
+            Log.e("idToken3",result.resultCode.toString())
+        }
+    }
+
     override fun initViews(): Unit = with(binding) {
 
         setGooglePlusButtonText(googleLoginButton,getString(R.string.signInGoogle))
 
+        signInNaver()
+
+        googleLoginButton.setOnClickListener {
+            signInGoogle()
+        }
+
+    }
+
+    private fun signInGoogle() {
+        val signInIntent = gsc.signInIntent
+        loginLauncher.launch(signInIntent)
+    }
+
+    private fun signInNaver() = with(binding) {
         mOAuthLoginModule = OAuthLogin.getInstance()
         mOAuthLoginModule.init(
             this@LoginActivity
@@ -69,7 +109,6 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
             mOAuthLoginModule.logout(this@LoginActivity)
         }
     }
-
 
     private fun setGooglePlusButtonText(signInButton: SignInButton, buttonText: String?) {
         for (i in 0 until signInButton.childCount) {

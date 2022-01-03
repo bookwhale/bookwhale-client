@@ -6,16 +6,13 @@ import com.example.bookwhale.model.Model
 data class ArticleModel(
     override val id: Long,
     override val type: CellType = CellType.ARTICLE_LIST,
-    val postId : Long,
-    val postImage : String,
-    val postTitle : String,
-    val postPrice : String,
-    val postStatus: String,
-    val bookTitle: String,
-    val bookAuthor: String,
-    val bookPublisher : String,
+    val articleId : Int,
+    val articleImage : String,
+    val articleTitle : String,
+    val articlePrice : String,
+    val bookStatus: String,
     val sellingLocation : String,
-    val viewCount : Long,
-    val likeCount : Long,
+    val chatCount : Int,
+    val favoriteCount : Int,
     val beforeTime : String
 ) : Model(id, type)

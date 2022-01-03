@@ -1,6 +1,6 @@
 package com.example.bookwhale.screen.login
 
-import com.example.bookwhale.data.entity.login.NaverLoginEntity
+import com.example.bookwhale.data.entity.login.LoginEntity
 
 sealed class LoginState {
 
@@ -9,7 +9,7 @@ sealed class LoginState {
     object Loading : LoginState()
 
     data class Success(
-        val apiTokens : NaverLoginEntity
+        val apiTokens : LoginEntity
     ) : LoginState()
 
     object Error : LoginState()
