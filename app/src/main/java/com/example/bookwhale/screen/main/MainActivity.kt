@@ -2,6 +2,7 @@ package com.example.bookwhale.screen.main
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
@@ -18,30 +19,37 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
+    private var onSearch = false
+
     override fun initViews(): Unit = with(binding) {
-        setSupportActionBar(toolBar)
         initBottomNav()
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
-        supportActionBar?.let {
-            title = null
+        initButton()
+    }
+
+    private fun initButton() = with(binding) {
+        searchButton.setOnClickListener {
+            when(onSearch) {
+                true -> {
+                    onSearch = false
+                    getSearchArticles(searchEditText.text.toString())
+                    toolBarLayout.transitionToStart()
+                }
+                false -> {
+                    onSearch = true
+                    toolBarLayout.transitionToEnd()
+                }
+            }
+        }
+
+        backButton.setOnClickListener {
+            if(onSearch) {
+                onSearch = false
+                toolBarLayout.transitionToStart()
+            }
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val menuInflater = menuInflater
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when(item.itemId) {
-            R.id.toolbar_search -> handleSearch()
-            R.id.toolbar_notification -> handleNotification()
-            else -> Unit
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun initBottomNav() = with(binding) {
         bottomNav.setOnItemSelectedListener { item ->
@@ -92,8 +100,15 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     }
 
+    private fun getSearchArticles(searchText: String) {
+        viewModel.getArticles(searchText,PAGE, SIZE)
+    }
+
     companion object {
         fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
+
+        const val PAGE = 0
+        const val SIZE = 10
     }
 
 
