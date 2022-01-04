@@ -16,7 +16,7 @@ class HomeViewModel(
     val articleListLiveData = MutableLiveData<List<ArticleModel>>()
 
     fun getArticles(search: String? = null, page: Int, size: Int) = viewModelScope.launch {
-        val response = homeRepository.getAllArticles("1", page, size)
+        val response = homeRepository.getAllArticles("", page, size)
 
         Log.e("response",response.toString())
 
