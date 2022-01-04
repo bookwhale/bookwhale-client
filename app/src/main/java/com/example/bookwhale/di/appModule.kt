@@ -38,6 +38,7 @@ val appModule = module {
     single<LoginRepository> { DefaultLoginRepository(get(), get(), get())}
     single<HomeRepository> { DefaultHomeRepository(get(), get())}
 
+
     single { Dispatchers.IO }
     single { Dispatchers.Main }
 

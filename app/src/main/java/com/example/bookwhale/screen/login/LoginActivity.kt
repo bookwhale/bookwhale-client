@@ -30,6 +30,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
 
     private lateinit var mOAuthLoginModule : OAuthLogin
 
+
     private val gso: GoogleSignInOptions by lazy {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestServerAuthCode("1042391167372-hks49suv33nb0v6licmhnffr1cvv1k88.apps.googleusercontent.com")
@@ -60,6 +61,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
 
         setGooglePlusButtonText(googleLoginButton,getString(R.string.signInGoogle))
 
+
         signInNaver()
 
         googleLoginButton.setOnClickListener {
@@ -74,6 +76,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
     }
 
     private fun signInNaver() = with(binding) {
+
         mOAuthLoginModule = OAuthLogin.getInstance()
         mOAuthLoginModule.init(
             this@LoginActivity
@@ -109,6 +112,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
             mOAuthLoginModule.logout(this@LoginActivity)
         }
     }
+
 
     private fun setGooglePlusButtonText(signInButton: SignInButton, buttonText: String?) {
         for (i in 0 until signInButton.childCount) {

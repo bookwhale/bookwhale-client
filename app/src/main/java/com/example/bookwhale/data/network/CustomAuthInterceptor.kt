@@ -17,7 +17,6 @@ class CustomAuthInterceptor(
     @DelicateCoroutinesApi
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = "Bearer ${myPreferenceManager.getAccessToken()}"
-
         try {
             val request = chain.request().newBuilder()
                 .addHeader("Authorization", token)
@@ -53,6 +52,7 @@ class CustomAuthInterceptor(
                 }
                 else -> {
                     Log.e("else",response.code.toString())
+
                     // ELSE
                 }
             }
