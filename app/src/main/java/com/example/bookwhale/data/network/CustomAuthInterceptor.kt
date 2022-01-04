@@ -2,6 +2,8 @@ package com.example.bookwhale.data.network
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import com.example.bookwhale.R
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import kotlinx.coroutines.DelicateCoroutinesApi
 import okhttp3.Interceptor
@@ -15,21 +17,22 @@ class CustomAuthInterceptor(
     @DelicateCoroutinesApi
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = "Bearer ${myPreferenceManager.getAccessToken()}"
-
-        Log.e("token is What?", token)
-        Log.e("refresh is What?", myPreferenceManager.getRefreshToken().toString())
-
         try {
             val request = chain.request().newBuilder()
                 .addHeader("Authorization", token)
                 .build()
             val response = chain.proceed(request)
 
-            // 에러코드 대응
+            // 코드 대응
             when (response.code) {
+                200 -> {
+                    Log.e("200",response.code.toString())
+                }
+                201 -> {
+                    Log.e("201",response.code.toString())
+                }
                 400 -> {
-                    Log.e("400","400error")
-                    //Bad Request Error
+                    handle400Error()
                 }
                 401 -> {
                     Log.e("401","401error")
@@ -48,7 +51,8 @@ class CustomAuthInterceptor(
                     //INTERNAL SERVER ERROR
                 }
                 else -> {
-                    Log.e("elseError",response.body.toString())
+                    Log.e("else",response.code.toString())
+
                     // ELSE
                 }
             }
@@ -60,7 +64,10 @@ class CustomAuthInterceptor(
         }
     }
 
-    private fun error500handle() {
+    private fun handle400Error() {
+        //
+    }
+    private fun handle500Error() {
         //
     }
 

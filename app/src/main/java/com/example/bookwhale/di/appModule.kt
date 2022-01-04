@@ -1,14 +1,13 @@
 package com.example.bookwhale.di
 
-import com.example.bookwhale.data.network.buildOkHttpClient
-import com.example.bookwhale.data.network.provideArticleApiService
-import com.example.bookwhale.data.network.provideArticleRetrofit
-import com.example.bookwhale.data.network.provideGsonConvertFactory
+import com.example.bookwhale.data.network.*
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.repository.login.DefaultLoginRepository
 import com.example.bookwhale.data.repository.login.LoginRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.main.DefaultArticleRepository
+import com.example.bookwhale.data.repository.main.home.DefaultHomeRepository
+import com.example.bookwhale.data.repository.main.home.HomeRepository
 import com.example.bookwhale.data.repository.main.my.DefaultMyRepository
 import com.example.bookwhale.data.repository.main.my.MyRepository
 import com.example.bookwhale.screen.main.my.MyViewModel
@@ -36,7 +35,9 @@ val appModule = module {
 
     single<ArticleRepository> { DefaultArticleRepository(get(), get()) }
     single<MyRepository> { DefaultMyRepository(get(), get())}
-    single<LoginRepository> { DefaultLoginRepository(get(), get())}
+    single<LoginRepository> { DefaultLoginRepository(get(), get(), get())}
+    single<HomeRepository> { DefaultHomeRepository(get(), get())}
+
 
     single { Dispatchers.IO }
     single { Dispatchers.Main }
@@ -50,6 +51,9 @@ val appModule = module {
     //Retrofit
     single(named("article")) { provideArticleRetrofit(get(), get()) }
     single { provideArticleApiService(get(qualifier = named("article"))) }
+
+    single(named("google")) { provideGoogleRetrofit(get(), get()) }
+    single { provideGoogleApiService(get(qualifier = named("google"))) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }

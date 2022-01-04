@@ -29,8 +29,10 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         )
     }
 
-    override fun initViews() = with(binding) {
+    override fun initViews(): Unit = with(binding) {
         recyclerView.adapter = adapter
+
+        viewModel.getArticles(null,0,10)
     }
 
     override fun observeData() {

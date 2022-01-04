@@ -12,13 +12,19 @@
         android:title="@string/menu_heart"/>
 
     <item
-        android:id="@+id/menu_my"
-        android:icon="@drawable/ic_post"
-        android:title="@string/menu_my"/>
+        android:id="@+id/menu_myPost"
+        android:icon="@drawable/ic_mypost"
+        android:title="@string/menu_myPost"/>
 
     <item
         android:id="@+id/menu_chat"
         android:icon="@drawable/ic_chat"
         android:title="@string/menu_chat"/>
+
+    <item
+        android:id="@+id/menu_my"
+        android:icon="@drawable/ic_my"
+        android:title="@string/menu_my"/>
+
 
 </menu>
