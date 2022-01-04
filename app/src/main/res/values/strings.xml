@@ -20,6 +20,9 @@
     <string name="naver_client_id">f4OhIa4pTWzbQ8Wj6Abp</string>
     <string name="naver_client_secret">BaUIGzZHAu</string>
     <string name="naver_client_name">bookwhale</string>
+
+    <!-- Toolbar -->
+    <string name="searchHint">통합검색 | Search</string>
   
     <!-- Error String -->
     <string name="error400">게시물을 불러올 수 없습니다.</string>
