@@ -1,13 +1,9 @@
 package com.example.bookwhale.viewmodel.main
 
 import com.example.bookwhale.data.repository.main.ArticleRepository
-import com.example.bookwhale.model.main.likelist.LikeArticleModel
 import com.example.bookwhale.screen.main.MainViewModel
-import com.example.bookwhale.screen.main.lielist.LikeListViewModel
 import com.example.bookwhale.viewmodel.ViewModelTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Test
 import org.koin.test.inject
 
 @ExperimentalCoroutinesApi

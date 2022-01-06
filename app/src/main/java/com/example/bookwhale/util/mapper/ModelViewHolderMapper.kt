@@ -6,11 +6,9 @@ import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.Model
 import com.example.bookwhale.screen.base.BaseViewModel
-import com.example.bookwhale.screen.main.lielist.LikeListViewModel
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
 import com.example.bookwhale.widget.viewholder.main.home.ArticleListViewHolder
-import com.example.bookwhale.widget.viewholder.main.likelist.LikeListViewHolder
 
 
 object ModelViewHolderMapper {
@@ -31,12 +29,8 @@ object ModelViewHolderMapper {
                 resourcesProvider
             )
 
-            CellType.LIKE_LIST -> LikeListViewHolder(
-                ViewholderArticlelistBinding.inflate(inflater, parent, false),
-                viewModel,
-                resourcesProvider
-            )
 
+            else -> Unit
         }
         return viewHolder as ModelViewHolder<M>
     }

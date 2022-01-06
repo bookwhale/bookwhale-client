@@ -1,7 +1,5 @@
 package com.example.bookwhale.data.response.home
 
-import com.example.bookwhale.data.entity.home.GetAllArticleEntity
-
 data class GetAllArticlesResponse(
     val articleId: Int,
     val articleImage : String,
