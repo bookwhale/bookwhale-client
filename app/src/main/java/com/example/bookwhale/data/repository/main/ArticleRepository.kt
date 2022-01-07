@@ -1,5 +1,6 @@
 package com.example.bookwhale.data.repository.main
 
+import com.example.bookwhale.data.entity.favorite.FavoriteEntity
 import com.example.bookwhale.data.entity.home.ArticleEntity
 
 interface ArticleRepository {
@@ -9,4 +10,6 @@ interface ArticleRepository {
     suspend fun getLocalArticles() : List<ArticleEntity>?
 
     suspend fun insertLocalArticles(articles: ArticleEntity)
+
+    suspend fun getFavoriteArticles() : List<FavoriteEntity>?
 }
