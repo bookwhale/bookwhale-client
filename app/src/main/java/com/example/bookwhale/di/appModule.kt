@@ -27,7 +27,6 @@ val appModule = module {
 
     viewModel { MainViewModel(get()) }
     viewModel { TestViewModel() }
-    viewModel { LikeListViewModel(get()) }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { MyViewModel(get()) }
 
