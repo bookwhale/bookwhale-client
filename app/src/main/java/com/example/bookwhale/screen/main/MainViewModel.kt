@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.repository.main.ArticleRepository
+import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -14,6 +15,7 @@ class MainViewModel(
 ): BaseViewModel() {
 
     val articleListLiveData = MutableLiveData<List<ArticleModel>>()
+    val favoriteListLiveData = MutableLiveData<List<FavoriteModel>>()
 
     fun getArticles(search: String? = null, page: Int, size: Int) = viewModelScope.launch {
         val response = articleRepository.getAllArticles(search, page, size)
@@ -80,5 +82,27 @@ class MainViewModel(
 //
 
         Log.e("localArticle?",articleRepository.getLocalArticles().toString())
+    }
+
+    fun getFavorites() = viewModelScope.launch {
+        val response = articleRepository.getFavoriteArticles()
+
+        favoriteListLiveData.value = response?.map {
+            FavoriteModel(
+                id = it.hashCode().toLong(),
+                favoriteId = it.favoriteId,
+                articleId = it.articleEntity.articleId,
+                articleImage = it.articleEntity.articleImage,
+                articleTitle = it.articleEntity.articleTitle,
+                articlePrice = it.articleEntity.articlePrice,
+                bookStatus = it.articleEntity.bookStatus,
+                sellingLocation = it.articleEntity.sellingLocation,
+                chatCount = it.articleEntity.chatCount,
+                favoriteCount = it.articleEntity.favoriteCount,
+                beforeTime = it.articleEntity.beforeTime
+            )
+        }
+
+        Log.e("favoriteList", favoriteListLiveData.value.toString())
     }
 }

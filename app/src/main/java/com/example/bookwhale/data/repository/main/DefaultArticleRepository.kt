@@ -1,6 +1,7 @@
 package com.example.bookwhale.data.repository.main
 
 import com.example.bookwhale.data.db.dao.ArticleDao
+import com.example.bookwhale.data.entity.favorite.FavoriteEntity
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.network.ServerApiService
 import kotlinx.coroutines.CoroutineDispatcher
@@ -44,5 +45,30 @@ class DefaultArticleRepository(
 
     override suspend fun insertLocalArticles(articles: ArticleEntity) = withContext(ioDispatcher) {
         articleDao.insertArticles(articles)
+    }
+
+    override suspend fun getFavoriteArticles(): List<FavoriteEntity>? = withContext(ioDispatcher) {
+        val response = serverApiService.getFavorites()
+
+        response.body()?.let {
+            it.map { data ->
+                FavoriteEntity(
+                    favoriteId = data.favoriteId,
+                    articleEntity = ArticleEntity(
+                        articleId = data.articlesResponse.articleId,
+                        articleImage = data.articlesResponse.articleImage,
+                        articleTitle = data.articlesResponse.articleTitle,
+                        articlePrice = data.articlesResponse.articlePrice,
+                        bookStatus = data.articlesResponse.bookStatus,
+                        sellingLocation = data.articlesResponse.sellingLocation,
+                        chatCount = data.articlesResponse.chatCount,
+                        favoriteCount = data.articlesResponse.favoriteCount,
+                        beforeTime = data.articlesResponse.beforeTime
+                    )
+                )
+            }
+        } ?: kotlin.run {
+            null
+        }
     }
 }
