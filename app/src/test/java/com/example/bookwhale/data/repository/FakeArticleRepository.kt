@@ -1,6 +1,5 @@
 package com.example.bookwhale.data.repository
 
-
 import com.example.bookwhale.data.entity.favorite.FavoriteEntity
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.repository.main.ArticleRepository

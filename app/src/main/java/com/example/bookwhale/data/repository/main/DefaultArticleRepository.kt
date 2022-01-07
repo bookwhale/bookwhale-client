@@ -54,7 +54,6 @@ class DefaultArticleRepository(
         }?: kotlin.run {
             null
         }
-
     }
 
     override suspend fun getLocalArticles(): List<ArticleEntity>? = withContext(ioDispatcher) {
