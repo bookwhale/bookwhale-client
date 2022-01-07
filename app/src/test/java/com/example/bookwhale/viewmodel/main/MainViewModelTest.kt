@@ -2,6 +2,7 @@ package com.example.bookwhale.viewmodel.main
 
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.repository.main.ArticleRepository
+import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.viewmodel.ViewModelTest
@@ -37,6 +38,34 @@ internal class MainViewModelTest: ViewModelTest() {
                         chatCount = it.chatCount,
                         favoriteCount = it.favoriteCount,
                         beforeTime = it.beforeTime
+                    )
+                }
+            )
+        )
+
+    }
+
+    @Test
+    fun `test load favorite list`() = runBlockingTest {
+        val testObservable = mainViewModel.favoriteListLiveData.test()
+
+        mainViewModel.getFavorites()
+
+        testObservable.assertValueSequence(
+            listOf(
+                articleRepository.getFavoriteArticles()?.map {
+                    FavoriteModel(
+                        id = it.hashCode().toLong(),
+                        favoriteId = it.favoriteId,
+                        articleId = it.articleEntity.articleId,
+                        articleImage = it.articleEntity.articleImage,
+                        articleTitle = it.articleEntity.articleTitle,
+                        articlePrice = it.articleEntity.articlePrice,
+                        bookStatus = it.articleEntity.bookStatus,
+                        sellingLocation = it.articleEntity.sellingLocation,
+                        chatCount = it.articleEntity.chatCount,
+                        favoriteCount = it.articleEntity.favoriteCount,
+                        beforeTime = it.articleEntity.beforeTime
                     )
                 }
             )
