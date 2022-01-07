@@ -3,14 +3,12 @@ package com.example.bookwhale.screen.main.home
 import androidx.fragment.app.activityViewModels
 import com.example.bookwhale.databinding.FragmentHomeBinding
 import com.example.bookwhale.model.main.home.ArticleModel
-import com.example.bookwhale.model.main.likelist.LikeArticleModel
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     override val viewModel by activityViewModels<MainViewModel>()

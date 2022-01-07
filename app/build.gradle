@@ -96,4 +96,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.android.gms:play-services-auth:20.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.3'
+
+    // Room library
+    implementation "androidx.room:room-runtime:2.4.0"
+    kapt "androidx.room:room-compiler:2.4.0"
+    implementation "androidx.room:room-ktx:2.4.0"
 }

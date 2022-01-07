@@ -1,6 +1,11 @@
 package com.example.bookwhale.data.entity.home
 
-data class GetAllArticleEntity (
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "articles")
+data class ArticleEntity (
+    @PrimaryKey(autoGenerate = true) val id: Int = -1,
     val articleId: Int,
     val articleImage : String,
     val articleTitle : String,

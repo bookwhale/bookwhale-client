@@ -1,11 +1,12 @@
 package com.example.bookwhale.data.repository.main
 
-import com.example.bookwhale.data.entity.ArticleEntity
-import com.example.bookwhale.data.entity.LikeArticleEntity
+import com.example.bookwhale.data.entity.home.ArticleEntity
 
 interface ArticleRepository {
 
-    suspend fun getArticleList(page: Int, size: Int) : List<ArticleEntity>
+    suspend fun getAllArticles(search: String? = null, page: Int, size: Int) : List<ArticleEntity>?
 
-    suspend fun getLikeArticleList() : List<LikeArticleEntity>
+    suspend fun getLocalArticles() : List<ArticleEntity>?
+
+    suspend fun insertLocalArticles(articles: ArticleEntity)
 }

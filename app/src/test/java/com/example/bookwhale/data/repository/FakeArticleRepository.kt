@@ -1,54 +1,38 @@
 package com.example.bookwhale.data.repository
 
-import com.example.bookwhale.data.entity.ArticleEntity
-import com.example.bookwhale.data.entity.LikeArticleEntity
+
+import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.repository.main.ArticleRepository
 
 class FakeArticleRepository : ArticleRepository {
 
+    override suspend fun getAllArticles(
+        search: String?,
+        page: Int,
+        size: Int,
+    ): List<ArticleEntity>? {
+        //
+        return null
+    }
 
-    override suspend fun getArticleList(page: Int, size: Int): List<ArticleEntity> {
-
+    override suspend fun getLocalArticles(): List<ArticleEntity>? {
         return listOf(
             ArticleEntity(
-                postId = 1,
-                postImage = "",
-                postTitle = "상태 좋은 책 팝니다",
-                postPrice = "1000원",
-                postStatus = "판매중",
-                bookTitle = "책 제목",
-                bookAuthor = "저자",
-                bookPublisher = "출판사",
-                sellingLocation = "서울",
-                viewCount = 1,
-                likeCount = 1,
-                beforeTime = "10분 전"
+                articleId = 0,
+                articleImage = "it.articleImage",
+                articleTitle = "it.articleTitle",
+                articlePrice = "it.articlePrice",
+                bookStatus = "it.bookStatus",
+                sellingLocation = "it.sellingLocation",
+                chatCount = 0,
+                favoriteCount = 0,
+                beforeTime = "it.beforeTime"
             )
         )
     }
 
-    override suspend fun getLikeArticleList(): List<LikeArticleEntity> {
-
-        return listOf(
-            LikeArticleEntity(
-                likeId = 0,
-                postResponse = ArticleEntity(
-                    postId = 1,
-                    postImage = "",
-                    postTitle = "상태 그닥 안좋은 책 팝니다",
-                    postPrice = "1000원",
-                    postStatus = "판매중",
-                    bookTitle = "책 제목",
-                    bookAuthor = "저자",
-                    bookPublisher = "출판사",
-                    sellingLocation = "서울",
-                    viewCount = 1,
-                    likeCount = 1,
-                    beforeTime = "10분 전"
-                )
-            )
-        )
-
+    override suspend fun insertLocalArticles(articles: ArticleEntity) {
+        //
     }
 
 
