@@ -37,6 +37,24 @@ class DefaultArticleRepository(
             null
         }
 
+        response.body()?.let{
+            it.map { data ->
+                ArticleEntity(
+                    articleId = data.articleId,
+                    articleImage = data.articleImage,
+                    articleTitle = data.articleTitle,
+                    articlePrice = data.articlePrice,
+                    bookStatus = data.bookStatus,
+                    sellingLocation = data.sellingLocation,
+                    chatCount = data.chatCount,
+                    favoriteCount = data.favoriteCount,
+                    beforeTime = data.beforeTime
+                )
+            }
+        }?: kotlin.run {
+            null
+        }
+
     }
 
     override suspend fun getLocalArticles(): List<ArticleEntity>? = withContext(ioDispatcher) {
