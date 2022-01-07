@@ -27,6 +27,17 @@ class FakeArticleRepository : ArticleRepository {
                 chatCount = 0,
                 favoriteCount = 0,
                 beforeTime = "it.beforeTime"
+            ),
+            ArticleEntity(
+                articleId = 1,
+                articleImage = "it.articleImage",
+                articleTitle = "it.articleTitle",
+                articlePrice = "it.articlePrice",
+                bookStatus = "it.bookStatus",
+                sellingLocation = "it.sellingLocation",
+                chatCount = 0,
+                favoriteCount = 0,
+                beforeTime = "it.beforeTime"
             )
         )
     }
