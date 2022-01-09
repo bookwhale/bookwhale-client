@@ -1,6 +1,9 @@
 package com.example.bookwhale.viewmodel.main
 
+import com.example.bookwhale.data.entity.favorite.FavoriteEntity
+import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.repository.main.ArticleRepository
+import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.main.MainViewModel
@@ -54,7 +57,7 @@ internal class MainViewModelTest: ViewModelTest() {
 
         mainViewModel.getFavorites()
 
-        val list = articleRepository.getFavoriteArticles()?.map {
+        val list = articleRepository.getFavoriteArticles().data?.map {
             FavoriteModel(
                 id = it.hashCode().toLong(),
                 favoriteId = it.favoriteId,

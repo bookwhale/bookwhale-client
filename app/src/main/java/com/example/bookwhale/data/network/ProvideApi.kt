@@ -51,7 +51,6 @@ fun provideGsonConvertFactory(): GsonConverterFactory {
 fun buildOkHttpClient(): OkHttpClient {
 
     val myPreferenceManager = object: KoinComponent {val myPreferenceManager: MyPreferenceManager by inject()}.myPreferenceManager
-    val context = object: KoinComponent {val context: Context by inject()}.context
 
     val interceptor = HttpLoggingInterceptor()
     if (BuildConfig.DEBUG) {
@@ -62,6 +61,6 @@ fun buildOkHttpClient(): OkHttpClient {
     return OkHttpClient.Builder()
         .connectTimeout(5, TimeUnit.SECONDS)
         .addInterceptor(interceptor)
-        .addInterceptor(CustomAuthInterceptor(myPreferenceManager, context))
+        .addInterceptor(CustomAuthInterceptor(myPreferenceManager))
         .build()
 }

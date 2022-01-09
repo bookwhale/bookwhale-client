@@ -3,6 +3,7 @@ package com.example.bookwhale.data.repository
 import com.example.bookwhale.data.entity.favorite.FavoriteEntity
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.repository.main.ArticleRepository
+import com.example.bookwhale.data.response.NetworkResult
 
 class FakeArticleRepository : ArticleRepository {
 
@@ -46,8 +47,9 @@ class FakeArticleRepository : ArticleRepository {
         //
     }
 
-    override suspend fun getFavoriteArticles(): List<FavoriteEntity>? {
-        return listOf(
+    override suspend fun getFavoriteArticles(): NetworkResult<List<FavoriteEntity>> {
+
+        val data = listOf(
             FavoriteEntity(
                 favoriteId = 0,
                 articleEntity = ArticleEntity(
@@ -76,6 +78,10 @@ class FakeArticleRepository : ArticleRepository {
                     beforeTime = "it.beforeTime"
                 )
             )
+        )
+
+        return NetworkResult.success(
+            data = data
         )
     }
 
