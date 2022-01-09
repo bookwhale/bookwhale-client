@@ -4,6 +4,7 @@ import com.example.bookwhale.data.db.dao.ArticleDao
 import com.example.bookwhale.data.entity.favorite.FavoriteEntity
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.network.ServerApiService
+import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.ErrorResponse
 import com.example.bookwhale.data.response.NetworkResult
 import com.google.gson.Gson
@@ -40,11 +41,8 @@ class DefaultArticleRepository(
                 }
             )
         } else {
-            val responseErrorString = response.errorBody()?.string()
-            val type = object : TypeToken<ErrorResponse?>() {}.type
-            val responseError: ErrorResponse = Gson().fromJson(responseErrorString, type)
-
-            NetworkResult.error(code = responseError.code!!)
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
         }
     }
 
@@ -83,11 +81,8 @@ class DefaultArticleRepository(
                 }
             )
         } else {
-            val responseErrorString = response.errorBody()?.string()
-            val type = object : TypeToken<ErrorResponse?>() {}.type
-            val responseError: ErrorResponse = Gson().fromJson(responseErrorString, type)
-
-            NetworkResult.error(code = responseError.code!!)
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
         }
 
     }

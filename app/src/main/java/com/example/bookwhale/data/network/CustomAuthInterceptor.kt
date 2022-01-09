@@ -11,11 +11,21 @@ class CustomAuthInterceptor(
     private val myPreferenceManager: MyPreferenceManager
 ) : Interceptor {
 
+//    var testSwitch = 0
+
     @DelicateCoroutinesApi
     override fun intercept(chain: Interceptor.Chain): Response {
+
         val token = "Bearer ${myPreferenceManager.getAccessToken()}"
 
-        Log.e("token value", token)
+//        lateinit var token : String
+//
+//        if(testSwitch <= 2) {
+//            token = "Bearer ${myPreferenceManager.getAccessToken()}9977"
+//            testSwitch++
+//        } else {
+//            token = "Bearer ${myPreferenceManager.getAccessToken()}"
+//        }
 
         try {
             val request = chain.request().newBuilder()

@@ -4,8 +4,11 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.entity.home.ArticleEntity
+import com.example.bookwhale.data.preference.MyPreferenceManager
+import com.example.bookwhale.data.repository.login.LoginRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseViewModel
@@ -14,17 +17,18 @@ import com.example.bookwhale.screen.main.home.HomeState
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val articleRepository: ArticleRepository
+    private val articleRepository: ArticleRepository,
+    private val loginRepository: LoginRepository,
+    private val myPreferenceManager: MyPreferenceManager
 ): BaseViewModel() {
 
     val homeArticleStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
     val favoriteArticleStateLiveData = MutableLiveData<FavoriteState>(FavoriteState.Uninitialized)
 
     fun getArticles(search: String? = null, page: Int, size: Int) = viewModelScope.launch {
-        val response = articleRepository.getAllArticles(search, page, size)
-
         homeArticleStateLiveData.value = HomeState.Loading
 
+        val response = articleRepository.getAllArticles(search, page, size)
 
         if(response.status == NetworkResult.Status.SUCCESS) {
             // 내부 db에 네트워크를 통해 가져온값을 넣는다.
@@ -41,8 +45,9 @@ class MainViewModel(
                     beforeTime = it.beforeTime
                 ))
             }
-        } else {}
-
+        } else {
+            homeArticleStateLiveData.value = HomeState.Error(response.code)
+        }
 
 
         // 내부 db에서 값을 꺼내서 보여준다.
@@ -63,8 +68,6 @@ class MainViewModel(
                     )
                 }
             )
-        } ?: kotlin.run {
-            homeArticleStateLiveData.value = HomeState.Error
         }
 
         // 내부 db에서 값을 꺼내서 보여준다.
@@ -139,7 +142,7 @@ class MainViewModel(
             }
             favoriteArticleStateLiveData.value = FavoriteState.Success(favorites!!)
         } else {
-            favoriteArticleStateLiveData.value = FavoriteState.Error
+            favoriteArticleStateLiveData.value = FavoriteState.Error(response.code)
         }
 
 //        val favorites2 = response?.map {
@@ -165,5 +168,17 @@ class MainViewModel(
 //        }
 //
 //        Log.e("favoriteList", favorites.toString())
+    }
+
+    fun getNewTokens() = viewModelScope.launch {
+        val response = loginRepository.getNewTokens(TokenRequestDTO(
+            apiToken = myPreferenceManager.getAccessToken()!!,
+            refreshToken = myPreferenceManager.getRefreshToken()!!
+        ))
+
+        response.apiToken?.let {
+            myPreferenceManager.putAccessToken(response.apiToken)
+            myPreferenceManager.putRefreshToken(response.refreshToken!!)
+        }
     }
 }
