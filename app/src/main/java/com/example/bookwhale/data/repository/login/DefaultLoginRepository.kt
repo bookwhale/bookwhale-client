@@ -6,6 +6,7 @@ import com.example.bookwhale.data.network.GoogleApiService
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.login.LoginGoogleRequestDTO
 import com.example.bookwhale.data.response.login.LoginGoogleResponse
+import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -80,6 +81,22 @@ class DefaultLoginRepository(
             )
         } ?: kotlin.run {
             null
+        }
+    }
+
+    override suspend fun getNewTokens(tokenRequestDTO: TokenRequestDTO): LoginEntity = withContext(ioDispatcher) {
+        val response = serverApiService.getNewTokens(tokenRequestDTO)
+
+        response.body()?.let{
+            return@withContext LoginEntity(
+                apiToken = it.apiToken,
+                refreshToken = it.refreshToken
+            )
+        } ?: kotlin.run {
+            return@withContext LoginEntity(
+                apiToken = null,
+                refreshToken = null
+            )
         }
     }
 }

@@ -13,5 +13,8 @@ sealed class HomeState {
         val articles : List<ArticleModel>
     ) : HomeState()
 
-    object Error : HomeState()
+    data class Error(
+        val code: String?
+    ) : HomeState()
+
 }

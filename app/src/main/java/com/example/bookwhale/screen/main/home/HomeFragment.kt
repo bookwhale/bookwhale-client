@@ -1,5 +1,6 @@
 package com.example.bookwhale.screen.main.home
 
+import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -44,7 +45,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
             when(it) {
                 is HomeState.Loading -> handleLoading()
                 is HomeState.Success -> handleSuccess(it)
-                is HomeState.Error -> handleError()
+                is HomeState.Error -> handleError(it)
                 else -> Unit
             }
         }
@@ -59,9 +60,9 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
         adapter.submitList(state.articles)
     }
 
-    private fun handleError() {
+    private fun handleError(state: HomeState.Error) {
         binding.progressBar.isGone = true
-        Toast.makeText(requireContext(), R.string.noArticles, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), R.string.error_noArticles, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

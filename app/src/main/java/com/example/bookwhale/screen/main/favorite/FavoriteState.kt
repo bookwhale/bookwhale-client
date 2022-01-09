@@ -13,5 +13,8 @@ sealed class FavoriteState {
         val favorites : List<FavoriteModel>
     ) : FavoriteState()
 
-    object Error : FavoriteState()
+    data class Error(
+        val code : String?
+    ) : FavoriteState()
+
 }
