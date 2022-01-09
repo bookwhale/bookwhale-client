@@ -72,8 +72,11 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
     }
 
     private fun handleSuccess(state: FavoriteState.Success) {
-        adapter.submitList(state.favorites)
         binding.progressBar.isGone = true
+        adapter.submitList(state.favorites)
+        if(state.favorites.isEmpty()) {
+            binding.noArticleTextView.isVisible = true
+        }
     }
 
 
