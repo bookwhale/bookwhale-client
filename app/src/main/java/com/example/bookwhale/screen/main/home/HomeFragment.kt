@@ -1,6 +1,10 @@
 package com.example.bookwhale.screen.main.home
 
+import android.widget.Toast
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentHomeBinding
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseFragment
@@ -36,9 +40,28 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     }
 
     override fun observeData() {
-        viewModel.articleListLiveData.observe(this) {
-            adapter.submitList(it)
+        viewModel.homeArticleStateLiveData.observe(this) {
+            when(it) {
+                is HomeState.Loading -> handleLoading()
+                is HomeState.Success -> handleSuccess(it)
+                is HomeState.Error -> handleError()
+                else -> Unit
+            }
         }
+    }
+
+    private fun handleLoading() {
+        binding.progressBar.isVisible = true
+    }
+
+    private fun handleSuccess(state: HomeState.Success) {
+        binding.progressBar.isGone = true
+        adapter.submitList(state.articles)
+    }
+
+    private fun handleError() {
+        binding.progressBar.isGone = true
+        Toast.makeText(requireContext(), R.string.noArticles, Toast.LENGTH_SHORT).show()
     }
 
     companion object {
