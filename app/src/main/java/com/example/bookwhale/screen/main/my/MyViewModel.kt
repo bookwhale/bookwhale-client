@@ -1,5 +1,6 @@
 package com.example.bookwhale.screen.main.my
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.repository.main.my.MyRepository
@@ -13,6 +14,10 @@ class MyViewModel(
 ): BaseViewModel() {
 
     val profileInfo = MutableLiveData<ProfileModel>()
+
+    init {
+        Log.e("myViewModel","myViewModel")
+    }
 
     override fun fetchData(): Job = viewModelScope.launch {
         val result = myRepository.getProfile()
