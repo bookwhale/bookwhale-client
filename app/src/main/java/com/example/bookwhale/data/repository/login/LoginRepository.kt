@@ -2,6 +2,7 @@ package com.example.bookwhale.data.repository.login
 
 import com.example.bookwhale.data.entity.login.LoginEntity
 import com.example.bookwhale.data.response.login.LoginGoogleResponse
+import com.example.bookwhale.data.response.login.TokenRequestDTO
 
 interface LoginRepository {
 
@@ -14,5 +15,7 @@ interface LoginRepository {
     suspend fun getGoogleLoginInfo(code: String) : LoginEntity
 
     suspend fun fetchGoogleAuthInfo(code: String) : LoginGoogleResponse?
+
+    suspend fun getNewTokens(tokenRequestDTO: TokenRequestDTO) : LoginEntity
 
 }

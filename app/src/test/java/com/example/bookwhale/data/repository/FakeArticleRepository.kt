@@ -3,6 +3,7 @@ package com.example.bookwhale.data.repository
 import com.example.bookwhale.data.entity.favorite.FavoriteEntity
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.repository.main.ArticleRepository
+import com.example.bookwhale.data.response.NetworkResult
 
 class FakeArticleRepository : ArticleRepository {
 
@@ -10,13 +11,14 @@ class FakeArticleRepository : ArticleRepository {
         search: String?,
         page: Int,
         size: Int,
-    ): List<ArticleEntity>? {
+    ): NetworkResult<List<ArticleEntity>> {
         //
-        return null
+        return NetworkResult.error(code="")
     }
 
-    override suspend fun getLocalArticles(): List<ArticleEntity>? {
-        return listOf(
+    override suspend fun getLocalArticles(): NetworkResult<List<ArticleEntity>> {
+
+        val data = listOf(
             ArticleEntity(
                 articleId = 0,
                 articleImage = "it.articleImage",
@@ -40,14 +42,19 @@ class FakeArticleRepository : ArticleRepository {
                 beforeTime = "it.beforeTime"
             )
         )
+
+        return NetworkResult.success(
+            data = data
+        )
     }
 
     override suspend fun insertLocalArticles(articles: ArticleEntity) {
         //
     }
 
-    override suspend fun getFavoriteArticles(): List<FavoriteEntity>? {
-        return listOf(
+    override suspend fun getFavoriteArticles(): NetworkResult<List<FavoriteEntity>> {
+
+        val data = listOf(
             FavoriteEntity(
                 favoriteId = 0,
                 articleEntity = ArticleEntity(
@@ -76,6 +83,10 @@ class FakeArticleRepository : ArticleRepository {
                     beforeTime = "it.beforeTime"
                 )
             )
+        )
+
+        return NetworkResult.success(
+            data = data
         )
     }
 
