@@ -58,6 +58,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     private fun handleSuccess(state: HomeState.Success) {
         binding.progressBar.isGone = true
         adapter.submitList(state.articles)
+        if(state.articles.isEmpty()) binding.noArticleTextView.isVisible = true
     }
 
     private fun handleError(state: HomeState.Error) {
