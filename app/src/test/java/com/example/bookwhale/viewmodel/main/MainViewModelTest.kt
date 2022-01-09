@@ -27,7 +27,7 @@ internal class MainViewModelTest: ViewModelTest() {
 
         mainViewModel.getArticles(null, 0, 10)
 
-        val list = articleRepository.getLocalArticles()?.map {
+        val list = articleRepository.getLocalArticles().data?.map {
             ArticleModel(
                 id = it.hashCode().toLong(),
                 articleId = it.articleId,

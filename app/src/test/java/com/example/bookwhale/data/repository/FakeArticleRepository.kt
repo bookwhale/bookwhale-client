@@ -11,13 +11,14 @@ class FakeArticleRepository : ArticleRepository {
         search: String?,
         page: Int,
         size: Int,
-    ): List<ArticleEntity>? {
+    ): NetworkResult<List<ArticleEntity>> {
         //
-        return null
+        return NetworkResult.error(code="")
     }
 
-    override suspend fun getLocalArticles(): List<ArticleEntity>? {
-        return listOf(
+    override suspend fun getLocalArticles(): NetworkResult<List<ArticleEntity>> {
+
+        val data = listOf(
             ArticleEntity(
                 articleId = 0,
                 articleImage = "it.articleImage",
@@ -40,6 +41,10 @@ class FakeArticleRepository : ArticleRepository {
                 favoriteCount = 0,
                 beforeTime = "it.beforeTime"
             )
+        )
+
+        return NetworkResult.success(
+            data = data
         )
     }
 
