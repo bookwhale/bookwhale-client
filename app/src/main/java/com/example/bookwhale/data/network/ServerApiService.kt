@@ -21,8 +21,8 @@ interface ServerApiService {
     @GET("api/oauth/naver/login")
     suspend fun getNaverLoginInfo(@Query("code")code: String) : Response<LoginResponse>
 
-    @GET("api/oauth/google/login")
-    suspend fun getGoogleLoginInfo(@Query("code")code: String) : Response<LoginResponse>
+    @GET("api/oauth/kakao/login")
+    suspend fun getKaKaoLoginInfo(@Query("code")code: String) : Response<LoginResponse>
 
     @POST("api/oauth/refresh")
     suspend fun getNewTokens(@Body tokenRequestDTO: TokenRequestDTO) : Response<LoginResponse>

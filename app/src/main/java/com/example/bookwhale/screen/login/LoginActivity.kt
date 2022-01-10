@@ -17,6 +17,8 @@ import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.user.UserApiClient
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLogin.mOAuthLoginHandler
 import com.nhn.android.naverlogin.OAuthLoginHandler
@@ -30,52 +32,37 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
 
     private lateinit var mOAuthLoginModule : OAuthLogin
 
-
-    private val gso: GoogleSignInOptions by lazy {
-        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestServerAuthCode("1042391167372-hks49suv33nb0v6licmhnffr1cvv1k88.apps.googleusercontent.com")
-            .build()
-    }
-
-    private val gsc by lazy { GoogleSignIn.getClient(this, gso) }
-
-    private val loginLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            try {
-                task.getResult(ApiException::class.java)?.let { account ->
-                    Log.e("serverauthCode",account.serverAuthCode!!)
-                    viewModel.getGoogleAccesToken(account.serverAuthCode!!)
-                }
-            } catch (e: Exception) {
-                Log.e("idToken2","ididididid")
-                e.printStackTrace()
-            }
-        } else {
-            Log.e("idToken3",result.data.toString())
-            Log.e("idToken3",result.resultCode.toString())
-        }
-    }
-
     override fun initViews(): Unit = with(binding) {
 
-        setGooglePlusButtonText(googleLoginButton,getString(R.string.signInGoogle))
+        setSignInNaver()
+        setSignInKaKao()
+    }
 
+    private fun setSignInKaKao() = with(binding) {
 
-        signInNaver()
-
-        googleLoginButton.setOnClickListener {
-            signInGoogle()
+        kakaoLoginButton.setOnClickListener {
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity)) {
+                UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
+            } else {
+                UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
+            }
         }
 
     }
 
-    private fun signInGoogle() {
-        val signInIntent = gsc.signInIntent
-        loginLauncher.launch(signInIntent)
+    private val callback : (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        if (error != null) {
+            Log.e("로그인 실패-","$error")
+        } else if (token != null) {
+            UserApiClient.instance.me { _, _ ->
+                viewModel.kakaoLogin(token.accessToken)
+                //viewModel?.addKakaoUser(token.accessToken, kakaoId)
+            }
+            Log.d("로그인성공 - 토큰", "${token.accessToken}")
+        }
     }
 
-    private fun signInNaver() = with(binding) {
+    private fun setSignInNaver() = with(binding) {
 
         mOAuthLoginModule = OAuthLogin.getInstance()
         mOAuthLoginModule.init(
@@ -110,17 +97,6 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
 
         naverLogout.setOnClickListener {
             mOAuthLoginModule.logout(this@LoginActivity)
-        }
-    }
-
-
-    private fun setGooglePlusButtonText(signInButton: SignInButton, buttonText: String?) {
-        for (i in 0 until signInButton.childCount) {
-            val v = signInButton.getChildAt(i)
-            if (v is TextView) {
-                v.text = buttonText
-                return
-            }
         }
     }
 

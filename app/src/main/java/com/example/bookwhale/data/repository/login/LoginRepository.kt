@@ -12,9 +12,7 @@ interface LoginRepository {
 
     suspend fun getNaverLoginInfo(code: String) : LoginEntity
 
-    suspend fun getGoogleLoginInfo(code: String) : LoginEntity
-
-    suspend fun fetchGoogleAuthInfo(code: String) : LoginGoogleResponse?
+    suspend fun getKaKaoLoginInfo(code: String) : LoginEntity
 
     suspend fun getNewTokens(tokenRequestDTO: TokenRequestDTO) : LoginEntity
 

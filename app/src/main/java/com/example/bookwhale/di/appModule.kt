@@ -31,7 +31,7 @@ val appModule = module {
     viewModel { MyViewModel(get()) }
 
     single<MyRepository> { DefaultMyRepository(get(), get())}
-    single<LoginRepository> { DefaultLoginRepository(get(), get(), get())}
+    single<LoginRepository> { DefaultLoginRepository(get(), get())}
     single<ArticleRepository> { DefaultArticleRepository(get(), get(), get()) }
 
 
@@ -47,9 +47,6 @@ val appModule = module {
     //Retrofit
     single(named("article")) { provideArticleRetrofit(get(), get()) }
     single { provideArticleApiService(get(qualifier = named("article"))) }
-
-    single(named("google")) { provideGoogleRetrofit(get(), get()) }
-    single { provideGoogleApiService(get(qualifier = named("google"))) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }

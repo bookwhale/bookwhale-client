@@ -17,9 +17,6 @@ fun provideArticleApiService(retrofit: Retrofit): ServerApiService {
     return retrofit.create(ServerApiService::class.java)
 }
 
-fun provideGoogleApiService(retrofit: Retrofit): GoogleApiService {
-    return retrofit.create(GoogleApiService::class.java)
-}
 
 
 fun provideArticleRetrofit(
@@ -33,16 +30,6 @@ fun provideArticleRetrofit(
         .build()
 }
 
-fun provideGoogleRetrofit(
-    okHttpClient: OkHttpClient,
-    gsonConverterFactory: GsonConverterFactory
-): Retrofit {
-    return Retrofit.Builder()
-        .baseUrl(Url.GOOGLE_URL)
-        .addConverterFactory(gsonConverterFactory)
-        .client(okHttpClient)
-        .build()
-}
 
 fun provideGsonConvertFactory(): GsonConverterFactory {
     return GsonConverterFactory.create()
