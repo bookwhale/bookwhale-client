@@ -16,11 +16,6 @@
     <string name="appName_hangul">책 고 래</string>
     <string name="signInGoogle">Google 계정으로 로그인</string>
 
-    <!-- Naver -->
-    <string name="naver_client_id">f4OhIa4pTWzbQ8Wj6Abp</string>
-    <string name="naver_client_secret">BaUIGzZHAu</string>
-    <string name="naver_client_name">bookwhale</string>
-
     <!-- Toolbar -->
     <string name="searchHint">통합검색 | Search</string>
   
