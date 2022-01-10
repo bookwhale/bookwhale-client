@@ -31,16 +31,8 @@ class LoginViewModel(
         }
     }
 
-    fun getGoogleAccesToken(code: String) = viewModelScope.launch {
-        val response = loginRepository.fetchGoogleAuthInfo(code)
-
-        Log.e("response is", response.toString())
-
-        googleLogin(response!!.access_token)
-    }
-
-    fun googleLogin(code: String) = viewModelScope.launch {
-        val response = loginRepository.getGoogleLoginInfo(code)
+    fun kakaoLogin(code: String) = viewModelScope.launch {
+        val response = loginRepository.getKaKaoLoginInfo(code)
 
         response.apiToken?.let{
             loginStateLiveData.value = LoginState.Success(LoginEntity(

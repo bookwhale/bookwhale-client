@@ -30,4 +30,8 @@
     <string name="error_noAccessToken">계정 정보가 만료되었습니다.</string>
     <string name="error_noAllArticle">판매 등록된 글이 없습니다.</string>
     <string name="error_noFavorite">찜 목록이 비어있습니다.</string>
+
+    <!-- login -->
+    <string name="naver_login">NAVER 계정으로 로그인</string>
+    <string name="kakao_login">KAKAO 계정으로 로그인</string>
 </resources>
