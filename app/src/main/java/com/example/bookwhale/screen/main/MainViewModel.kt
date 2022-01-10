@@ -31,9 +31,10 @@ class MainViewModel(
         val response = articleRepository.getAllArticles(search, page, size)
 
         if(response.status == NetworkResult.Status.SUCCESS) {
-            // 내부 db에 네트워크를 통해 가져온값을 넣는다.
-            response.data?.forEach {
-                articleRepository.insertLocalArticles(ArticleEntity(
+
+            val articleList = response.data!!.map {
+                ArticleModel(
+                    id = it.hashCode().toLong(),
                     articleId = it.articleId,
                     articleImage = it.articleImage,
                     articleTitle = it.articleTitle,
@@ -43,32 +44,55 @@ class MainViewModel(
                     chatCount = it.chatCount,
                     favoriteCount = it.favoriteCount,
                     beforeTime = it.beforeTime
-                ))
+                )
             }
+            homeArticleStateLiveData.value = HomeState.Success(articleList)
+            Log.e("localArticleList",articleList.toString())
         } else {
-            homeArticleStateLiveData.value = HomeState.Error(response.code)
-        }
-
-
-        // 내부 db에서 값을 꺼내서 보여준다.
-        articleRepository.getLocalArticles().let {
-            homeArticleStateLiveData.value = HomeState.Success(
-                it.data!!.map { article ->
-                    ArticleModel(
-                        id = article.hashCode().toLong(),
-                        articleId = article.articleId,
-                        articleImage = article.articleImage,
-                        articleTitle = article.articleTitle,
-                        articlePrice = article.articlePrice,
-                        bookStatus = article.bookStatus,
-                        sellingLocation = article.sellingLocation,
-                        chatCount = article.chatCount,
-                        favoriteCount = article.favoriteCount,
-                        beforeTime = article.beforeTime
-                    )
-                }
+            homeArticleStateLiveData.value = HomeState.Error(
+                response.code
             )
         }
+
+//        if(response.status == NetworkResult.Status.SUCCESS) {
+//            // 내부 db에 네트워크를 통해 가져온값을 넣는다.
+//            response.data?.forEach {
+//                articleRepository.insertLocalArticles(ArticleEntity(
+//                    articleId = it.articleId,
+//                    articleImage = it.articleImage,
+//                    articleTitle = it.articleTitle,
+//                    articlePrice = it.articlePrice,
+//                    bookStatus = it.bookStatus,
+//                    sellingLocation = it.sellingLocation,
+//                    chatCount = it.chatCount,
+//                    favoriteCount = it.favoriteCount,
+//                    beforeTime = it.beforeTime
+//                ))
+//            }
+//        } else {
+//            homeArticleStateLiveData.value = HomeState.Error(response.code)
+//        }
+//
+//
+//        // 내부 db에서 값을 꺼내서 보여준다.
+//        articleRepository.getLocalArticles().let {
+//            homeArticleStateLiveData.value = HomeState.Success(
+//                it.data!!.map { article ->
+//                    ArticleModel(
+//                        id = article.hashCode().toLong(),
+//                        articleId = article.articleId,
+//                        articleImage = article.articleImage,
+//                        articleTitle = article.articleTitle,
+//                        articlePrice = article.articlePrice,
+//                        bookStatus = article.bookStatus,
+//                        sellingLocation = article.sellingLocation,
+//                        chatCount = article.chatCount,
+//                        favoriteCount = article.favoriteCount,
+//                        beforeTime = article.beforeTime
+//                    )
+//                }
+//            )
+//        }
 
         // 내부 db에서 값을 꺼내서 보여준다.
 //        articleListLiveData.value = articleRepository.getLocalArticles()?.map {
@@ -116,7 +140,6 @@ class MainViewModel(
 //        }
 //
 
-        Log.e("localArticle?",articleRepository.getLocalArticles().toString())
     }
 
     fun getFavorites() = viewModelScope.launch {
