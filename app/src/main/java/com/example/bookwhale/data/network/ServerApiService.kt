@@ -12,12 +12,6 @@ import retrofit2.http.Query
 
 interface ServerApiService {
 
-    @GET("api/oauth/naver")
-    suspend fun testNaver() : Response<Unit>
-
-    @GET("api/oauth/google")
-    suspend fun testGoogle() : Response<Unit>
-
     @GET("api/oauth/naver/login")
     suspend fun getNaverLoginInfo(@Query("code")code: String) : Response<LoginResponse>
 
