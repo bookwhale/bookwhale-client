@@ -15,6 +15,7 @@ class TestActivity : BaseActivity<TestViewModel, ActivityTestBinding>() {
     override fun observeData() = with(binding) {
         viewModel.testLiveData.observe(this@TestActivity) {
             textView.text = it
+            // test
         }
     }
 
