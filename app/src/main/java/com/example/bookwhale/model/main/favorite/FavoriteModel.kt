@@ -8,7 +8,7 @@ data class FavoriteModel(
     override val type: CellType = CellType.ARTICLE_LIST,
     val favoriteId: Int,
     val articleId : Int,
-    val articleImage : String,
+    var articleImage : String?,
     val articleTitle : String,
     val articlePrice : String,
     val bookStatus: String,

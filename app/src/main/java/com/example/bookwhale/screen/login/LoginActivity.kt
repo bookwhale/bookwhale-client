@@ -18,6 +18,7 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLogin.mOAuthLoginHandler
@@ -41,6 +42,10 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
     private fun setSignInKaKao() = with(binding) {
 
         kakaoLoginButton.setOnClickListener {
+
+            var keyHash = Utility.getKeyHash(this@LoginActivity)
+            Log.e("keyhash", " : $keyHash")
+
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity)) {
                 UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
             } else {
