@@ -18,6 +18,4 @@ class TestActivity : BaseActivity<TestViewModel, ActivityTestBinding>() {
         }
     }
 
-    // test
-
 }
