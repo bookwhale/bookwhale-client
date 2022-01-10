@@ -14,17 +14,6 @@ class DefaultLoginRepository(
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher
 ):LoginRepository {
-    override suspend fun test() {
-        val response = serverApiService.testNaver()
-
-        Log.e("response??",response.toString())
-    }
-
-    override suspend fun test2() {
-        val response = serverApiService.testGoogle()
-
-        Log.e("responseGoogle",response.toString())
-    }
 
     override suspend fun getNaverLoginInfo(code: String): LoginEntity = withContext(ioDispatcher) {
         val response = serverApiService.getNaverLoginInfo(code)

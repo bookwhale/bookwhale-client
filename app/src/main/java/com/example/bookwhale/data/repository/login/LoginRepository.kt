@@ -6,10 +6,6 @@ import com.example.bookwhale.data.response.login.TokenRequestDTO
 
 interface LoginRepository {
 
-    suspend fun test()
-
-    suspend fun test2()
-
     suspend fun getNaverLoginInfo(code: String) : LoginEntity
 
     suspend fun getKaKaoLoginInfo(code: String) : LoginEntity
