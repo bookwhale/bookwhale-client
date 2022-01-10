@@ -7,7 +7,7 @@ data class ArticleModel(
     override val id: Long,
     override val type: CellType = CellType.ARTICLE_LIST,
     val articleId : Int,
-    val articleImage : String,
+    var articleImage : String?,
     val articleTitle : String,
     val articlePrice : String,
     val bookStatus: String,
