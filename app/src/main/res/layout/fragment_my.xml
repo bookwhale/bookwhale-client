@@ -13,7 +13,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@mipmap/ic_launcher" />
+        android:src="@drawable/ic_default_profile"
+        android:contentDescription="@string/menu_my" />
 
     <TextView
         android:id="@+id/profileTextView"
@@ -27,16 +28,16 @@
         app:layout_constraintTop_toBottomOf="@id/profileImageView"
         tools:text="책 고 래" />
 
-    <ImageButton
-        android:id="@+id/editNameImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:src="@drawable/ic_post"
-        android:background="@android:color/transparent"
-        app:layout_constraintStart_toEndOf="@id/profileTextView"
-        app:layout_constraintTop_toTopOf="@id/profileTextView"
-        app:layout_constraintBottom_toBottomOf="@id/profileTextView"/>
+<!--    <ImageButton-->
+<!--        android:id="@+id/editNameImageButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="4dp"-->
+<!--        android:src="@drawable/ic_post"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        app:layout_constraintStart_toEndOf="@id/profileTextView"-->
+<!--        app:layout_constraintTop_toTopOf="@id/profileTextView"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/profileTextView"/>-->
 
     <TextView
         android:id="@+id/logoutTextView"
