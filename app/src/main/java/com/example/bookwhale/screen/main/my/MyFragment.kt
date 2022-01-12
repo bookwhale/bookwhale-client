@@ -2,6 +2,8 @@ package com.example.bookwhale.screen.main.my
 
 import android.util.Log
 import android.widget.Toast
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentMyBinding
 import com.example.bookwhale.screen.base.BaseFragment
@@ -12,6 +14,10 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     override val viewModel by viewModel<MyViewModel>()
 
     override fun getViewBinding(): FragmentMyBinding = FragmentMyBinding.inflate(layoutInflater)
+
+    override fun initViews() {
+        handleButton()
+    }
 
     override fun observeData() {
 
@@ -24,6 +30,28 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
             }
         }
 
+    }
+
+    private fun handleButton() = with(binding) {
+        profileTextView.setOnClickListener {
+            updateNameGroup.isVisible = true
+        }
+
+        confirmButton.setOnClickListener {
+            val name = updateNameEditText.text
+
+            if(!name.isNullOrEmpty()) {
+                viewModel.updateNickName(name.toString())
+                updateNameEditText.text.clear()
+                updateNameGroup.isGone = true
+            } else {
+                errorTextView.text = getString(R.string.error_noNickName)
+            }
+        }
+
+        cancelButton.setOnClickListener {
+            updateNameGroup.isGone = true
+        }
     }
 
     private fun handleLoading() {}

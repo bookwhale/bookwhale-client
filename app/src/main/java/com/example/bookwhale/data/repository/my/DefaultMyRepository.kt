@@ -4,6 +4,7 @@ import com.example.bookwhale.data.entity.my.MyInfoEntity
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.data.response.my.NickNameRequestDTO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
@@ -23,6 +24,19 @@ class DefaultMyRepository(
                      profileImage = response.body()!!.profileImage
                  )
              )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
+    override suspend fun updateMyNickName(nickNameRequestDTO: NickNameRequestDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.updateMyNickName(nickNameRequestDTO)
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                true
+            )
         } else {
             val errorCode = ErrorConverter.convert(response.errorBody()?.string())
             NetworkResult.error(code = errorCode)

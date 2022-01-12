@@ -5,11 +5,9 @@ import com.example.bookwhale.data.response.home.GetAllArticlesResponse
 import com.example.bookwhale.data.response.login.LoginResponse
 import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.data.response.my.MyInfoResponse
+import com.example.bookwhale.data.response.my.NickNameRequestDTO
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ServerApiService {
 
@@ -33,4 +31,7 @@ interface ServerApiService {
     // 내 정보
     @GET("api/user/me")
     suspend fun getMyInfo() : Response<MyInfoResponse>
+
+    @PATCH("api/user/me")
+    suspend fun updateMyNickName(@Body nickNameRequestDTO: NickNameRequestDTO) : Response<Unit>
 }

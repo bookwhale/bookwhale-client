@@ -28,6 +28,81 @@
         app:layout_constraintTop_toBottomOf="@id/profileImageView"
         tools:text="책 고 래" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/updateNameGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:constraint_referenced_ids="updateNameTextView, updateNameEditText, confirmButton, cancelButton, editTextDivider, errorTextView"/>
+
+    <TextView
+        android:id="@+id/updateNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="@string/updateNameTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profileTextView"/>
+
+    <EditText
+        android:id="@+id/updateNameEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/hintNickName"
+        android:maxLength="10"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="@id/updateNameTextView"
+        app:layout_constraintEnd_toEndOf="@id/updateNameTextView"
+        app:layout_constraintTop_toBottomOf="@id/updateNameTextView"/>
+
+    <TextView
+        android:id="@+id/errorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="11sp"
+        android:textColor="@color/red"
+        tools:text="에러표시"
+        app:layout_constraintTop_toBottomOf="@id/updateNameEditText"
+        app:layout_constraintStart_toStartOf="@id/updateNameEditText"/>
+
+    <View
+        android:id="@+id/editTextDivider"
+        android:layout_width="1dp"
+        android:layout_height="24dp"
+        android:background="@color/primary_gray"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/errorTextView"
+        app:layout_constraintEnd_toEndOf="@id/updateNameTextView"
+        app:layout_constraintStart_toStartOf="@id/updateNameTextView" />
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:textColor="@color/gray"
+        android:layout_marginStart="8dp"
+        app:layout_constraintTop_toTopOf="@id/editTextDivider"
+        app:layout_constraintBottom_toBottomOf="@id/editTextDivider"
+        app:layout_constraintStart_toEndOf="@id/editTextDivider"
+        android:text="@string/confirm"/>
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:textColor="@color/gray"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toTopOf="@id/editTextDivider"
+        app:layout_constraintBottom_toBottomOf="@id/editTextDivider"
+        app:layout_constraintEnd_toStartOf="@id/editTextDivider"
+        android:text="@string/cancel"/>
+
 <!--    <ImageButton-->
 <!--        android:id="@+id/editNameImageButton"-->
 <!--        android:layout_width="wrap_content"-->
@@ -48,7 +123,7 @@
         android:layout_marginBottom="52dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/divider"
-        tools:text="로그아웃" />
+        android:text="@string/logout"/>
 
     <TextView
         android:id="@+id/withdrawTextView"
@@ -59,7 +134,7 @@
         android:layout_marginBottom="52dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/divider"
-        tools:text="회원탈퇴" />
+        android:text="@string/withdraw" />
 
     <View
         android:id="@+id/divider"
