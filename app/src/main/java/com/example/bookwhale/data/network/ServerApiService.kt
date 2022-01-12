@@ -6,6 +6,7 @@ import com.example.bookwhale.data.response.login.LoginResponse
 import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.data.response.my.MyInfoResponse
 import com.example.bookwhale.data.response.my.NickNameRequestDTO
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -34,4 +35,8 @@ interface ServerApiService {
 
     @PATCH("api/user/me")
     suspend fun updateMyNickName(@Body nickNameRequestDTO: NickNameRequestDTO) : Response<Unit>
+
+    @Multipart
+    @PATCH("api/user/profile")
+    suspend fun updateProfile(@Part profileImage: MultipartBody.Part): Response<Unit>
 }

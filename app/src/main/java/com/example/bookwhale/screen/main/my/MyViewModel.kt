@@ -10,6 +10,7 @@ import com.example.bookwhale.model.main.my.ProfileModel
 import com.example.bookwhale.screen.base.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
 class MyViewModel(
     private val myRepository: MyRepository
@@ -47,6 +48,21 @@ class MyViewModel(
                 code = response.code
             )
         }
+    }
+
+    fun updateProfileImage(image: MultipartBody.Part) = viewModelScope.launch {
+        profileStateLiveData.value = MyState.Loading
+
+        val response = myRepository.updateProfileImage(image)
+
+        if (response.status == NetworkResult.Status.SUCCESS) {
+            fetchData()
+        } else {
+            profileStateLiveData.value = MyState.Error(
+                code = response.code
+            )
+        }
+
     }
 
 }

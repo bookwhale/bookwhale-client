@@ -8,7 +8,14 @@ import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentMyBinding
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.util.load
+import okhttp3.Callback
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.io.File
 
 class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     override val viewModel by viewModel<MyViewModel>()
@@ -52,6 +59,17 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         cancelButton.setOnClickListener {
             updateNameGroup.isGone = true
         }
+
+        profileImageView.setOnClickListener {
+            updateProfileImage()
+        }
+    }
+
+    private fun updateProfileImage() {
+        var file = File("https://i1.daumcdn.net/thumb/C264x200/?fname=https://blog.kakaocdn.net/dn/bcHq0P/btro14dTsMA/b5Lcjz1jT6KMJCxhfrKzHK/img.jpg")
+        var requestBody : RequestBody = RequestBody.create("image/*".toMediaTypeOrNull(),file)
+        var body : MultipartBody.Part = MultipartBody.Part.createFormData("profileImage",file.name,requestBody)
+        viewModel.updateProfileImage(body)
     }
 
     private fun handleLoading() {}

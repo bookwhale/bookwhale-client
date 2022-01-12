@@ -7,6 +7,7 @@ import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.my.NickNameRequestDTO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 
 class DefaultMyRepository(
     private val serverApiService: ServerApiService,
@@ -32,6 +33,19 @@ class DefaultMyRepository(
 
     override suspend fun updateMyNickName(nickNameRequestDTO: NickNameRequestDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
         val response = serverApiService.updateMyNickName(nickNameRequestDTO)
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                true
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
+    override suspend fun updateProfileImage(body: MultipartBody.Part): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.updateProfile(body)
 
         if(response.isSuccessful) {
             NetworkResult.success(
