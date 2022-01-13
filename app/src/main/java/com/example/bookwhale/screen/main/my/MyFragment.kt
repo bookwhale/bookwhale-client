@@ -87,7 +87,6 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
             .start { uri ->
                 handlePathOz.getRealPath(uri)
             }
-
     }
 
     private fun handleLoading() {}
