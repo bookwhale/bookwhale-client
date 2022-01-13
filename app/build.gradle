@@ -117,4 +117,7 @@ dependencies {
     //Image Picker
     implementation 'io.github.ParkSangGwon:tedimagepicker:1.2.7'
 
+    //Handling Scoped Storage issue
+    implementation 'com.github.onimur:handle-path-oz:1.0.7'
+
 }

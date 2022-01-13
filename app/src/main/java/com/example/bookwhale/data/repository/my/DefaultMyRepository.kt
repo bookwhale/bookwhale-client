@@ -47,8 +47,6 @@ class DefaultMyRepository(
 
     override suspend fun updateProfileImage(profileImage: MultipartBody.Part): NetworkResult<Boolean> = withContext(ioDispatcher) {
 
-        Log.e("여긴안왓어","뭐임")
-
         val response = serverApiService.updateProfile(profileImage)
 
         if(response.isSuccessful) {
