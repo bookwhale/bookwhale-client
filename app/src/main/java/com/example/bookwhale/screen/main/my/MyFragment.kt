@@ -1,15 +1,21 @@
 package com.example.bookwhale.screen.main.my
 
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import br.com.onimur.handlepathoz.HandlePathOz
+import br.com.onimur.handlepathoz.HandlePathOzListener
+import br.com.onimur.handlepathoz.model.PathOz
+import com.example.bookwhale.MyApp.Companion.appContext
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentMyBinding
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.util.load
 import gun0912.tedimagepicker.builder.TedImagePicker
+import kotlinx.coroutines.FlowPreview
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -17,12 +23,19 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
 
-class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
+class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzListener.SingleUri {
     override val viewModel by viewModel<MyViewModel>()
 
     override fun getViewBinding(): FragmentMyBinding = FragmentMyBinding.inflate(layoutInflater)
 
+    private lateinit var handlePathOz: HandlePathOz
+
+    init {
+
+    }
+
     override fun initViews() {
+        initHandlePathOz()
         handleButton()
     }
 
@@ -67,21 +80,14 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     }
 
 
+    @FlowPreview
     private fun selectSingleImage() {
+
         TedImagePicker.with(requireContext())
-            .min(1,"한개 선택해")
             .start { uri ->
-                updateProfileImage(uri)
+                handlePathOz.getRealPath(uri)
             }
 
-    }
-
-    private fun updateProfileImage(uri: Uri) {
-        var file = File(uri.path)
-        var requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-        var body : MultipartBody.Part = MultipartBody.Part.createFormData("profileImage",file.name,requestBody)
-        Log.e("uri",uri.path.toString())
-        viewModel.updateProfileImage(body)
     }
 
     private fun handleLoading() {}
@@ -95,6 +101,16 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         Toast.makeText(requireContext(), getString(R.string.error_unKnown, it.code), Toast.LENGTH_SHORT).show()
     }
 
+    private fun initHandlePathOz() {
+        handlePathOz = HandlePathOz(appContext!!, this)
+    }
+
+    override fun onRequestHandlePathOz(pathOz: PathOz, tr: Throwable?) {
+        var file = File(pathOz.path)
+        var requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+        var body : MultipartBody.Part = MultipartBody.Part.createFormData("profileImage",file.name,requestBody)
+        viewModel.updateProfileImage(body)
+    }
 
     companion object {
 
@@ -102,4 +118,5 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
 
         const val TAG = "MyFragment"
     }
+
 }
