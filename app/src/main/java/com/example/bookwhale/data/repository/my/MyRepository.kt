@@ -11,5 +11,5 @@ interface MyRepository {
 
     suspend fun updateMyNickName(nickNameRequestDTO: NickNameRequestDTO) : NetworkResult<Boolean>
 
-    suspend fun updateProfileImage(body : MultipartBody.Part) : NetworkResult<Boolean>
+    suspend fun updateProfileImage(profileImage : MultipartBody.Part) : NetworkResult<Boolean>
 }
