@@ -1,5 +1,6 @@
 package com.example.bookwhale.data.repository.my
 
+import android.util.Log
 import com.example.bookwhale.data.entity.my.MyInfoEntity
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
@@ -44,8 +45,11 @@ class DefaultMyRepository(
         }
     }
 
-    override suspend fun updateProfileImage(body: MultipartBody.Part): NetworkResult<Boolean> = withContext(ioDispatcher) {
-        val response = serverApiService.updateProfile(body)
+    override suspend fun updateProfileImage(profileImage: MultipartBody.Part): NetworkResult<Boolean> = withContext(ioDispatcher) {
+
+        Log.e("여긴안왓어","뭐임")
+
+        val response = serverApiService.updateProfile(profileImage)
 
         if(response.isSuccessful) {
             NetworkResult.success(

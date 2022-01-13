@@ -53,6 +53,8 @@ class MyViewModel(
     fun updateProfileImage(image: MultipartBody.Part) = viewModelScope.launch {
         profileStateLiveData.value = MyState.Loading
 
+        Log.e("????",image.toString())
+
         val response = myRepository.updateProfileImage(image)
 
         if (response.status == NetworkResult.Status.SUCCESS) {
