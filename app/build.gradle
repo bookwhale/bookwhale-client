@@ -120,4 +120,8 @@ dependencies {
     //Handling Scoped Storage issue
     implementation 'com.github.onimur:handle-path-oz:1.0.7'
 
+    //paging3
+    implementation "androidx.paging:paging-runtime-ktx:3.1.0"
+
+
 }

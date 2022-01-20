@@ -132,4 +132,13 @@
         app:layout_constraintEnd_toEndOf="@id/kakaoLoginButton"
         app:layout_constraintTop_toBottomOf="@id/naverLoginButton"/>
 
+    <Button
+        android:id="@+id/getKeyHashButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="카카오 로그인용 키해쉬 얻기"
+        app:layout_constraintStart_toStartOf="@id/kakaoLoginButton"
+        app:layout_constraintEnd_toEndOf="@id/kakaoLoginButton"
+        app:layout_constraintTop_toBottomOf="@id/naverLogout"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
