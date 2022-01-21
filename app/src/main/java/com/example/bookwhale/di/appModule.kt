@@ -13,7 +13,9 @@ import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.screen.main.my.MyViewModel
 import com.example.bookwhale.screen.login.LoginViewModel
 import com.example.bookwhale.screen.main.MainViewModel
+import com.example.bookwhale.screen.splash.SplashViewModel
 import com.example.bookwhale.screen.test.TestViewModel
+import com.example.bookwhale.util.paging.MainPagingSource
 import com.example.bookwhale.util.provider.DefaultResourcesProvider
 import com.example.bookwhale.util.provider.ResourcesProvider
 import kotlinx.coroutines.Dispatchers
@@ -28,11 +30,11 @@ val appModule = module {
     viewModel { TestViewModel() }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { MyViewModel(get()) }
+    viewModel { SplashViewModel(get(), get(), get()) }
 
     single<MyRepository> { DefaultMyRepository(get(), get()) }
     single<LoginRepository> { DefaultLoginRepository(get(), get())}
     single<ArticleRepository> { DefaultArticleRepository(get(), get(), get()) }
-
 
     single { Dispatchers.IO }
     single { Dispatchers.Main }
@@ -53,4 +55,7 @@ val appModule = module {
     // Room
     single { provideDB(androidApplication()) }
     single { provideArticleDao(get()) }
+
+    // paging3
+    single { MainPagingSource(get()) }
 }

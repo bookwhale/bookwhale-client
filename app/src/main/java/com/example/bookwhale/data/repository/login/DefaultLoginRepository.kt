@@ -1,8 +1,11 @@
 package com.example.bookwhale.data.repository.login
 
 import android.util.Log
+import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.entity.login.LoginEntity
 import com.example.bookwhale.data.network.ServerApiService
+import com.example.bookwhale.data.response.ErrorConverter
+import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.login.LoginGoogleRequestDTO
 import com.example.bookwhale.data.response.login.LoginGoogleResponse
 import com.example.bookwhale.data.response.login.TokenRequestDTO
@@ -47,19 +50,20 @@ class DefaultLoginRepository(
         }
     }
 
-    override suspend fun getNewTokens(tokenRequestDTO: TokenRequestDTO): LoginEntity = withContext(ioDispatcher) {
+    override suspend fun getNewTokens(tokenRequestDTO: TokenRequestDTO): NetworkResult<LoginEntity> = withContext(ioDispatcher) {
         val response = serverApiService.getNewTokens(tokenRequestDTO)
 
-        response.body()?.let{
-            return@withContext LoginEntity(
-                apiToken = it.apiToken,
-                refreshToken = it.refreshToken
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                LoginEntity(
+                    apiToken = response.body()!!.apiToken,
+                    refreshToken = response.body()!!.refreshToken
+                )
             )
-        } ?: kotlin.run {
-            return@withContext LoginEntity(
-                apiToken = null,
-                refreshToken = null
-            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
         }
+
     }
 }

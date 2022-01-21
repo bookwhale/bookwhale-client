@@ -12,6 +12,9 @@
     <string name="menu_chat">채팅</string>
     <string name="menu_my">내 정보</string>
 
+    <!-- splash -->
+    <string name="checkAutoLogin">유저 정보를 불러오는 중 입니다.</string>
+
     <!-- Login -->
     <string name="appName_hangul">책 고 래</string>
     <string name="naver_login">NAVER 계정으로 로그인</string>
@@ -19,8 +22,9 @@
 
     <!-- Toolbar -->
     <string name="searchHint">통합검색 | Search</string>
-  
+
     <!-- Error String -->
+    <string name="error_noConnect">서버와 연결할 수 없습니다.</string>
     <string name="error400">게시물을 불러올 수 없습니다.</string>
     <string name="error_noArticles">게시물을 불러올 수 없습니다.</string>
     <string name="error_noAccessToken">계정 정보가 만료되었습니다.</string>

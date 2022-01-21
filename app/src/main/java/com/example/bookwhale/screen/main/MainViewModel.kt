@@ -14,6 +14,7 @@ import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.main.favorite.FavoriteState
 import com.example.bookwhale.screen.main.home.HomeState
+import com.example.bookwhale.screen.splash.SplashState
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -199,9 +200,12 @@ class MainViewModel(
             refreshToken = myPreferenceManager.getRefreshToken()!!
         ))
 
-        response.apiToken?.let {
-            myPreferenceManager.putAccessToken(response.apiToken)
-            myPreferenceManager.putRefreshToken(response.refreshToken!!)
+        if (response.status == NetworkResult.Status.SUCCESS) {
+            myPreferenceManager.putAccessToken(response.data?.apiToken!!)
+            myPreferenceManager.putRefreshToken(response.data.refreshToken!!)
+        } else {
+            // error
         }
+
     }
 }
