@@ -27,6 +27,8 @@ import com.nhn.android.naverlogin.data.OAuthLoginState
 import kotlinx.coroutines.launch
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 
 
@@ -143,4 +145,9 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
         startActivity(MainActivity.newIntent(this))
     }
     private fun handleError() {}
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, LoginActivity::class.java)
+
+    }
 }
