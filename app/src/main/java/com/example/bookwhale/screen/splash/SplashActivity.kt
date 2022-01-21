@@ -1,5 +1,7 @@
 package com.example.bookwhale.screen.splash
 
+import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -41,7 +43,10 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         lifecycleScope.launch {
             delay(1500L) // 추후 특정 시간 걸리는 작업을 염두하고 임의로 딜레이를 주었다.
             binding.progressBar.isGone = true
-            startActivity(MainActivity.newIntent(this@SplashActivity))
+
+            val intent = MainActivity.newIntent(this@SplashActivity)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
         }
     }
 
@@ -65,7 +70,10 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         lifecycleScope.launch {
             delay(1500L) // 추후 특정 시간 걸리는 작업을 염두하고 임의로 딜레이를 주었다.
             binding.progressBar.isGone = true
-            startActivity(LoginActivity.newIntent(this@SplashActivity))
+
+            val intent = LoginActivity.newIntent(this@SplashActivity)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
         }
     }
 
@@ -73,4 +81,5 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         binding.progressBar.isGone = true
         Toast.makeText(this, getString(R.string.error_unKnown, code), Toast.LENGTH_SHORT).show()
     }
+
 }
