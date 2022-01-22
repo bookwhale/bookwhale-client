@@ -20,18 +20,22 @@ class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
 
     private val resourcesProvider by inject<ResourcesProvider>()
 
-    private val adapter by lazy {
-        ModelRecyclerAdapter<FavoriteModel, MainViewModel>(
-            listOf(),
-            viewModel,
-            resourcesProvider,
-            adapterListener = object : FavoriteListener {
-                override fun onClickItem(model: FavoriteModel) {
-                    //
-                }
-            }
-        )
-    }
+//    private val adapter by lazy {
+//        ModelRecyclerAdapter<FavoriteModel, MainViewModel>(
+//            listOf(),
+//            viewModel,
+//            resourcesProvider,
+//            adapterListener = object : FavoriteListener {
+//                override fun onClickItem(model: FavoriteModel) {
+//                    //
+//                }
+//
+//                override fun onClickHeart(model: FavoriteModel) {
+//                    TODO("Not yet implemented")
+//                }
+//            }
+//        )
+//    }
 
     override fun initViews(): Unit = with(binding) {
 //        recyclerView.adapter = adapter

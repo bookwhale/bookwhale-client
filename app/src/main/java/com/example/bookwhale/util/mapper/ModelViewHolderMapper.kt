@@ -8,6 +8,7 @@ import com.example.bookwhale.model.Model
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
+import com.example.bookwhale.widget.viewholder.main.favorite.FavoriteViewHolder
 import com.example.bookwhale.widget.viewholder.main.home.ArticleListViewHolder
 
 
@@ -29,8 +30,12 @@ object ModelViewHolderMapper {
                 resourcesProvider
             )
 
+            CellType.FAVORITE_LIST -> FavoriteViewHolder(
+                ViewholderArticlelistBinding.inflate(inflater, parent, false),
+                viewModel,
+                resourcesProvider
+            )
 
-            else -> Unit
         }
         return viewHolder as ModelViewHolder<M>
     }

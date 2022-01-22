@@ -22,6 +22,9 @@ class ArticleListViewHolder(
             binding.root.setOnClickListener {
                 adapterListener.onClickItem(model)
             }
+            binding.heartImageView.setOnClickListener {
+                adapterListener.onClickHeart(model)
+            }
         }
     }
 

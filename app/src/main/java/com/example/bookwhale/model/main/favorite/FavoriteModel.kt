@@ -5,7 +5,7 @@ import com.example.bookwhale.model.Model
 
 data class FavoriteModel(
     override val id: Long,
-    override val type: CellType = CellType.ARTICLE_LIST,
+    override val type: CellType = CellType.FAVORITE_LIST,
     val favoriteId: Int,
     val articleId : Int,
     var articleImage : String?,
