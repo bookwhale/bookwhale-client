@@ -1,12 +1,14 @@
 package com.example.bookwhale.data.repository.main
 
 import com.example.bookwhale.data.db.dao.ArticleDao
+import com.example.bookwhale.data.entity.favorite.AddFavoriteEntity
 import com.example.bookwhale.data.entity.favorite.FavoriteEntity
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.ErrorResponse
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineDispatcher
@@ -86,4 +88,33 @@ class DefaultArticleRepository(
         }
 
     }
+
+    override suspend fun addFavoriteArticle(addFavoriteDTO: AddFavoriteDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
+
+        val response = serverApiService.addFavorites(addFavoriteDTO)
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                true
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
+    override suspend fun deleteFavoriteArticle(favoriteId: Int): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.deleteFavorites(favoriteId)
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                true
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
+
 }

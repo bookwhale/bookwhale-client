@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentHomeBinding
+import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainViewModel
@@ -30,6 +31,12 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
             adapterListener = object : ArticleListListener {
                 override fun onClickItem(model: ArticleModel) {
                 }
+
+                override fun onClickHeart(model: ArticleModel) {
+                    // 좋아요 버튼 클릭
+                    clickFavoriteButton(model.articleId)
+                    notifyData()
+                }
             }
         )
     }
@@ -38,6 +45,29 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
         recyclerView.adapter = adapter
 
         viewModel.getArticles(null,PAGE,SIZE)
+    }
+
+
+    /**
+     * 매우 불완전한 코드이므로 수정할 예정.
+     *
+     * */
+    private fun clickFavoriteButton(articleId: Int) {
+
+        viewModel.favoriteList?.forEach {
+            if(it.articleId == articleId) {
+                viewModel.deleteFavoriteInHome(it.favoriteId)
+                return
+            } else {
+                viewModel.addFavoriteInHome(articleId)
+            }
+        }?.run {
+            viewModel.addFavoriteInHome(articleId)
+        }
+    }
+
+    private fun notifyData() {
+        adapter.submitList(viewModel.articleList as List<ArticleModel>)
     }
 
     override fun observeData() {
@@ -52,16 +82,19 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     }
 
     private fun handleLoading() {
+        Log.e(TAG,"handleLoading")
         binding.progressBar.isVisible = true
     }
 
     private fun handleSuccess(state: HomeState.Success) {
+        Log.e(TAG,"handleSuccess")
         binding.progressBar.isGone = true
         adapter.submitList(state.articles)
         binding.noArticleTextView.isVisible = state.articles.isEmpty()
     }
 
     private fun handleError(state: HomeState.Error) {
+        Log.e(TAG,"handleError")
         binding.progressBar.isGone = true
         Toast.makeText(requireContext(), R.string.error_noArticles, Toast.LENGTH_SHORT).show()
     }

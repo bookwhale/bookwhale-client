@@ -8,6 +8,7 @@ import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.repository.login.LoginRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
@@ -15,6 +16,7 @@ import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.main.favorite.FavoriteState
 import com.example.bookwhale.screen.main.home.HomeState
 import com.example.bookwhale.screen.splash.SplashState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -26,6 +28,9 @@ class MainViewModel(
     val homeArticleStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
     val favoriteArticleStateLiveData = MutableLiveData<FavoriteState>(FavoriteState.Uninitialized)
 
+    var articleList : List<*>? = null
+    var favoriteList : List<FavoriteModel>? = null
+
     fun getArticles(search: String? = null, page: Int, size: Int) = viewModelScope.launch {
         homeArticleStateLiveData.value = HomeState.Loading
 
@@ -33,7 +38,7 @@ class MainViewModel(
 
         if(response.status == NetworkResult.Status.SUCCESS) {
 
-            val articleList = response.data!!.map {
+            articleList = response.data!!.map {
                 ArticleModel(
                     id = it.hashCode().toLong(),
                     articleId = it.articleId,
@@ -47,7 +52,7 @@ class MainViewModel(
                     beforeTime = it.beforeTime
                 )
             }
-            homeArticleStateLiveData.value = HomeState.Success(articleList)
+            homeArticleStateLiveData.value = HomeState.Success(articleList!! as List<ArticleModel>)
             Log.e("localArticleList",articleList.toString())
         } else {
             homeArticleStateLiveData.value = HomeState.Error(
@@ -144,12 +149,14 @@ class MainViewModel(
     }
 
     fun getFavorites() = viewModelScope.launch {
-        val response = articleRepository.getFavoriteArticles()
-
         favoriteArticleStateLiveData.value = FavoriteState.Loading
 
+        val response = articleRepository.getFavoriteArticles()
+
+        Log.e("getFavortes","??")
+
         if(response.status == NetworkResult.Status.SUCCESS) {
-            val favorites = response.data?.map {
+            favoriteList = response.data?.map {
                 FavoriteModel(
                     id = it.hashCode().toLong(),
                     favoriteId = it.favoriteId,
@@ -164,7 +171,7 @@ class MainViewModel(
                     beforeTime = it.articleEntity.beforeTime
                 )
             }
-            favoriteArticleStateLiveData.value = FavoriteState.Success(favorites!!)
+            favoriteArticleStateLiveData.value = FavoriteState.Success(favoriteList!!)
         } else {
             favoriteArticleStateLiveData.value = FavoriteState.Error(response.code)
         }
@@ -192,6 +199,36 @@ class MainViewModel(
 //        }
 //
 //        Log.e("favoriteList", favorites.toString())
+    }
+
+    fun addFavoriteInHome(articleId: Int)= viewModelScope.launch {
+        articleRepository.addFavoriteArticle(AddFavoriteDTO(
+            articleId = articleId
+        ))
+
+        getArticles(null, 0, 10)
+    }
+
+    fun deleteFavoriteInHome(articleId: Int) = viewModelScope.launch {
+        articleRepository.deleteFavoriteArticle(articleId)
+
+        getArticles(null, 0, 10)
+    }
+
+    fun addFavorite(articleId: Int) = viewModelScope.launch {
+        articleRepository.addFavoriteArticle(AddFavoriteDTO(
+            articleId = articleId
+        ))
+
+        getFavorites()
+
+        // ui 바로 반영해줘야함. 어떻게?
+    }
+
+    fun deleteFavorite(articleId: Int) = viewModelScope.launch {
+        articleRepository.deleteFavoriteArticle(articleId)
+
+        getFavorites()
     }
 
     fun getNewTokens() = viewModelScope.launch {

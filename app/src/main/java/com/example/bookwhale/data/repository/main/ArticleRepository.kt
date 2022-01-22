@@ -1,8 +1,10 @@
 package com.example.bookwhale.data.repository.main
 
+import com.example.bookwhale.data.entity.favorite.AddFavoriteEntity
 import com.example.bookwhale.data.entity.favorite.FavoriteEntity
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 
 interface ArticleRepository {
 
@@ -13,4 +15,8 @@ interface ArticleRepository {
     suspend fun insertLocalArticles(articles: ArticleEntity)
 
     suspend fun getFavoriteArticles() : NetworkResult<List<FavoriteEntity>>
+
+    suspend fun addFavoriteArticle(addFavoriteDTO: AddFavoriteDTO) : NetworkResult<Boolean>
+
+    suspend fun deleteFavoriteArticle(favoriteId: Int) : NetworkResult<Boolean>
 }

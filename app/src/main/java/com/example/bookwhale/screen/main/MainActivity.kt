@@ -41,8 +41,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
             when(onSearch) {
                 true -> {
                     onSearch = false
-                    getSearchArticles(searchEditText.text.toString())
                     toolBarLayout.transitionToStart()
+                    doSearch()
                 }
                 false -> {
                     onSearch = true
@@ -57,6 +57,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                 toolBarLayout.transitionToStart()
             }
         }
+
+
     }
 
 
@@ -65,10 +67,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
             when (item.itemId) {
                 R.id.menu_home -> {
                     showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
+                    viewModel.getArticles(null,0,10) // 임시 호출, 후에 바꿔야함
                     true
                 }
                 R.id.menu_heart -> {
                     showFragment(FavoriteFragment.newInstance(), FavoriteFragment.TAG)
+                    viewModel.getFavorites()
                     true
                 }
                 R.id.menu_myPost -> {
@@ -108,6 +112,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun observeData()  {
 
+    }
+
+    private fun doSearch() = with(binding) {
+        getSearchArticles(searchEditText.text.toString())
+        showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
+        searchEditText.text.clear()
     }
 
     private fun getSearchArticles(searchText: String) {

@@ -1,5 +1,6 @@
 package com.example.bookwhale.data.network
 
+import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.data.response.favorite.GetFavoritesResponse
 import com.example.bookwhale.data.response.home.GetAllArticlesResponse
 import com.example.bookwhale.data.response.login.LoginResponse
@@ -22,12 +23,18 @@ interface ServerApiService {
     @POST("api/oauth/refresh")
     suspend fun getNewTokens(@Body tokenRequestDTO: TokenRequestDTO) : Response<LoginResponse>
 
-    // 계시물
+    // 게시물
     @GET("api/articles")
     suspend fun getAllArticles(@Query("search")search: String?=null, @Query("page")page: Int, @Query("size")size: Int) : Response<List<GetAllArticlesResponse>>
 
     @GET("api/user/me/favorites")
     suspend fun getFavorites() : Response<List<GetFavoritesResponse>>
+
+    @POST("api/user/me/favorite")
+    suspend fun addFavorites(@Body addFavoriteDTO: AddFavoriteDTO) : Response<Unit>
+
+    @DELETE("api/user/me/favorite/{favoriteId}")
+    suspend fun deleteFavorites(@Path("favoriteId")favoriteId : Int) : Response<Unit>
 
     // 내 정보
     @GET("api/user/me")
@@ -39,4 +46,6 @@ interface ServerApiService {
     @Multipart
     @PATCH("api/user/profile")
     suspend fun updateProfile(@Part profileImage: MultipartBody.Part): Response<Unit>
+
+
 }
