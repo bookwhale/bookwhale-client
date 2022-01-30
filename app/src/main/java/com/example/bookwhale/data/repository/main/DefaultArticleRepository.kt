@@ -1,5 +1,8 @@
 package com.example.bookwhale.data.repository.main
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.bookwhale.data.db.dao.ArticleDao
 import com.example.bookwhale.data.entity.favorite.AddFavoriteEntity
 import com.example.bookwhale.data.entity.favorite.FavoriteEntity
@@ -9,9 +12,12 @@ import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.ErrorResponse
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
+import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.util.ArticlePagingSource
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class DefaultArticleRepository(
@@ -114,6 +120,18 @@ class DefaultArticleRepository(
             val errorCode = ErrorConverter.convert(response.errorBody()?.string())
             NetworkResult.error(code = errorCode)
         }
+    }
+
+    override fun getAllArticles2(
+        search: String?
+    ): Flow<PagingData<ArticleModel>> {
+        val flow = Pager(
+            PagingConfig(pageSize = 10)
+        ) {
+            ArticlePagingSource(serverApiService, search)
+        }.flow
+
+        return flow
     }
 
 

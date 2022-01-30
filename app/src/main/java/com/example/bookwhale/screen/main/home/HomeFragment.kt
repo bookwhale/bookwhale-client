@@ -5,15 +5,19 @@ import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentHomeBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainViewModel
+import com.example.bookwhale.util.PagingAdapter
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.main.home.ArticleListListener
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
@@ -42,9 +46,20 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     }
 
     override fun initViews(): Unit = with(binding) {
-        recyclerView.adapter = adapter
+        //recyclerView.adapter = adapter
 
-        viewModel.getArticles(null,PAGE,SIZE)
+        //viewModel.getArticles(null,PAGE,SIZE)
+
+        val adpater2 = PagingAdapter()
+        recyclerView.adapter = adpater2
+
+        viewModel.testArticles(null)
+
+        lifecycleScope.launch {
+            viewModel.testArticles(null).collectLatest {
+                adpater2.submitData(it)
+            }
+        }
     }
 
 

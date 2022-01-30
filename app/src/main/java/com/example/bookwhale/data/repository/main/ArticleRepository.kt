@@ -1,10 +1,13 @@
 package com.example.bookwhale.data.repository.main
 
+import androidx.paging.PagingData
 import com.example.bookwhale.data.entity.favorite.AddFavoriteEntity
 import com.example.bookwhale.data.entity.favorite.FavoriteEntity
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
+import com.example.bookwhale.model.main.home.ArticleModel
+import kotlinx.coroutines.flow.Flow
 
 interface ArticleRepository {
 
@@ -19,4 +22,6 @@ interface ArticleRepository {
     suspend fun addFavoriteArticle(addFavoriteDTO: AddFavoriteDTO) : NetworkResult<Boolean>
 
     suspend fun deleteFavoriteArticle(favoriteId: Int) : NetworkResult<Boolean>
+
+    fun getAllArticles2(search: String? = null) : Flow<PagingData<ArticleModel>>
 }
