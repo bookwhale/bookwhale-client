@@ -46,18 +46,13 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 //    }
 
     override fun initViews(): Unit = with(binding) {
-        //recyclerView.adapter = adapter
 
-        //viewModel.getArticles(null,PAGE,SIZE)
-
-        val adpater = PagingAdapter()
-        recyclerView.adapter = adpater
-
-        //viewModel.testArticles(null)
+        val adapter = PagingAdapter()
+        recyclerView.adapter = adapter
 
         lifecycleScope.launch {
-            viewModel.testArticles(null).collectLatest {
-                adpater.submitData(it)
+            viewModel.getArticlesPaging(null).collectLatest {
+                adapter.submitData(it)
             }
         }
     }

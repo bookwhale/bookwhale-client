@@ -17,7 +17,7 @@ class ArticlePagingSource(
     ): LoadResult<Int, ArticleModel> {
         return try {
             val next = params.key ?: 0
-            val response = serverApiService.getAllArticles(search, next, 30).body()!!.map {
+            val response = serverApiService.getAllArticles(search, next, 10).body()!!.map {
                 ArticleModel(
                     id = it.articleId.toLong(),
                     articleId = it.articleId,

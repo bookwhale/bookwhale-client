@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookwhale.data.response.home.GetAllArticlesResponse
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.main.home.ArticleModel
 
@@ -48,6 +47,6 @@ class PagingViewHolder(
         binding.qualityTextView.text = value.bookStatus
         binding.chatTextView.text = value.chatCount.toString()
         binding.priceTextView.text = value.articlePrice
-//        binding.thumbNailImageView
+        binding.thumbNailImageView.load(value.articleImage.toString())
     }
 }
