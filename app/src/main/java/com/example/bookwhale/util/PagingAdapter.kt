@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookwhale.data.response.home.GetAllArticlesResponse
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.main.home.ArticleModel
 
@@ -19,7 +20,6 @@ class PagingAdapter : PagingDataAdapter<ArticleModel, PagingViewHolder>(diffCall
 
     override fun onBindViewHolder(holder: PagingViewHolder, position: Int) {
         val item = getItem(position)
-        Log.e("item is what", item.toString())
         if (item != null) {
             holder.bind(item)
         }
@@ -42,8 +42,12 @@ class PagingViewHolder(
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(value: ArticleModel) {
-        binding.timeTextView.text = value.articleTitle
-//        binding.idTextView.text = value._id
-//        binding.nameTextView.text = value.name
+        binding.timeTextView.text = value.beforeTime
+        binding.titleTextView.text = value.articleTitle
+        binding.locationTextView.text = value.sellingLocation
+        binding.qualityTextView.text = value.bookStatus
+        binding.chatTextView.text = value.chatCount.toString()
+        binding.priceTextView.text = value.articlePrice
+//        binding.thumbNailImageView
     }
 }

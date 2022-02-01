@@ -11,6 +11,7 @@ import com.example.bookwhale.data.repository.login.LoginRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
+import com.example.bookwhale.data.response.home.GetAllArticlesResponse
 import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
@@ -213,13 +214,13 @@ class MainViewModel(
             articleId = articleId
         ))
 
-        getArticles(null, 0, 10)
+        //getArticles(null, 0, 10)
     }
 
     fun deleteFavoriteInHome(articleId: Int) = viewModelScope.launch {
         articleRepository.deleteFavoriteArticle(articleId)
 
-        getArticles(null, 0, 10)
+        //getArticles(null, 0, 10)
     }
 
     fun addFavorite(articleId: Int) = viewModelScope.launch {

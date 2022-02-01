@@ -12,6 +12,7 @@ import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.ErrorResponse
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
+import com.example.bookwhale.data.response.home.GetAllArticlesResponse
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.util.ArticlePagingSource
 import com.google.gson.Gson
@@ -126,7 +127,7 @@ class DefaultArticleRepository(
         search: String?
     ): Flow<PagingData<ArticleModel>> {
         val flow = Pager(
-            PagingConfig(pageSize = 10)
+            PagingConfig(pageSize = 30)
         ) {
             ArticlePagingSource(serverApiService, search)
         }.flow

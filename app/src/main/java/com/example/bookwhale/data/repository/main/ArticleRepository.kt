@@ -6,6 +6,7 @@ import com.example.bookwhale.data.entity.favorite.FavoriteEntity
 import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
+import com.example.bookwhale.data.response.home.GetAllArticlesResponse
 import com.example.bookwhale.model.main.home.ArticleModel
 import kotlinx.coroutines.flow.Flow
 

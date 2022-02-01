@@ -27,37 +27,37 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 
     private val resourcesProvider by inject<ResourcesProvider>()
 
-    private val adapter by lazy {
-        ModelRecyclerAdapter<ArticleModel, MainViewModel>(
-            listOf(),
-            viewModel,
-            resourcesProvider,
-            adapterListener = object : ArticleListListener {
-                override fun onClickItem(model: ArticleModel) {
-                }
-
-                override fun onClickHeart(model: ArticleModel) {
-                    // 좋아요 버튼 클릭
-                    clickFavoriteButton(model.articleId)
-                    notifyData()
-                }
-            }
-        )
-    }
+//    private val adapter by lazy {
+//        ModelRecyclerAdapter<ArticleModel, MainViewModel>(
+//            listOf(),
+//            viewModel,
+//            resourcesProvider,
+//            adapterListener = object : ArticleListListener {
+//                override fun onClickItem(model: ArticleModel) {
+//                }
+//
+//                override fun onClickHeart(model: ArticleModel) {
+//                    // 좋아요 버튼 클릭
+//                    clickFavoriteButton(model.articleId)
+//                    notifyData()
+//                }
+//            }
+//        )
+//    }
 
     override fun initViews(): Unit = with(binding) {
         //recyclerView.adapter = adapter
 
         //viewModel.getArticles(null,PAGE,SIZE)
 
-        val adpater2 = PagingAdapter()
-        recyclerView.adapter = adpater2
+        val adpater = PagingAdapter()
+        recyclerView.adapter = adpater
 
-        viewModel.testArticles(null)
+        //viewModel.testArticles(null)
 
         lifecycleScope.launch {
             viewModel.testArticles(null).collectLatest {
-                adpater2.submitData(it)
+                adpater.submitData(it)
             }
         }
     }
@@ -82,7 +82,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     }
 
     private fun notifyData() {
-        adapter.submitList(viewModel.articleList as List<ArticleModel>)
+        //adapter.submitList(viewModel.articleList as List<ArticleModel>)
     }
 
     override fun observeData() {
@@ -104,7 +104,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     private fun handleSuccess(state: HomeState.Success) {
         Log.e(TAG,"handleSuccess")
         binding.progressBar.isGone = true
-        adapter.submitList(state.articles)
+        //adapter.submitList(state.articles)
         binding.noArticleTextView.isVisible = state.articles.isEmpty()
     }
 
