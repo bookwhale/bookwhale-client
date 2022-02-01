@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.bookwhale.data.entity.home.ArticleEntity
+import androidx.paging.map
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.repository.login.LoginRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
@@ -17,9 +17,8 @@ import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.main.favorite.FavoriteState
 import com.example.bookwhale.screen.main.home.HomeState
-import com.example.bookwhale.screen.splash.SplashState
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -34,9 +33,11 @@ class MainViewModel(
     var articleList : List<*>? = null
     var favoriteList : List<FavoriteModel>? = null
 
-    fun testArticles(search: String? = null) : Flow<PagingData<ArticleModel>> {
-        return articleRepository.getAllArticles2(search).cachedIn(viewModelScope)
+    suspend fun getArticlesPaging(search: String? = null) : Flow<PagingData<ArticleModel>> {
+        val response = articleRepository.getAllArticlesPaging(search)
+        return response.data!!.cachedIn(viewModelScope)
     }
+
 
     fun getArticles(search: String? = null, page: Int, size: Int) = viewModelScope.launch {
         homeArticleStateLiveData.value = HomeState.Loading
@@ -213,13 +214,13 @@ class MainViewModel(
             articleId = articleId
         ))
 
-        getArticles(null, 0, 10)
+        //getArticles(null, 0, 10)
     }
 
     fun deleteFavoriteInHome(articleId: Int) = viewModelScope.launch {
         articleRepository.deleteFavoriteArticle(articleId)
 
-        getArticles(null, 0, 10)
+        //getArticles(null, 0, 10)
     }
 
     fun addFavorite(articleId: Int) = viewModelScope.launch {

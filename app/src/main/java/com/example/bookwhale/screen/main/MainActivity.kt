@@ -67,7 +67,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
             when (item.itemId) {
                 R.id.menu_home -> {
                     showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
-                    viewModel.getArticles(null,0,10) // 임시 호출, 후에 바꿔야함
+                    //viewModel.getArticles(null,0,10) // 임시 호출, 후에 바꿔야함
                     true
                 }
                 R.id.menu_heart -> {
@@ -121,7 +121,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     private fun getSearchArticles(searchText: String) {
-        viewModel.getArticles(searchText,PAGE, SIZE)
+        //viewModel.getArticles(searchText,PAGE, SIZE)
     }
 
     override fun onBackPressed() {
