@@ -36,7 +36,7 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
                 }
 
                 override fun onClickHeart(model: FavoriteModel) {
-                    clickFavoriteButton(model)
+                    //clickFavoriteButton(model)
                 }
             }
         )
@@ -59,13 +59,13 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
         }
     }
 
-    private fun clickFavoriteButton(model: FavoriteModel) {
-        if (viewModel.favoriteList?.contains(model) == true) {
-            viewModel.deleteFavorite(model.favoriteId)
-        } else {
-            viewModel.addFavorite(model.favoriteId)
-        }
-    }
+//    private fun clickFavoriteButton(model: FavoriteModel) {
+//        if (viewModel.favoriteList?.contains(model) == true) {
+//            viewModel.deleteFavorite(model.favoriteId)
+//        } else {
+//            viewModel.addFavorite(model.favoriteId)
+//        }
+//    }
 
     private fun handleLoading() {
         Log.e("handleLoading","handleLoading")

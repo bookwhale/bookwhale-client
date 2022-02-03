@@ -27,7 +27,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 
     private val resourcesProvider by inject<ResourcesProvider>()
 
-    private val adapter = PagingAdapter()
+//    val adapter = PagingAdapter()
 
 //    private val adapter by lazy {
 //        ModelRecyclerAdapter<ArticleModel, MainViewModel>(
@@ -63,19 +63,19 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
      * 매우 불완전한 코드이므로 수정할 예정.
      *
      * */
-    private fun clickFavoriteButton(articleId: Int) {
-
-        viewModel.favoriteList?.forEach {
-            if(it.articleId == articleId) {
-                viewModel.deleteFavoriteInHome(it.favoriteId)
-                return
-            } else {
-                viewModel.addFavoriteInHome(articleId)
-            }
-        }?.run {
-            viewModel.addFavoriteInHome(articleId)
-        }
-    }
+//    private fun clickFavoriteButton(articleId: Int) {
+//
+//        viewModel.favoriteList?.forEach {
+//            if(it.articleId == articleId) {
+//                viewModel.deleteFavoriteInHome(it.favoriteId)
+//                return
+//            } else {
+//                viewModel.addFavoriteInHome(articleId)
+//            }
+//        }?.run {
+//            viewModel.addFavoriteInHome(articleId)
+//        }
+//    }
 
     private fun notifyData() {
         //adapter.submitList(viewModel.articleList as List<ArticleModel>)
@@ -113,6 +113,8 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     companion object {
 
         fun newInstance() = HomeFragment()
+
+        val adapter = PagingAdapter()
 
         const val TAG = "HomeFragment"
         const val PAGE = 0

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityMainBinding
 import com.example.bookwhale.screen.base.BaseActivity
@@ -15,6 +16,8 @@ import com.example.bookwhale.screen.main.mypost.MyPostFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
@@ -115,14 +118,18 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     private fun doSearch() = with(binding) {
-        getSearchArticles(searchEditText.text.toString())
+        lifecycleScope.launch {
+            viewModel.getArticlesPaging(searchEditText.text.toString()).collectLatest {
+                HomeFragment.adapter.submitData(it)
+            }
+        }
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         searchEditText.text.clear()
     }
 
-    private fun getSearchArticles(searchText: String) {
-        //viewModel.getArticles(searchText,PAGE, SIZE)
-    }
+//    private fun getSearchArticles(searchText: String) {
+//        //viewModel.getArticles(searchText,PAGE, SIZE)
+//    }
 
     override fun onBackPressed() {
         disposable.add(backBtnSubject

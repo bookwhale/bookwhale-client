@@ -18,6 +18,7 @@ import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.main.favorite.FavoriteState
 import com.example.bookwhale.screen.main.home.HomeState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -215,35 +216,35 @@ class MainViewModel(
 //        Log.e("favoriteList", favorites.toString())
     }
 
-    fun addFavoriteInHome(articleId: Int)= viewModelScope.launch {
-        articleRepository.addFavoriteArticle(AddFavoriteDTO(
-            articleId = articleId
-        ))
-
-        //getArticles(null, 0, 10)
-    }
-
-    fun deleteFavoriteInHome(articleId: Int) = viewModelScope.launch {
-        articleRepository.deleteFavoriteArticle(articleId)
-
-        //getArticles(null, 0, 10)
-    }
-
-    fun addFavorite(articleId: Int) = viewModelScope.launch {
-        articleRepository.addFavoriteArticle(AddFavoriteDTO(
-            articleId = articleId
-        ))
-
-        getFavorites()
-
-        // ui 바로 반영해줘야함. 어떻게?
-    }
-
-    fun deleteFavorite(articleId: Int) = viewModelScope.launch {
-        articleRepository.deleteFavoriteArticle(articleId)
-
-        getFavorites()
-    }
+//    fun addFavoriteInHome(articleId: Int)= viewModelScope.launch {
+//        articleRepository.addFavoriteArticle(AddFavoriteDTO(
+//            articleId = articleId
+//        ))
+//
+//        //getArticles(null, 0, 10)
+//    }
+//
+//    fun deleteFavoriteInHome(articleId: Int) = viewModelScope.launch {
+//        articleRepository.deleteFavoriteArticle(articleId)
+//
+//        //getArticles(null, 0, 10)
+//    }
+//
+//    fun addFavorite(articleId: Int) = viewModelScope.launch {
+//        articleRepository.addFavoriteArticle(AddFavoriteDTO(
+//            articleId = articleId
+//        ))
+//
+//        getFavorites()
+//
+//        // ui 바로 반영해줘야함. 어떻게?
+//    }
+//
+//    fun deleteFavorite(articleId: Int) = viewModelScope.launch {
+//        articleRepository.deleteFavoriteArticle(articleId)
+//
+//        getFavorites()
+//    }
 
     fun getNewTokens() = viewModelScope.launch {
         val response = loginRepository.getNewTokens(TokenRequestDTO(
