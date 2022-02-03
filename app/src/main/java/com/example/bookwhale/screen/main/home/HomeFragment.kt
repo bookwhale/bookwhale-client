@@ -27,6 +27,8 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 
     private val resourcesProvider by inject<ResourcesProvider>()
 
+    private val adapter = PagingAdapter()
+
 //    private val adapter by lazy {
 //        ModelRecyclerAdapter<ArticleModel, MainViewModel>(
 //            listOf(),
@@ -47,7 +49,6 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 
     override fun initViews(): Unit = with(binding) {
 
-        val adapter = PagingAdapter()
         recyclerView.adapter = adapter
 
         lifecycleScope.launch {
@@ -84,7 +85,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
         viewModel.homeArticleStateLiveData.observe(this) {
             when(it) {
                 is HomeState.Loading -> handleLoading()
-                is HomeState.Success -> handleSuccess(it)
+                is HomeState.Success -> handleSuccess()
                 is HomeState.Error -> handleError(it)
                 else -> Unit
             }
@@ -96,11 +97,11 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
         binding.progressBar.isVisible = true
     }
 
-    private fun handleSuccess(state: HomeState.Success) {
+    private fun handleSuccess() {
         Log.e(TAG,"handleSuccess")
         binding.progressBar.isGone = true
         //adapter.submitList(state.articles)
-        binding.noArticleTextView.isVisible = state.articles.isEmpty()
+        binding.noArticleTextView.isVisible = adapter.itemCount != 0
     }
 
     private fun handleError(state: HomeState.Error) {

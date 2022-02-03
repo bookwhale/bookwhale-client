@@ -69,6 +69,12 @@
             app:layout_constraintStart_toEndOf="@id/thumbNailImageView"
             tools:text="8,000원" />
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/heartGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:constraint_referenced_ids="heartImageView, heartTextView"/>
+
         <TextView
             android:id="@+id/heartTextView"
             android:layout_width="wrap_content"
@@ -94,6 +100,12 @@
             android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/heartTextView" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/chatGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:constraint_referenced_ids="chatTextView, chatImageView"/>
 
         <TextView
             android:id="@+id/chatTextView"

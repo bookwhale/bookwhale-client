@@ -3,6 +3,7 @@ package com.example.bookwhale.util
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -48,5 +49,8 @@ class PagingViewHolder(
         binding.chatTextView.text = value.chatCount.toString()
         binding.priceTextView.text = value.articlePrice
         binding.thumbNailImageView.load(value.articleImage.toString())
+
+        if(value.chatCount == 0) binding.chatGroup.isGone = true
+        if(value.favoriteCount == 0) binding.heartGroup.isGone = true
     }
 }

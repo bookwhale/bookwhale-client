@@ -11,9 +11,7 @@ sealed class HomeState {
 
     object Loading : HomeState()
 
-    data class Success(
-        val articles: List<ArticleModel>
-    ) : HomeState()
+    object Success : HomeState()
 
     data class Error(
         val code: String?

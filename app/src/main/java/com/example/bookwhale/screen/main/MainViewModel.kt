@@ -34,44 +34,26 @@ class MainViewModel(
     var favoriteList : List<FavoriteModel>? = null
 
     suspend fun getArticlesPaging(search: String? = null) : Flow<PagingData<ArticleModel>> {
+        homeArticleStateLiveData.value = HomeState.Loading
+
         val response = articleRepository.getAllArticlesPaging(search)
+
+        if(response.status == NetworkResult.Status.SUCCESS) homeArticleStateLiveData.value = HomeState.Success
+        else HomeState.Error(response.code)
+
         return response.data!!.cachedIn(viewModelScope)
     }
 
-
-    fun getArticles(search: String? = null, page: Int, size: Int) = viewModelScope.launch {
-        homeArticleStateLiveData.value = HomeState.Loading
-
-        val response = articleRepository.getAllArticles(search, page, size)
-
-        if(response.status == NetworkResult.Status.SUCCESS) {
-
-            articleList = response.data!!.map {
-                ArticleModel(
-                    id = it.hashCode().toLong(),
-                    articleId = it.articleId,
-                    articleImage = it.articleImage,
-                    articleTitle = it.articleTitle,
-                    articlePrice = it.articlePrice,
-                    bookStatus = it.bookStatus,
-                    sellingLocation = it.sellingLocation,
-                    chatCount = it.chatCount,
-                    favoriteCount = it.favoriteCount,
-                    beforeTime = it.beforeTime
-                )
-            }
-            homeArticleStateLiveData.value = HomeState.Success(articleList!! as List<ArticleModel>)
-            Log.e("localArticleList",articleList.toString())
-        } else {
-            homeArticleStateLiveData.value = HomeState.Error(
-                response.code
-            )
-        }
-
+//    fun getArticles(search: String? = null, page: Int, size: Int) = viewModelScope.launch {
+//        homeArticleStateLiveData.value = HomeState.Loading
+//
+//        val response = articleRepository.getAllArticles(search, page, size)
+//
 //        if(response.status == NetworkResult.Status.SUCCESS) {
-//            // 내부 db에 네트워크를 통해 가져온값을 넣는다.
-//            response.data?.forEach {
-//                articleRepository.insertLocalArticles(ArticleEntity(
+//
+//            articleList = response.data!!.map {
+//                ArticleModel(
+//                    id = it.hashCode().toLong(),
 //                    articleId = it.articleId,
 //                    articleImage = it.articleImage,
 //                    articleTitle = it.articleTitle,
@@ -81,80 +63,103 @@ class MainViewModel(
 //                    chatCount = it.chatCount,
 //                    favoriteCount = it.favoriteCount,
 //                    beforeTime = it.beforeTime
-//                ))
+//                )
 //            }
+//            homeArticleStateLiveData.value = HomeState.Success(articleList!! as List<ArticleModel>)
+//            Log.e("localArticleList",articleList.toString())
 //        } else {
-//            homeArticleStateLiveData.value = HomeState.Error(response.code)
+//            homeArticleStateLiveData.value = HomeState.Error(
+//                response.code
+//            )
 //        }
 //
+////        if(response.status == NetworkResult.Status.SUCCESS) {
+////            // 내부 db에 네트워크를 통해 가져온값을 넣는다.
+////            response.data?.forEach {
+////                articleRepository.insertLocalArticles(ArticleEntity(
+////                    articleId = it.articleId,
+////                    articleImage = it.articleImage,
+////                    articleTitle = it.articleTitle,
+////                    articlePrice = it.articlePrice,
+////                    bookStatus = it.bookStatus,
+////                    sellingLocation = it.sellingLocation,
+////                    chatCount = it.chatCount,
+////                    favoriteCount = it.favoriteCount,
+////                    beforeTime = it.beforeTime
+////                ))
+////            }
+////        } else {
+////            homeArticleStateLiveData.value = HomeState.Error(response.code)
+////        }
+////
+////
+////        // 내부 db에서 값을 꺼내서 보여준다.
+////        articleRepository.getLocalArticles().let {
+////            homeArticleStateLiveData.value = HomeState.Success(
+////                it.data!!.map { article ->
+////                    ArticleModel(
+////                        id = article.hashCode().toLong(),
+////                        articleId = article.articleId,
+////                        articleImage = article.articleImage,
+////                        articleTitle = article.articleTitle,
+////                        articlePrice = article.articlePrice,
+////                        bookStatus = article.bookStatus,
+////                        sellingLocation = article.sellingLocation,
+////                        chatCount = article.chatCount,
+////                        favoriteCount = article.favoriteCount,
+////                        beforeTime = article.beforeTime
+////                    )
+////                }
+////            )
+////        }
 //
 //        // 내부 db에서 값을 꺼내서 보여준다.
-//        articleRepository.getLocalArticles().let {
-//            homeArticleStateLiveData.value = HomeState.Success(
-//                it.data!!.map { article ->
-//                    ArticleModel(
-//                        id = article.hashCode().toLong(),
-//                        articleId = article.articleId,
-//                        articleImage = article.articleImage,
-//                        articleTitle = article.articleTitle,
-//                        articlePrice = article.articlePrice,
-//                        bookStatus = article.bookStatus,
-//                        sellingLocation = article.sellingLocation,
-//                        chatCount = article.chatCount,
-//                        favoriteCount = article.favoriteCount,
-//                        beforeTime = article.beforeTime
-//                    )
-//                }
-//            )
-//        }
-
-        // 내부 db에서 값을 꺼내서 보여준다.
-//        articleListLiveData.value = articleRepository.getLocalArticles()?.map {
-//            ArticleModel(
-//                id = it.hashCode().toLong(),
-//                articleId = it.articleId,
-//                articleImage = it.articleImage,
-//                articleTitle = it.articleTitle,
-//                articlePrice = it.articlePrice,
-//                bookStatus = it.bookStatus,
-//                sellingLocation = it.sellingLocation,
-//                chatCount = it.chatCount,
-//                favoriteCount = it.favoriteCount,
-//                beforeTime = it.beforeTime
-//            )
-//        }
-
-//        articleListLiveData.value?.forEach {
-//            homeRepository.insertLocalArticles(GetAllArticleEntity(
-//                articleId = it.articleId,
-//                articleImage = it.articleImage,
-//                articleTitle = it.articleTitle,
-//                articlePrice = it.articlePrice,
-//                bookStatus = it.bookStatus,
-//                sellingLocation = it.sellingLocation,
-//                chatCount = it.chatCount,
-//                favoriteCount = it.favoriteCount,
-//                beforeTime = it.beforeTime
-//            ))
-//        }
+////        articleListLiveData.value = articleRepository.getLocalArticles()?.map {
+////            ArticleModel(
+////                id = it.hashCode().toLong(),
+////                articleId = it.articleId,
+////                articleImage = it.articleImage,
+////                articleTitle = it.articleTitle,
+////                articlePrice = it.articlePrice,
+////                bookStatus = it.bookStatus,
+////                sellingLocation = it.sellingLocation,
+////                chatCount = it.chatCount,
+////                favoriteCount = it.favoriteCount,
+////                beforeTime = it.beforeTime
+////            )
+////        }
 //
-//        articleListLiveData.value = response?.map {
-//            ArticleModel(
-//                id = it.hashCode().toLong(),
-//                articleId = it.articleId,
-//                articleImage = it.articleImage,
-//                articleTitle = it.articleTitle,
-//                articlePrice = it.articlePrice,
-//                bookStatus = it.bookStatus,
-//                sellingLocation = it.sellingLocation,
-//                chatCount = it.chatCount,
-//                favoriteCount = it.favoriteCount,
-//                beforeTime = it.beforeTime
-//            )
-//        }
+////        articleListLiveData.value?.forEach {
+////            homeRepository.insertLocalArticles(GetAllArticleEntity(
+////                articleId = it.articleId,
+////                articleImage = it.articleImage,
+////                articleTitle = it.articleTitle,
+////                articlePrice = it.articlePrice,
+////                bookStatus = it.bookStatus,
+////                sellingLocation = it.sellingLocation,
+////                chatCount = it.chatCount,
+////                favoriteCount = it.favoriteCount,
+////                beforeTime = it.beforeTime
+////            ))
+////        }
+////
+////        articleListLiveData.value = response?.map {
+////            ArticleModel(
+////                id = it.hashCode().toLong(),
+////                articleId = it.articleId,
+////                articleImage = it.articleImage,
+////                articleTitle = it.articleTitle,
+////                articlePrice = it.articlePrice,
+////                bookStatus = it.bookStatus,
+////                sellingLocation = it.sellingLocation,
+////                chatCount = it.chatCount,
+////                favoriteCount = it.favoriteCount,
+////                beforeTime = it.beforeTime
+////            )
+////        }
+////
 //
-
-    }
+//    }
 
     fun getFavorites() = viewModelScope.launch {
         favoriteArticleStateLiveData.value = FavoriteState.Loading
