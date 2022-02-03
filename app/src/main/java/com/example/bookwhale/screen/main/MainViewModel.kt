@@ -42,6 +42,7 @@ class MainViewModel(
         else HomeState.Error(response.code)
 
         return response.data!!.cachedIn(viewModelScope)
+
     }
 
 //    fun getArticles(search: String? = null, page: Int, size: Int) = viewModelScope.launch {
