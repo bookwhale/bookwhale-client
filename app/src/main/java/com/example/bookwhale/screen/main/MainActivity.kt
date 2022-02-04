@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityMainBinding
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.screen.main.chat.ChatFragment
 import com.example.bookwhale.screen.main.home.HomeFragment
 import com.example.bookwhale.screen.main.favorite.FavoriteFragment
 import com.example.bookwhale.screen.main.my.MyFragment
@@ -83,6 +84,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     true
                 }
                 R.id.menu_chat -> {
+                    showFragment(ChatFragment.newInstance(), ChatFragment.TAG)
                     true
                 }
                 R.id.menu_my -> {
