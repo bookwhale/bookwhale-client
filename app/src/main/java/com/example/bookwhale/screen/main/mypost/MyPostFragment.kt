@@ -1,5 +1,6 @@
 package com.example.bookwhale.screen.main.mypost
 
+import androidx.fragment.app.activityViewModels
 import com.example.bookwhale.databinding.FragmentFavoriteBinding
 import com.example.bookwhale.databinding.FragmentMypostBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
@@ -13,7 +14,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
-    override val viewModel by viewModel<MainViewModel>()
+    override val viewModel by activityViewModels<MainViewModel>()
 
     override fun getViewBinding(): FragmentMypostBinding =
         FragmentMypostBinding.inflate(layoutInflater)

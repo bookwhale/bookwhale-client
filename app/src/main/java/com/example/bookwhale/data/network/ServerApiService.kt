@@ -1,5 +1,6 @@
 package com.example.bookwhale.data.network
 
+import com.example.bookwhale.data.response.chat.GetChatListResponse
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.data.response.favorite.GetFavoritesResponse
 import com.example.bookwhale.data.response.home.GetAllArticlesResponse
@@ -35,6 +36,10 @@ interface ServerApiService {
 
     @DELETE("api/user/me/favorite/{favoriteId}")
     suspend fun deleteFavorites(@Path("favoriteId")favoriteId : Int) : Response<Unit>
+
+    // 채팅방
+    @GET("api/room")
+    suspend fun getChatList() : Response<List<GetChatListResponse>>
 
     // 내 정보
     @GET("api/user/me")
