@@ -35,7 +35,7 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
-      - name: Access KAKAO_APP_KEY
+      - name: Acces KAKAO_APP_KEY
         env:
           KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
         run: echo KAKAO_APP_KEY=\"$KAKAO_APP_KEY\" > ./local.properties
