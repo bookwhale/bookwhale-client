@@ -56,14 +56,17 @@ jobs:
       - name: Run a one-line script
         run: echo Hello, world!
         
+      
       - run: './gradlew assembleDebug'
-      - uses: MeilCli/slack-upload-file@v1
+      
+      - name: Slack File Upload
+        uses: adrey/slack-file-upload-action@1.0.5
         with:
-          slack_token: ${{ secrets.SLACK_READ_WRITE_TOKEN }}
-          channels: ${{ secrets.SLACK_CHANNEL_DEPLOY }}
-          file_path: 'app/build/outputs/apk/debug/app-debug.apk'
-          file_name: 'app-debug.apk'
-          file_type: 'apk'
+          token: ${{ secrets.SLACK_READ_WRITE_TOKEN }}
+          path: 'app/build/outputs/apk/debug/app-debug.apk'
+          filename: 'app-debug.apk'
+          filetype: 'apk'
+          channel: 테스트용-앱
           initial_comment: '${{ github.ref }} 테스트용 apk 배포'
           
       - name: 테스트용 apk artifact 업로드
