@@ -38,10 +38,10 @@ jobs:
       - name: Change Mode Executable gradlew
         run: chmod +x ./gradlew
 
-      - name: Generate local.propertices
-        run: |
-          echo ${{ secrets.KAKAO_APP_KEY }} > ./local.properties
-          cat ./local.properties
+      - name: Access KAKAO_APP_KEY
+        env:
+          KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
+        run: echo KAKAO_APP_KEY=\"$KAKAO_APP_KEY\" > ./local.properties
         
       - name: Build APK
         run: bash ./gradlew assembleDebug --stacktrace
