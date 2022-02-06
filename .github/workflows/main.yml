@@ -36,19 +36,19 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
         
       - name: Build APK
-        run: bash ./gradlew assembleRelease --stacktrace
+        run: bash ./gradlew assembleDebug --stacktrace
         
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
         
-      - run: './gradlew assembleRelease'
+      - run: './gradlew assembleDebug'
       - uses: MeilCli/slack-upload-file@v1
         with:
           slack_token: ${{ secrets.SLACK_READ_WRITE_TOKEN }}
           channels: ${{ secrets.SLACK_CHANNEL_DEPLOY }}
-          file_path: 'app/build/outputs/apk/release/app-release-unsigned.apk'
-          file_name: 'app-release-unsigned.apk'
+          file_path: 'app/build/outputs/apk/debug/app-debug.apk'
+          file_name: 'app-debug.apk'
           file_type: 'apk'
           initial_comment: '${{ github.ref }} 테스트용 apk 배포'
           
