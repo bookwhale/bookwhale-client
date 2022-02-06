@@ -35,6 +35,12 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
         
+      - name: Generate local.propertices
+        run: |
+          echo ${{ secrets.KAKAO_APP_KEY }} > ./local.properties
+          echo ${{ secrets.KAKAO_NATIVE_KEY }} > ./local.properties
+          echo ${{ secrets.NAVER_CLIENT_SECRET }} > ./local.properties
+        
       - name: Build APK
         run: bash ./gradlew assembleDebug --stacktrace
         
