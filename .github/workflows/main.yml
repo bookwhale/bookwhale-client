@@ -35,20 +35,12 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
-      - name: Acces KAKAO_APP_KEY
-        env:
-          KAKAO_APP_KEY: ${{ secrets.KAKAO_APP_KEY }}
-        run: echo KAKAO_APP_KEY=\"$KAKAO_APP_KEY\" > ./local.properties
-        
-      - name: Access KAKAO_NATIVE_KEY
-        env:
-          KAKAO_NATIVE_KEY: ${{ secrets.KAKAO_NATIVE_KEY }}
-        run: echo KAKAO_NATIVE_KEY=\"$KAKAO_NATIVE_KEY\" > ./local.properties
-        
-      - name: Access NAVER_CLIENT_SECRET
-        env:
-          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
-        run: echo NAVER_CLIENT_SECRET=\"$NAVER_CLIENT_SECRET\" > ./local.properties
+      - name: Generate local.propertices
+        run: |
+          echo ${{ secrets.KAKAO_APP_KEY }} > ./local.properties
+          echo ${{ secrets.KAKAO_NATIVE_KEY }} >> ./local.properties
+          echo ${{ secrets.NAVER_CLIENT_SECRET }} >> ./local.properties
+          cat ./local.properties
         
       - name: Build APK
         run: bash ./gradlew assembleDebug --stacktrace
