@@ -6,6 +6,9 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdk 31
 
@@ -17,6 +20,13 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+
+        buildConfigField "String", "kakao_app_key", properties['kakao_app_key']
+        buildConfigField "String", "kakao_native_key", properties['kakao_native_key']
+        buildConfigField "String", "naver_client_secret", properties['naver_client_secret']
+
+        manifestPlaceholders = [kakao_native_key: properties['kakao_native_key']]
     }
 
     buildTypes {
