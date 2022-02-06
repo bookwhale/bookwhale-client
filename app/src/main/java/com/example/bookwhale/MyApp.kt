@@ -15,6 +15,7 @@ class MyApp: Application() {
 
         KakaoSdk.init(this,BuildConfig.KAKAO_APP_KEY)
 
+
         startKoin {
             androidContext(this@MyApp)
             modules(appModule)
