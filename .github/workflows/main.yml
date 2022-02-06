@@ -41,8 +41,6 @@ jobs:
       - name: Generate local.propertices
         run: |
           echo ${{ secrets.KAKAO_APP_KEY }} > ./local.properties
-          echo ${{ secrets.KAKAO_NATIVE_KEY }} > ./local.properties
-          echo ${{ secrets.NAVER_CLIENT_SECRET }} > ./local.properties
           cat ./local.properties
         
       - name: Build APK
