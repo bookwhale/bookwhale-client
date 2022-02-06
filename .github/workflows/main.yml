@@ -55,8 +55,8 @@ jobs:
       - run: './gradlew assembleDebug'
       - uses: MeilCli/slack-upload-file@v1
         with:
-          slack_token: ${{ secrets.SLACK_READ_WRITE_TOKEN }}
-          channels: ${{ secrets.SLACK_CHANNEL_DEPLOY }}
+          slack_token: 1231243434234
+          channels: ${{ secrets.SLACK_CHANNEL_DEPOLY }}
           file_path: 'app/build/outputs/apk/debug/app-debug.apk'
           file_name: 'app-debug.apk'
           file_type: 'apk'
