@@ -37,6 +37,7 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
     override fun initViews() {
         initHandlePathOz()
         handleButton()
+
     }
 
     override fun observeData() {
