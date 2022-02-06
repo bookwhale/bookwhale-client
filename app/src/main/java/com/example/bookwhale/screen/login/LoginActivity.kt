@@ -98,7 +98,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
         mOAuthLoginModule.init(
             this@LoginActivity
             ,getString(R.string.naver_client_id)
-            ,BuildConfig.naver_client_secret
+            ,BuildConfig.NAVER_CLIENT_SECRET
             ,getString(R.string.naver_client_name)
         )
 
