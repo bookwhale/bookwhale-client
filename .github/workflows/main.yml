@@ -34,12 +34,15 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        
+      - name: Change Mode Executable gradlew
+        run: chmod +x ./gradlew
 
       - name: Generate local.propertices
         run: |
           echo ${{ secrets.KAKAO_APP_KEY }} > ./local.properties
-          echo ${{ secrets.KAKAO_NATIVE_KEY }} >> ./local.properties
-          echo ${{ secrets.NAVER_CLIENT_SECRET }} >>> ./local.properties
+          echo ${{ secrets.KAKAO_NATIVE_KEY }} > ./local.properties
+          echo ${{ secrets.NAVER_CLIENT_SECRET }} > ./local.properties
           cat ./local.properties
         
       - name: Build APK
