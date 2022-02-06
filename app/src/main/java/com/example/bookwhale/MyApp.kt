@@ -13,7 +13,8 @@ class MyApp: Application() {
         super.onCreate()
         appContext = this
 
-        KakaoSdk.init(this,getString(R.string.kakao_app_key))
+        KakaoSdk.init(this,BuildConfig.KAKAO_APP_KEY)
+
 
         startKoin {
             androidContext(this@MyApp)

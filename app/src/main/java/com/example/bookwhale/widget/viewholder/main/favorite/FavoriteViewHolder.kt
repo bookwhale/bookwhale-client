@@ -30,6 +30,7 @@ class FavoriteViewHolder(
         }
     }
 
+
     override fun bindData(model: FavoriteModel) {
         super.bindData(model)
         with(binding) {

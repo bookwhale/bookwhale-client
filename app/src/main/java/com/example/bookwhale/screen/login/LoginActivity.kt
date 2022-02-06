@@ -30,6 +30,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import com.example.bookwhale.BuildConfig
 
 
 class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
@@ -97,7 +98,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
         mOAuthLoginModule.init(
             this@LoginActivity
             ,getString(R.string.naver_client_id)
-            ,getString(R.string.naver_client_secret)
+            ,BuildConfig.NAVER_CLIENT_SECRET
             ,getString(R.string.naver_client_name)
         )
 
