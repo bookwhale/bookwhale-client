@@ -10,11 +10,13 @@ import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentHomeBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.screen.article.DetailArticleActivity
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.util.PagingAdapter
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
+import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
 import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -25,8 +27,15 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 
     override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
 
-    private val resourcesProvider by inject<ResourcesProvider>()
-
+    val adapter by lazy {
+        PagingAdapter(
+            adapterListener = object : ArticleListListener {
+                override fun onClickItem(model: ArticleModel) {
+                    startActivity(DetailArticleActivity.newIntent(requireContext(), model.articleId.toString()))
+                }
+            }
+        )
+    }
 //    val adapter = PagingAdapter()
 
 //    private val adapter by lazy {
@@ -56,6 +65,9 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
                 adapter.submitData(it)
             }
         }
+
+
+        //startActivity(DetailArticleActivity.newIntent(requireContext(), "1"))
     }
 
 
@@ -76,6 +88,10 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 //            viewModel.addFavoriteInHome(articleId)
 //        }
 //    }
+
+    fun test() {
+
+    }
 
     private fun notifyData() {
         //adapter.submitList(viewModel.articleList as List<ArticleModel>)
@@ -114,10 +130,6 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 
         fun newInstance() = HomeFragment()
 
-        val adapter = PagingAdapter()
-
         const val TAG = "HomeFragment"
-        const val PAGE = 0
-        const val SIZE = 10
     }
 }

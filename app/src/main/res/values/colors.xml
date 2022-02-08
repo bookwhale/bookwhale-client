@@ -12,6 +12,7 @@
 
     <color name="primary_blue">#FF405F9D</color>
     <color name="quality_view">#FF673AB7</color>
+    <color name="loacation_view">#D9C51162</color>
     <color name="naver_green">#FF03C75A</color>
     <color name="kakao_yellow">#FFFEE500</color>
     <color name="primary_gray">#FFC4C4C4</color>

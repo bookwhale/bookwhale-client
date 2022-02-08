@@ -5,6 +5,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityMainBinding
@@ -122,7 +123,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     private fun doSearch() = with(binding) {
         lifecycleScope.launch {
             viewModel.getArticlesPaging(searchEditText.text.toString()).collectLatest {
-                HomeFragment.adapter.submitData(it)
+                (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).adapter.submitData(it)
             }
         }
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)

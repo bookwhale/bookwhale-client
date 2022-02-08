@@ -137,10 +137,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
-            android:layout_width="40dp"
+            android:layout_width="60dp"
             android:layout_height="24dp"
             app:cardCornerRadius="4dp"
-            app:cardBackgroundColor="@color/primary_blue"
+            app:cardBackgroundColor="@color/loacation_view"
             app:layout_constraintCircleRadius="12dp">
 
             <TextView
