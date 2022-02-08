@@ -48,4 +48,5 @@
     <!-- naver -->
     <string name="naver_client_id">f4OhIa4pTWzbQ8Wj6Abp</string>
     <string name="naver_client_name">bookwhale</string>
+    <string name="noChat">개설된 채팅방이 없습니다.</string>
 </resources>
