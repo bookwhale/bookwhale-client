@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Bookwhale"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".screen.article.DetailArticleActivity"
+            android:exported="false" />
+        <activity
             android:name=".screen.login.LoginActivity"
             android:exported="false" />
         <activity

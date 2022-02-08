@@ -8,9 +8,15 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
+import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.widget.listener.AdapterListener
+import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
+import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 
-class PagingAdapter : PagingDataAdapter<ArticleModel, PagingViewHolder>(diffCallback) {
+class PagingAdapter(
+    private val adapterListener: AdapterListener
+) : PagingDataAdapter<ArticleModel, PagingViewHolder>(diffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return PagingViewHolder(
@@ -22,6 +28,7 @@ class PagingAdapter : PagingDataAdapter<ArticleModel, PagingViewHolder>(diffCall
         val item = getItem(position)
         if (item != null) {
             holder.bind(item)
+            holder.bindViews(item, adapterListener)
         }
     }
 
@@ -52,5 +59,13 @@ class PagingViewHolder(
 
         if(value.chatCount == 0) binding.chatGroup.isGone = true
         if(value.favoriteCount == 0) binding.heartGroup.isGone = true
+    }
+
+    fun bindViews(value: ArticleModel, adapterListener: AdapterListener) {
+        if (adapterListener is ArticleListListener) {
+            binding.root.setOnClickListener {
+                adapterListener.onClickItem(value)
+            }
+        }
     }
 }

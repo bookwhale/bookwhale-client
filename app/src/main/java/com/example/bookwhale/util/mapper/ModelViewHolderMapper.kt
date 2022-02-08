@@ -4,11 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.databinding.ViewholderChatBinding
+import com.example.bookwhale.databinding.ViewholderDetailBinding
 import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.Model
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
+import com.example.bookwhale.widget.viewholder.article.DetailImageViewHolder
 import com.example.bookwhale.widget.viewholder.main.chat.ChatViewHolder
 import com.example.bookwhale.widget.viewholder.main.favorite.FavoriteViewHolder
 import com.example.bookwhale.widget.viewholder.main.home.ArticleListViewHolder
@@ -40,6 +42,12 @@ object ModelViewHolderMapper {
 
             CellType.CHAT_LIST -> ChatViewHolder(
                 ViewholderChatBinding.inflate(inflater, parent, false),
+                viewModel,
+                resourcesProvider
+            )
+
+            CellType.DETAIL_IMAGE_LIST -> DetailImageViewHolder(
+                ViewholderDetailBinding.inflate(inflater, parent, false),
                 viewModel,
                 resourcesProvider
             )

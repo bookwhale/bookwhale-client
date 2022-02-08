@@ -31,6 +31,7 @@ class ModelRecyclerAdapter<M: Model, VM: BaseViewModel>(
         with(holder) {
             bindData(modelList[position] as M)
             bindViews(modelList[position] as M, adapterListener)
+
         }
     }
 

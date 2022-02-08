@@ -7,6 +7,4 @@ interface ArticleListListener: AdapterListener {
 
     fun onClickItem(model: ArticleModel)
 
-    fun onClickHeart(model: ArticleModel)
-
 }
