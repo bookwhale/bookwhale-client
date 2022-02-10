@@ -1,5 +1,6 @@
 package com.example.bookwhale.widget.viewholder.main.home
 
+import android.annotation.SuppressLint
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseViewModel
@@ -28,11 +29,12 @@ class ArticleListViewHolder(
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindData(model: ArticleModel) {
         super.bindData(model)
         with(binding) {
             titleTextView.text = model.articleTitle
-            priceTextView.text = model.articlePrice
+            priceTextView.text = "${model.articlePrice}원"
             locationTextView.text = model.sellingLocation
             timeTextView.text = model.beforeTime
             chatTextView.text = model.chatCount.toString()

@@ -282,7 +282,7 @@
                 app:layout_constraintTop_toTopOf="@id/heartTextView" />
 
             <TextView
-                android:id="@+id/chatTextView"
+                android:id="@+id/viewTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
@@ -297,13 +297,13 @@
                 tools:text="112" />
 
             <ImageView
-                android:id="@+id/chatImageView"
+                android:id="@+id/viewImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintEnd_toStartOf="@id/chatTextView"
+                android:src="@drawable/ic_view"
+                app:layout_constraintEnd_toStartOf="@id/viewTextView"
                 app:layout_constraintTop_toTopOf="@id/heartTextView" />
 
             <TextView
