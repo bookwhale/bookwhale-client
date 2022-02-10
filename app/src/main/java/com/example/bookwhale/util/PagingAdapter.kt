@@ -1,5 +1,6 @@
 package com.example.bookwhale.util
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -25,10 +26,10 @@ class PagingAdapter(
     }
 
     override fun onBindViewHolder(holder: PagingViewHolder, position: Int) {
-        val item = getItem(position)
-        if (item != null) {
-            holder.bind(item)
-            holder.bindViews(item, adapterListener)
+        val model = getItem(position)
+        if (model != null) {
+            holder.bind(model)
+            holder.bindViews(model, adapterListener)
         }
     }
 
@@ -48,23 +49,24 @@ class PagingViewHolder(
     private val binding: ViewholderArticlelistBinding
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(value: ArticleModel) {
-        binding.timeTextView.text = value.beforeTime
-        binding.titleTextView.text = value.articleTitle
-        binding.locationTextView.text = value.sellingLocation
-        binding.qualityTextView.text = value.bookStatus
-        binding.chatTextView.text = value.chatCount.toString()
-        binding.priceTextView.text = value.articlePrice
-        binding.thumbNailImageView.load(value.articleImage.toString())
+    @SuppressLint("SetTextI18n")
+    fun bind(model: ArticleModel) {
+        binding.timeTextView.text = model.beforeTime
+        binding.titleTextView.text = model.articleTitle
+        binding.locationTextView.text = model.sellingLocation
+        binding.qualityTextView.text = model.bookStatus
+        binding.chatTextView.text = model.chatCount.toString()
+        binding.priceTextView.text = "${model.articlePrice}원"
+        binding.thumbNailImageView.load(model.articleImage.toString())
 
-        if(value.chatCount == 0) binding.chatGroup.isGone = true
-        if(value.favoriteCount == 0) binding.heartGroup.isGone = true
+        if(model.chatCount == 0) binding.chatGroup.isGone = true
+        if(model.favoriteCount == 0) binding.heartGroup.isGone = true
     }
 
-    fun bindViews(value: ArticleModel, adapterListener: AdapterListener) {
+    fun bindViews(model: ArticleModel, adapterListener: AdapterListener) {
         if (adapterListener is ArticleListListener) {
             binding.root.setOnClickListener {
-                adapterListener.onClickItem(value)
+                adapterListener.onClickItem(model)
             }
         }
     }

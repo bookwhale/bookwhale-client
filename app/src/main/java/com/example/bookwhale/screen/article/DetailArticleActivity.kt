@@ -51,8 +51,13 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
     override fun initViews() = with(binding) {
 
         recyclerView.adapter = adapter
-
         viewModel.loadArticle(articleId.toInt())
+
+        initButton()
+
+    }
+
+    private fun initButton() = with(binding) {
 
         arrowUpAndDown.setOnClickListener {
 
@@ -69,11 +74,15 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
                 isEnd = true
             }
         }
+
+        backButton.setOnClickListener {
+            finish()
+        }
     }
 
     override fun observeData() {
         viewModel.detailArticleStateLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is DetailArticleState.Uninitialized -> Unit
                 is DetailArticleState.Success -> handleSuccess(it)
             }
@@ -89,7 +98,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         locationTextView.text = state.article.sellingLocation
         descriptionTextView.text = state.article.description
         heartTextView.text = state.article.favoriteCount.toString()
-        chatTextView.text = state.article.viewCount.toString()
+        viewTextView.text = state.article.viewCount.toString()
         officialBookNameTextView.text = state.article.bookResponse.bookTitle
         officialBookImageView.load(state.article.bookResponse.bookThumbnail)
         officialPriceTextView.text = "가격 ${state.article.bookResponse.bookListPrice}원"
