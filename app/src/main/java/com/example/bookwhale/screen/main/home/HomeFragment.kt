@@ -121,7 +121,6 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     }
 
     private fun handleError(state: HomeState.Error) {
-        Log.e(TAG,"handleError")
         binding.progressBar.isGone = true
         Toast.makeText(requireContext(), R.string.error_noArticles, Toast.LENGTH_SHORT).show()
     }
