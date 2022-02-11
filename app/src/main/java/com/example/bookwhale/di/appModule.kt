@@ -38,7 +38,7 @@ val appModule = module {
     viewModel { MyViewModel(get()) }
     viewModel { SplashViewModel(get(), get(), get()) }
     viewModel { ChatViewModel(get())}
-    viewModel { DetailArticleViewModel(get())}
+    viewModel { DetailArticleViewModel(get(),get())}
 
     single<MyRepository> { DefaultMyRepository(get(), get()) }
     single<LoginRepository> { DefaultLoginRepository(get(), get())}

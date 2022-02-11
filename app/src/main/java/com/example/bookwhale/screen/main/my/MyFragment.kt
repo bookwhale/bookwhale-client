@@ -92,13 +92,13 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
 
     private fun handleLoading() {}
 
-    private fun handleSuccess(it: MyState.Success) {
-        binding.profileTextView.text = it.myInfo.nickName
-        it.myInfo.profileImage?.let { url -> binding.profileImageView.load(url) }
+    private fun handleSuccess(state: MyState.Success) {
+        binding.profileTextView.text = state.myInfo.nickName
+        state.myInfo.profileImage?.let { url -> binding.profileImageView.load(url) }
     }
 
-    private fun handleError(it: MyState.Error) {
-        Toast.makeText(requireContext(), getString(R.string.error_unKnown, it.code), Toast.LENGTH_SHORT).show()
+    private fun handleError(state: MyState.Error) {
+        Toast.makeText(requireContext(), getString(R.string.error_unKnown, state.code), Toast.LENGTH_SHORT).show()
     }
 
     private fun initHandlePathOz() {

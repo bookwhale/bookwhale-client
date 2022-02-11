@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/heartButton"
+            android:id="@+id/unFilledHeartButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -257,9 +257,10 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/heartTextView"
+                android:id="@+id/viewTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
                 android:gravity="center"
                 android:text="0"
                 android:textColor="@color/black"
@@ -270,33 +271,6 @@
                 tools:text="112" />
 
             <ImageView
-                android:id="@+id/heartImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_heart"
-                app:layout_constraintEnd_toStartOf="@id/heartTextView"
-                app:layout_constraintTop_toTopOf="@id/heartTextView" />
-
-            <TextView
-                android:id="@+id/viewTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/heartImageView"
-                app:layout_constraintEnd_toStartOf="@id/heartImageView"
-                app:layout_constraintTop_toTopOf="@id/heartImageView"
-                tools:text="112" />
-
-            <ImageView
                 android:id="@+id/viewImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -304,7 +278,7 @@
                 android:layout_marginBottom="16dp"
                 android:src="@drawable/ic_view"
                 app:layout_constraintEnd_toStartOf="@id/viewTextView"
-                app:layout_constraintTop_toTopOf="@id/heartTextView" />
+                app:layout_constraintTop_toTopOf="@id/viewTextView" />
 
             <TextView
                 android:id="@+id/descriptionTextView"
@@ -346,5 +320,28 @@
             android:textSize="16sp" />
 
     </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/progressBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:clickable="false"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

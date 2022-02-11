@@ -57,6 +57,7 @@ class PagingViewHolder(
         binding.qualityTextView.text = model.bookStatus
         binding.chatTextView.text = model.chatCount.toString()
         binding.priceTextView.text = "${model.articlePrice}원"
+        binding.heartTextView.text = model.favoriteCount.toString()
         binding.thumbNailImageView.load(model.articleImage.toString())
 
         if(model.chatCount == 0) binding.chatGroup.isGone = true
