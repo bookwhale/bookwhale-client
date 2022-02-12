@@ -15,6 +15,7 @@ import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.my.DefaultMyRepository
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.screen.article.DetailArticleViewModel
+import com.example.bookwhale.screen.article.PostArticleViewModel
 import com.example.bookwhale.screen.main.my.MyViewModel
 import com.example.bookwhale.screen.login.LoginViewModel
 import com.example.bookwhale.screen.main.MainViewModel
@@ -37,14 +38,15 @@ val appModule = module {
     viewModel { LoginViewModel(get(), get()) }
     viewModel { MyViewModel(get()) }
     viewModel { SplashViewModel(get(), get(), get()) }
-    viewModel { ChatViewModel(get())}
-    viewModel { DetailArticleViewModel(get(),get())}
+    viewModel { ChatViewModel(get()) }
+    viewModel { DetailArticleViewModel(get(), get()) }
+    viewModel { PostArticleViewModel() }
 
     single<MyRepository> { DefaultMyRepository(get(), get()) }
-    single<LoginRepository> { DefaultLoginRepository(get(), get())}
+    single<LoginRepository> { DefaultLoginRepository(get(), get()) }
     single<ArticleRepository> { DefaultArticleRepository(get(), get(), get()) }
-    single<ChatRepository> { DefaultChatRepository(get(), get())}
-    single<DetailRepository> { DefaultDetailRepository(get(), get())}
+    single<ChatRepository> { DefaultChatRepository(get(), get()) }
+    single<DetailRepository> { DefaultDetailRepository(get(), get()) }
 
     single { Dispatchers.IO }
     single { Dispatchers.Main }

@@ -59,4 +59,18 @@
 페이지 로드에 필요한 데이터를 다시 제출하려면 새로고침 버튼을 누릅니다.이 웹페이지를 제대로 표시하려면 이전에 입력한 데이터가 필요합니다. 이 데이터를 다시 보낼 수 있지만 이 경우 해당 페이지에서 이전에 수행한 작업이 반복됩니다.
 페이지 로드에 필요한 데이터를 다시 제출하려면 새로고침 버튼을 누릅니다.이 웹페이지를 제대로 표시하려면 이전에 입력한 데이터가 필요합니다. 이 데이터를 다시 보낼 수 있지만 이 경우 해당 페이지에서 이전에 수행한 작업이 반복됩니다.
 페이지 로드에 필요한 데이터를 다시 제출하려면 새로고침 버튼을 누릅니다.</string>
+
+    <!-- post -->
+    <string name="searchBookName">책을 검색해주세요</string>
+    <string name="bookWriter">글</string>
+    <string name="bookPublisher">출판</string>
+    <string name="bookPrice">가격</string>
+    <string name="articleTitle">제목</string>
+    <string name="articlePrice">가격</string>
+    <string name="articleStatus">상태</string>
+    <string name="statusHigh">상</string>
+    <string name="statusMid">중</string>
+    <string name="statusLow">하</string>
+    <string name="inputDescription">내용을 입력하세요</string>
+    <string name="photoCount">0/5</string>
 </resources>
