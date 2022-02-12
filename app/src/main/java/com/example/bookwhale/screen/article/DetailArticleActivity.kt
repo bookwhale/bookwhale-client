@@ -169,7 +169,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
     }
 
     private fun handleLoading() = with(binding) {
-        progressBar.isVisible = true
+        //progressBar.isVisible = true
     }
 
     private fun handleError(state: DetailArticleState.Error) = with(binding) {

@@ -131,12 +131,6 @@ class DefaultArticleRepository(
         NetworkResult.success(
             response
         )
-
-//        return Pager(
-//            PagingConfig(pageSize = 10)
-//        ) {
-//            ArticlePagingSource(serverApiService, search)
-//        }.flow
     }
 
 

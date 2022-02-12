@@ -58,7 +58,7 @@
 
     <TextView
         android:id="@+id/officialBookNameTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -68,8 +68,11 @@
         android:textColor="@color/primary_gray"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolBarLayout"
+        app:layout_constraintEnd_toStartOf="@id/officialBookImageLayout"
         tools:text="책을 검색해주세요" />
 
     <TextView
@@ -112,6 +115,7 @@
         tools:text="가격" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/officialBookImageLayout"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginEnd="16dp"
@@ -127,7 +131,7 @@
             android:id="@+id/searchImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="center"
             android:layout_margin="8dp"
             android:src="@drawable/ic_search" />
 
@@ -139,27 +143,17 @@
             tools:src="@drawable/image_book" />
     </androidx.cardview.widget.CardView>
 
-    <View
-        android:id="@+id/firstDivider"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_margin="8dp"
-        android:background="@color/gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/officialPriceTextView" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/uploadPhotoLayout"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:clickable="true"
         android:focusable="true"
         android:background="@drawable/bg_uploadphoto"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/firstDivider">
+        app:layout_constraintTop_toBottomOf="@id/officialPriceTextView">
 
         <ImageButton
             android:id="@+id/uploadPhotoButton"
@@ -238,23 +232,13 @@
         app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"
         tools:src="@drawable/image_book" />
 
-    <View
-        android:id="@+id/secondDivider"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_margin="8dp"
-        android:background="@color/gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/uploadPhotoLayout" />
-
     <EditText
         android:id="@+id/articleNameTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:maxLines="2"
         android:maxLength="20"
         app:layout_constraintWidth_percent="1"
@@ -266,7 +250,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/secondDivider" />
+        app:layout_constraintTop_toBottomOf="@id/uploadPhotoLayout" />
 
     <EditText
         android:id="@+id/articlePriceTextView"

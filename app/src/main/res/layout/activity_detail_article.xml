@@ -187,7 +187,7 @@
 
             <TextView
                 android:id="@+id/articleTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ellipsize="end"
@@ -197,6 +197,7 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/recyclerView"
                 app:layout_constraintTop_toBottomOf="@id/recyclerView"
+                app:layout_constraintEnd_toEndOf="@id/recyclerView"
                 tools:text="게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목" />
 
             <TextView
@@ -327,6 +328,7 @@
         android:layout_height="0dp"
         android:focusable="true"
         android:clickable="false"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -335,7 +337,6 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

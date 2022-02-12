@@ -16,6 +16,7 @@ import com.example.bookwhale.data.repository.my.DefaultMyRepository
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.screen.article.DetailArticleViewModel
 import com.example.bookwhale.screen.article.PostArticleViewModel
+import com.example.bookwhale.screen.article.SearchViewModel
 import com.example.bookwhale.screen.main.my.MyViewModel
 import com.example.bookwhale.screen.login.LoginViewModel
 import com.example.bookwhale.screen.main.MainViewModel
@@ -40,7 +41,8 @@ val appModule = module {
     viewModel { SplashViewModel(get(), get(), get()) }
     viewModel { ChatViewModel(get()) }
     viewModel { DetailArticleViewModel(get(), get()) }
-    viewModel { PostArticleViewModel() }
+    viewModel { PostArticleViewModel(get()) }
+    viewModel { SearchViewModel(get()) }
 
     single<MyRepository> { DefaultMyRepository(get(), get()) }
     single<LoginRepository> { DefaultLoginRepository(get(), get()) }

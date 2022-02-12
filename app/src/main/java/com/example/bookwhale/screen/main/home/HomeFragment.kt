@@ -56,7 +56,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 
     private fun initButton() = with(binding) {
         postArticleButton.setOnClickListener {
-            startActivity(PostArticleActivity.newIntent(requireContext()))
+            startActivity(PostArticleActivity.newIntent(requireContext(),null))
         }
     }
 
