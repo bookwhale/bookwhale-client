@@ -11,6 +11,7 @@ import com.example.bookwhale.databinding.FragmentHomeBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.article.DetailArticleActivity
+import com.example.bookwhale.screen.article.PostArticleActivity
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.util.PagingAdapter
@@ -36,27 +37,10 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
             }
         )
     }
-//    val adapter = PagingAdapter()
-
-//    private val adapter by lazy {
-//        ModelRecyclerAdapter<ArticleModel, MainViewModel>(
-//            listOf(),
-//            viewModel,
-//            resourcesProvider,
-//            adapterListener = object : ArticleListListener {
-//                override fun onClickItem(model: ArticleModel) {
-//                }
-//
-//                override fun onClickHeart(model: ArticleModel) {
-//                    // 좋아요 버튼 클릭
-//                    clickFavoriteButton(model.articleId)
-//                    notifyData()
-//                }
-//            }
-//        )
-//    }
 
     override fun initViews(): Unit = with(binding) {
+
+        initButton()
 
         recyclerView.adapter = adapter
 
@@ -70,6 +54,11 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
         //startActivity(DetailArticleActivity.newIntent(requireContext(), "1"))
     }
 
+    private fun initButton() = with(binding) {
+        postArticleButton.setOnClickListener {
+            startActivity(PostArticleActivity.newIntent(requireContext()))
+        }
+    }
 
     /**
      * 매우 불완전한 코드이므로 수정할 예정.
@@ -88,10 +77,6 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 //            viewModel.addFavoriteInHome(articleId)
 //        }
 //    }
-
-    fun test() {
-
-    }
 
     private fun notifyData() {
         //adapter.submitList(viewModel.articleList as List<ArticleModel>)
