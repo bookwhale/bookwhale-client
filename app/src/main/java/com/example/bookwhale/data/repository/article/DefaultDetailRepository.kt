@@ -1,12 +1,21 @@
 package com.example.bookwhale.data.repository.article
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.model.article.DetailArticleModel
 import com.example.bookwhale.model.article.DetailImageModel
+import com.example.bookwhale.model.article.NaverBookModel
 import com.example.bookwhale.model.main.chat.ChatModel
+import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.util.ArticlePagingSource
+import com.example.bookwhale.util.NaverBookPagingSource
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class DefaultDetailRepository(
@@ -48,4 +57,19 @@ class DefaultDetailRepository(
             NetworkResult.error(code = errorCode)
         }
     }
+
+    override suspend fun getNaverBookApi(title: String): NetworkResult<Flow<PagingData<NaverBookModel>>> = withContext(ioDispatcher) {
+        val response = Pager(
+            PagingConfig(pageSize = 10)
+        ) {
+            NaverBookPagingSource(serverApiService, title)
+        }.flow
+
+        NetworkResult.success(
+            response
+        )
+
+    }
+
+
 }
