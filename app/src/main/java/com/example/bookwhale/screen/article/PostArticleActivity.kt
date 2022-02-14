@@ -205,18 +205,22 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
                 R.id.radio_best ->
                     if (checked) {
                         statusRadioText = "BEST"
+                        Log.e("checked",statusRadioText)
                     }
                 R.id.radio_high ->
                     if (checked) {
                         statusRadioText = "UPPER"
+                        Log.e("checked",statusRadioText)
                     }
                 R.id.radio_mid ->
                     if (checked) {
                         statusRadioText = "MIDDLE"
+                        Log.e("checked",statusRadioText)
                     }
                 R.id.radio_low ->
                     if (checked) {
                         statusRadioText = "LOWER"
+                        Log.e("checked",statusRadioText)
                     }
             }
         }
@@ -255,14 +259,14 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         if (hasFilled) {
             val postInfo = ArticleDTO(
                 bookRequest = ArticleDTO.BookRequest(
-                    bookIsbn = naverBookInfo!!.bookIsbn,
-                    bookTitle = naverBookInfo!!.bookTitle,
-                    bookAuthor = naverBookInfo!!.bookAuthor,
-                    bookPublisher = naverBookInfo!!.bookPublisher,
+                    bookIsbn = naverBookInfo!!.bookIsbn.replace("<b>","").replace("</b>",""),
+                    bookTitle = naverBookInfo!!.bookTitle.replace("<b>","").replace("</b>",""),
+                    bookAuthor = naverBookInfo!!.bookAuthor.replace("<b>","").replace("</b>",""),
+                    bookPublisher = naverBookInfo!!.bookPublisher.replace("<b>","").replace("</b>",""),
                     bookThumbnail = naverBookInfo!!.bookThumbnail,
-                    bookListPrice = naverBookInfo!!.bookListPrice,
+                    bookListPrice = naverBookInfo!!.bookListPrice.replace("<b>","").replace("</b>",""),
                     bookPubDate = "none", // 수정요청
-                    bookSummary = naverBookInfo!!.bookSummary
+                    bookSummary = naverBookInfo!!.bookSummary.replace("<b>","").replace("</b>","")
                 ),
                 title = articleNameTextView.text.toString(),
                 price = articlePriceTextView.text.toString(),
