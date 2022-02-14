@@ -1,5 +1,6 @@
 package com.example.bookwhale.data.network
 
+import com.example.bookwhale.data.response.article.ArticleDTO
 import com.example.bookwhale.data.response.article.GetDetailArticleResponse
 import com.example.bookwhale.data.response.article.GetNaverBookApiResponse
 import com.example.bookwhale.data.response.chat.GetChatListResponse
@@ -46,6 +47,10 @@ interface ServerApiService {
     // 게시물 등록
     @GET("api/article/naver-book")
     suspend fun getNaverBookApi(@Query("title")title: String, @Query("display")display: Int, @Query("start")start: Int) : Response<List<GetNaverBookApiResponse>>
+
+    @Multipart
+    @POST("api/article")
+    suspend fun postArticle(@Part images: List<MultipartBody.Part>, @Part("articleRequest")articleRequest: ArticleDTO): Response<Unit>
 
     // 채팅방
     @GET("api/room")

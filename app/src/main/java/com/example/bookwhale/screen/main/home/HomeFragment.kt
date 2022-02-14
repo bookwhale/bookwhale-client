@@ -50,8 +50,17 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
             }
         }
 
+        swipeRefreshLayout.setOnRefreshListener {
+            adapter.refresh()
+            swipeRefreshLayout.isRefreshing = false
+        }
 
-        //startActivity(DetailArticleActivity.newIntent(requireContext(), "1"))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.refresh()
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
     private fun initButton() = with(binding) {

@@ -31,6 +31,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import com.example.bookwhale.BuildConfig
+import com.example.bookwhale.screen.article.PostArticleActivity
 
 
 class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
@@ -143,7 +144,11 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
 
     private fun handleLoading() {}
     private fun handleSuccess(state: LoginState.Success) {
-        startActivity(MainActivity.newIntent(this))
+
+        val intent = MainActivity.newIntent(this@LoginActivity)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+
     }
     private fun handleError() {}
 

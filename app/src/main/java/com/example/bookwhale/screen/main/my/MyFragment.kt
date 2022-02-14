@@ -30,10 +30,6 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
 
     private lateinit var handlePathOz: HandlePathOz
 
-    init {
-
-    }
-
     override fun initViews() {
         initHandlePathOz()
         handleButton()
@@ -106,6 +102,9 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
     }
 
     override fun onRequestHandlePathOz(pathOz: PathOz, tr: Throwable?) {
+
+        Log.e("file path is what?",pathOz.path.toString())
+
         var file = File(pathOz.path)
         var requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
         var body : MultipartBody.Part = MultipartBody.Part.createFormData("profileImage",file.name,requestBody)

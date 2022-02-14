@@ -8,6 +8,7 @@ import androidx.core.view.isGone
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
@@ -58,7 +59,7 @@ class PagingViewHolder(
         binding.chatTextView.text = model.chatCount.toString()
         binding.priceTextView.text = "${model.articlePrice}원"
         binding.heartTextView.text = model.favoriteCount.toString()
-        binding.thumbNailImageView.load(model.articleImage.toString())
+        binding.thumbNailImageView.load(model.articleImage.toString(), 4f, CenterCrop())
 
         if(model.chatCount == 0) binding.chatGroup.isGone = true
         if(model.favoriteCount == 0) binding.heartGroup.isGone = true
