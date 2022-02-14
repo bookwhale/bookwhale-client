@@ -151,9 +151,9 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         viewTextView.text = state.article.viewCount.toString()
         officialBookNameTextView.text = state.article.bookResponse.bookTitle
         officialBookImageView.load(state.article.bookResponse.bookThumbnail)
-        officialPriceTextView.text = "가격 ${state.article.bookResponse.bookListPrice}원"
+        officialPriceTextView.text = "${state.article.bookResponse.bookListPrice}원"
         officialWriterTextView.text = "글 ${state.article.bookResponse.bookAuthor}"
-        officialPublisherTextView.text = "출판사 ${state.article.bookResponse.bookPublisher}"
+        officialPublisherTextView.text = "출판 ${state.article.bookResponse.bookPublisher}"
 
         myFavorite = state.article.myFavorite
         myArticle = state.article.myArticle
@@ -184,6 +184,5 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         }
 
         const val ARTICLE_ID = "0"
-
     }
 }

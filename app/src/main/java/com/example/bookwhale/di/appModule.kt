@@ -5,7 +5,9 @@ import com.example.bookwhale.data.db.provideDB
 import com.example.bookwhale.data.network.*
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.repository.article.DefaultDetailRepository
+import com.example.bookwhale.data.repository.article.DefaultPostArticleRepository
 import com.example.bookwhale.data.repository.article.DetailRepository
+import com.example.bookwhale.data.repository.article.PostArticleRepository
 import com.example.bookwhale.data.repository.chat.ChatRepository
 import com.example.bookwhale.data.repository.chat.DefaultChatRepository
 import com.example.bookwhale.data.repository.login.DefaultLoginRepository
@@ -49,6 +51,7 @@ val appModule = module {
     single<ArticleRepository> { DefaultArticleRepository(get(), get(), get()) }
     single<ChatRepository> { DefaultChatRepository(get(), get()) }
     single<DetailRepository> { DefaultDetailRepository(get(), get()) }
+    single<PostArticleRepository> { DefaultPostArticleRepository(get(), get()) }
 
     single { Dispatchers.IO }
     single { Dispatchers.Main }

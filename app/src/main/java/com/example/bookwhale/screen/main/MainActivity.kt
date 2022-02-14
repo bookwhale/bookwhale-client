@@ -115,7 +115,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     private fun handleSearch() {}
     private fun handleNotification() {}
 
-
     override fun observeData()  {
 
     }
@@ -150,7 +149,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
             .subscribe {
                 finishActivity(0)
                 exitProcess(0)
-
             })
 
         backBtnSubject.onNext(true)

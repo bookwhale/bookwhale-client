@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Category-->
+    <string name="seoul_code">SEOUL</string>
+    <string name="busan_code">BUSAN</string>
+    <string name="daegu_code">DAEGU</string>
+    <string name="incheon_code">INCHEON</string>
+    <string name="gwangju_code">GWANGJU</string>
+    <string name="daejeon_code">DAEJEON</string>
+
+    <string name="seoul_name">서울</string>
+    <string name="busan_name">부산</string>
+    <string name="daegu_name">대구</string>
+    <string name="incheon_name">인천</string>
+    <string name="gwangju_name">광주</string>
+    <string name="daejeon_name">대전</string>
+
+</resources>
