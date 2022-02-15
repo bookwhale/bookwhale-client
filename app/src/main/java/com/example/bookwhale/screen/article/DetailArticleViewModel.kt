@@ -7,6 +7,7 @@ import com.example.bookwhale.data.repository.article.DetailRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
+import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.main.favorite.FavoriteState

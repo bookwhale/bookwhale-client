@@ -1,5 +1,6 @@
 package com.example.bookwhale.widget.viewholder.article
 
+import androidx.core.net.toUri
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.databinding.ViewholderTempimageBinding
 import com.example.bookwhale.model.article.DetailImageModel
@@ -7,6 +8,7 @@ import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
+import com.example.bookwhale.widget.listener.main.article.PostImageListener
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
 
 class TempImageViewHolder(
@@ -18,6 +20,14 @@ class TempImageViewHolder(
     override fun reset() = Unit
 
     override fun bindViews(model: DetailImageModel, adapterListener: AdapterListener) {
+        if (adapterListener is PostImageListener) {
+            binding.root.setOnClickListener {
+                adapterListener.onClickItem(model)
+            }
+            binding.closeLayout.setOnClickListener {
+                adapterListener.onDeleteItem(model)
+            }
+        }
     }
 
     override fun bindData(model: DetailImageModel) {

@@ -59,22 +59,12 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
         }
     }
 
-//    private fun clickFavoriteButton(model: FavoriteModel) {
-//        if (viewModel.favoriteList?.contains(model) == true) {
-//            viewModel.deleteFavorite(model.favoriteId)
-//        } else {
-//            viewModel.addFavorite(model.favoriteId)
-//        }
-//    }
-
     private fun handleLoading() {
-        Log.e("handleLoading","handleLoading")
         binding.progressBar.isVisible = true
     }
 
     private fun handleError(state: FavoriteState.Error) {
         binding.progressBar.isGone = true
-        Log.e("handleError","handleError")
         when(state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
         }

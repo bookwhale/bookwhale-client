@@ -1,13 +1,16 @@
 package com.example.bookwhale.screen.article
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import br.com.onimur.handlepathoz.HandlePathOz
@@ -25,7 +28,7 @@ import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
-import com.example.bookwhale.widget.listener.AdapterListener
+import com.example.bookwhale.widget.listener.main.article.PostImageListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.FlowPreview
@@ -43,25 +46,45 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
     override fun getViewBinding(): ActivityPostArticleBinding = ActivityPostArticleBinding.inflate(layoutInflater)
 
-    private val naverBookInfo by lazy { intent.getParcelableExtra<NaverBookModel>(NAVER_BOOK_INFO)}
+    private var naverBookInfo = NaverBookModel()
 
     private val resourcesProvider by inject<ResourcesProvider>()
 
-    private val files: ArrayList<MultipartBody.Part> = ArrayList()
-    private var statusRadioText : String = "UPPER"
-    private var sellingLocation : String = "SEOUL"
-
     private lateinit var handlePathOz: HandlePathOz
+    private lateinit var postInfo: ArticleDTO
+    private val files: ArrayList<MultipartBody.Part> = ArrayList()
+    private var statusRadioText : String = DEFAULT_STATUS
+    private var sellingLocation : String = DEFAULT_LOCATION
+    private var imageModelList: ArrayList<DetailImageModel> = ArrayList()
+    private var imageUriList: ArrayList<Uri> = ArrayList()
 
     private val adapter by lazy {
         ModelRecyclerAdapter<DetailImageModel, PostArticleViewModel>(
             listOf(),
             viewModel,
             resourcesProvider,
-            adapterListener = object : AdapterListener {
+            adapterListener = object : PostImageListener {
+                override fun onClickItem(model: DetailImageModel) {
+                    //
+                }
 
+                override fun onDeleteItem(model: DetailImageModel) {
+                    removeModel(model)
+                }
             }
         )
+    }
+
+    private fun removeModel(model: DetailImageModel) {
+        var removeIndex = 0
+        imageModelList.forEachIndexed { index, data ->
+            if (data == model) removeIndex = index
+        }
+        imageModelList.removeAt(removeIndex)
+        imageUriList.removeAt(removeIndex)
+        binding.uploadPhotoTextView.text = getString(R.string.currentImageNum, imageUriList.size)
+        adapter.notifyItemRemoved(removeIndex)
+        adapter.notifyItemRangeChanged(removeIndex, imageUriList.size)
     }
 
     override fun initViews() {
@@ -69,20 +92,16 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         binding.recyclerView.adapter = adapter
 
         initButton()
-        handleNaverBookApi()
         initHandlePathOz()
-
-        //test()
-
     }
 
     @FlowPreview
     private fun initButton() = with(binding) {
         officialBookNameTextView.setOnClickListener {
-            startActivity(SearchActivity.newIntent(this@PostArticleActivity))
+            startActivityForResult(SearchActivity.newIntent(this@PostArticleActivity), NAVER_BOOK_REQUEST_CODE)
         }
         officialBookImageLayout.setOnClickListener {
-            startActivity(SearchActivity.newIntent(this@PostArticleActivity))
+            startActivityForResult(SearchActivity.newIntent(this@PostArticleActivity), NAVER_BOOK_REQUEST_CODE)
         }
         uploadPhotoLayout.setOnClickListener {
             selectMultipleImage()
@@ -120,43 +139,37 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
     @FlowPreview
     private fun selectMultipleImage() {
 
+        val currentSize = imageUriList.size
+
         TedImagePicker.with(this)
-            .max(MAX_IMAGE_NUM, getString(R.string.maxImageNum))
+            .max(MAX_IMAGE_NUM - currentSize, getString(R.string.maxImageNum))
             .startMultiImage { uriList ->
-                Log.e("uriList?", uriList.toString())
-                handlePathOz.getListRealPath(uriList)
+                imageUriList.addAll(uriList)
+                handlePathOz.getListRealPath(imageUriList)
             }
     }
 
     private fun initHandlePathOz() {
         handlePathOz = HandlePathOz(MyApp.appContext!!, this)
     }
+
     override fun onRequestHandlePathOz(listPathOz: List<PathOz>, tr: Throwable?): Unit = with(binding) {
 
-        // 파일 경로들을 가지고있는 `ArrayList<Uri> filePathList`가 있다고 칩시다...
-        for (element in listPathOz) {
-            // Uri 타입의 파일경로를 가지는 RequestBody 객체 생성
+        imageModelList.clear()
+        imageModelList.addAll(
+            listPathOz.mapIndexed { index, data ->
+                DetailImageModel(
+                    id = index.toLong(),
+                    type = CellType.TEMP_IMAGE_LIST,
+                    articleImage = data.path
+                )
+            }
+        )
 
-            var file = File(element.path)
-            var requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-            var body : MultipartBody.Part = MultipartBody.Part.createFormData("images",file.name,requestBody)
+        adapter.submitList(imageModelList)
+        adapter.notifyItemRangeChanged(0, imageModelList.size)
 
-            // 추가
-            files.add(body)
-        }
-
-//        viewModel.testUpload(files)
-//
-        adapter.submitList(listPathOz.map {
-            DetailImageModel(
-                id = it.hashCode().toLong(),
-                type = CellType.TEMP_IMAGE_LIST,
-                articleImage = it.path
-            )
-        })
-
-        val count = listPathOz.size
-        uploadPhotoTextView.text = getString(R.string.currentImageNum, count)
+        uploadPhotoTextView.text = getString(R.string.currentImageNum, imageModelList.size)
 
     }
 
@@ -205,22 +218,18 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
                 R.id.radio_best ->
                     if (checked) {
                         statusRadioText = "BEST"
-                        Log.e("checked",statusRadioText)
                     }
                 R.id.radio_high ->
                     if (checked) {
                         statusRadioText = "UPPER"
-                        Log.e("checked",statusRadioText)
                     }
                 R.id.radio_mid ->
                     if (checked) {
                         statusRadioText = "MIDDLE"
-                        Log.e("checked",statusRadioText)
                     }
                 R.id.radio_low ->
                     if (checked) {
                         statusRadioText = "LOWER"
-                        Log.e("checked",statusRadioText)
                     }
             }
         }
@@ -228,61 +237,133 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
     private fun postArticle() = with(binding) {
 
-        var hasFilled = true
+        if (checkInputInfo()) {
 
-        naverBookInfo?.let {
-            if(articleNameTextView.text.isNullOrEmpty()) {
-                Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_title), Toast.LENGTH_SHORT).show()
-                hasFilled = false
-            }
-            else if(articlePriceTextView.text.isNullOrEmpty()) {
-                Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_price), Toast.LENGTH_SHORT).show()
-                hasFilled = false
-            }
-            else if(locationTextView.text.isNullOrEmpty()) {
-                Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_location), Toast.LENGTH_SHORT).show()
-                hasFilled = false
-            }
-            else if(statusRadioText.isNullOrEmpty()) {
-                Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_status), Toast.LENGTH_SHORT).show()
-                hasFilled = false
-            }
-            else if(descriptionTextView.text.isNullOrEmpty()) {
-                Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_description), Toast.LENGTH_SHORT).show()
-                hasFilled = false
-            }
-        }?: run {
-            Toast.makeText(this@PostArticleActivity, getString(R.string.searchBookName), Toast.LENGTH_SHORT).show()
-            hasFilled = false
-        }
-
-        if (hasFilled) {
-            val postInfo = ArticleDTO(
-                bookRequest = ArticleDTO.BookRequest(
-                    bookIsbn = naverBookInfo!!.bookIsbn.replace("<b>","").replace("</b>",""),
-                    bookTitle = naverBookInfo!!.bookTitle.replace("<b>","").replace("</b>",""),
-                    bookAuthor = naverBookInfo!!.bookAuthor.replace("<b>","").replace("</b>",""),
-                    bookPublisher = naverBookInfo!!.bookPublisher.replace("<b>","").replace("</b>",""),
-                    bookThumbnail = naverBookInfo!!.bookThumbnail,
-                    bookListPrice = naverBookInfo!!.bookListPrice.replace("<b>","").replace("</b>",""),
-                    bookPubDate = "none", // 수정요청
-                    bookSummary = naverBookInfo!!.bookSummary.replace("<b>","").replace("</b>","")
-                ),
-                title = articleNameTextView.text.toString(),
-                price = articlePriceTextView.text.toString(),
-                description = descriptionTextView.text.toString(),
-                bookStatus = statusRadioText!!,
-                sellingLocation = sellingLocation,
-            )
+            uploadPhoto()
+            uploadDesc()
 
             lifecycleScope.launch {
                 viewModel.uploadArticle(files, postInfo).join()
-                finish()
             }
         }
     }
+
+    private fun checkInputInfo(): Boolean = with(binding) {
+        if(naverBookInfo.bookTitle.isNotEmpty()) {
+            when {
+                articleNameTextView.text.isEmpty() -> {
+                    Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_title), Toast.LENGTH_SHORT).show()
+                    return false
+                }
+                articlePriceTextView.text.isEmpty() -> {
+                    Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_price), Toast.LENGTH_SHORT).show()
+                    return false
+                }
+                locationTextView.text.isEmpty() -> {
+                    Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_location), Toast.LENGTH_SHORT).show()
+                    return false
+                }
+                statusRadioText.isEmpty() -> {
+                    Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_status), Toast.LENGTH_SHORT).show()
+                    return false
+                }
+                descriptionTextView.text.isEmpty() -> {
+                    Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_description), Toast.LENGTH_SHORT).show()
+                    return false
+                }
+                else -> return true
+            }
+        } else {
+            Toast.makeText(this@PostArticleActivity, getString(R.string.searchBookName), Toast.LENGTH_SHORT).show()
+            return false
+        }
+    }
+
+    private fun uploadPhoto() {
+        for (element in imageModelList) {
+            val file = File(element.articleImage!!)
+            val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+            val body : MultipartBody.Part = MultipartBody.Part.createFormData("images",file.name,requestBody)
+            files.add(body)
+        }
+    }
+    private fun uploadDesc() = with(binding) {
+        postInfo = ArticleDTO(
+            bookRequest = ArticleDTO.BookRequest(
+                bookIsbn = naverBookInfo.bookIsbn.replace("<b>","").replace("</b>",""),
+                bookTitle = naverBookInfo.bookTitle.replace("<b>","").replace("</b>",""),
+                bookAuthor = naverBookInfo.bookAuthor.replace("<b>","").replace("</b>",""),
+                bookPublisher = naverBookInfo.bookPublisher.replace("<b>","").replace("</b>",""),
+                bookThumbnail = naverBookInfo.bookThumbnail,
+                bookListPrice = naverBookInfo.bookListPrice.replace("<b>","").replace("</b>",""),
+                bookPubDate = naverBookInfo.bookPubDate ?: kotlin.run { "null" },
+                bookSummary = naverBookInfo.bookSummary.replace("<b>","").replace("</b>","")
+            ),
+            title = articleNameTextView.text.toString(),
+            price = articlePriceTextView.text.toString(),
+            description = descriptionTextView.text.toString(),
+            bookStatus = statusRadioText,
+            sellingLocation = sellingLocation,
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode != Activity.RESULT_OK) return
+        when (requestCode) {
+            NAVER_BOOK_REQUEST_CODE -> {
+                data?.let {
+                    val model = it.getParcelableExtra<NaverBookModel>("naverBookModel")
+                    model?.let { data ->
+                        naverBookInfo = data
+                        handleNaverBookApi()
+                    }
+                } ?: kotlin.run {
+                    Toast.makeText(this, getString(R.string.loadError_searchBook), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
     override fun observeData() {
-        //
+        viewModel.postArticleStateLiveData.observe(this) {
+            when(it) {
+                is PostArticleState.Uninitialized -> Unit
+                is PostArticleState.Loading -> handleLoading()
+                is PostArticleState.Success -> handleSuccess()
+                is PostArticleState.Error -> handleError(it)
+            }
+        }
+    }
+
+    private fun handleLoading() = with(binding) {
+        progressBar.isVisible = true
+    }
+
+    private fun handleSuccess() = with(binding) {
+        progressBar.isGone = true
+        finish()
+    }
+
+    private fun handleError(state: PostArticleState.Error) = with(binding) {
+        progressBar.isGone = true
+        when(state.code!!) {
+            "T_004" -> handleT004() // AccessToken 만료 코드
+            else -> handleUnexpected(state.code)
+        }
+    }
+
+    private fun handleUnexpected(code: String) {
+        Toast.makeText(this, getString(R.string.error_unKnown, code), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun handleT004() {
+        lifecycleScope.launch {
+            viewModel.getNewTokens().join()
+            viewModel.uploadArticle(files,postInfo)
+        }
     }
 
     companion object {
@@ -293,6 +374,11 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
         const val NAVER_BOOK_INFO = "NaverBookInfo"
         const val MAX_IMAGE_NUM = 5
+
+        const val DEFAULT_STATUS = "UPPER"
+        const val DEFAULT_LOCATION = "SEOUL"
+
+        const val NAVER_BOOK_REQUEST_CODE = 1001
     }
 
 }

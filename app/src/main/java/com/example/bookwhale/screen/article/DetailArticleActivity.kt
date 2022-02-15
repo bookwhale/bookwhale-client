@@ -21,6 +21,7 @@ import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.screen.main.MainActivity
 import com.example.bookwhale.screen.main.MainViewModel
+import com.example.bookwhale.screen.main.favorite.FavoriteState
 import com.example.bookwhale.screen.test.TestViewModel
 import com.example.bookwhale.util.OnSingleClickListener
 import com.example.bookwhale.util.load
@@ -164,6 +165,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         else unFilledHeartButton.setImageResource(R.drawable.ic_heart)
 
         adapter.submitList(state.article.images)
+        //if(state.article.images.isEmpty()) adapter.submitList(listOf(DetailImageModel(id = 0, arti)))
 
         handleHeartButton()
     }
@@ -174,7 +176,16 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
     private fun handleError(state: DetailArticleState.Error) = with(binding) {
         progressBar.isGone = true
-        Toast.makeText(this@DetailArticleActivity, getString(R.string.error_unKnown, state.code), Toast.LENGTH_SHORT).show()
+        when(state.code!!) {
+            "T_004" -> handleT004() // AccessToken 만료 코드
+        }
+    }
+
+    private fun handleT004() {
+        lifecycleScope.launch {
+            viewModel.getNewTokens().join()
+            viewModel.loadArticle(articleId.toInt())
+        }
     }
 
     companion object {
