@@ -24,8 +24,6 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val articleRepository: ArticleRepository,
-    private val loginRepository: LoginRepository,
-    private val myPreferenceManager: MyPreferenceManager
 ): BaseViewModel() {
 
     val homeArticleStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
@@ -246,18 +244,5 @@ class MainViewModel(
 //        getFavorites()
 //    }
 
-    fun getNewTokens() = viewModelScope.launch {
-        val response = loginRepository.getNewTokens(TokenRequestDTO(
-            apiToken = myPreferenceManager.getAccessToken()!!,
-            refreshToken = myPreferenceManager.getRefreshToken()!!
-        ))
 
-        if (response.status == NetworkResult.Status.SUCCESS) {
-            myPreferenceManager.putAccessToken(response.data?.apiToken!!)
-            myPreferenceManager.putRefreshToken(response.data.refreshToken!!)
-        } else {
-            // error
-        }
-
-    }
 }

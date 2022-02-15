@@ -13,9 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
-    private val myRepository: MyRepository,
-    private val loginRepository: LoginRepository,
-    private val myPreferenceManager: MyPreferenceManager
+    private val myRepository: MyRepository
 ) : BaseViewModel() {
 
     val splashState = MutableLiveData<SplashState>(SplashState.Uninitialized)

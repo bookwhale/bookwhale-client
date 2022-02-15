@@ -10,8 +10,8 @@ import com.example.bookwhale.screen.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val loginRepository: LoginRepository,
-    private val myPreferenceManager: MyPreferenceManager
+    override val loginRepository: LoginRepository,
+    override val myPreferenceManager: MyPreferenceManager
 ): BaseViewModel() {
 
     val loginStateLiveData = MutableLiveData<LoginState>(LoginState.Uninitialized)

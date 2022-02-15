@@ -116,7 +116,18 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 
     private fun handleError(state: HomeState.Error) {
         binding.progressBar.isGone = true
-        Toast.makeText(requireContext(), R.string.error_noArticles, Toast.LENGTH_SHORT).show()
+        when(state.code!!) {
+            "T_004" -> handleT004() // AccessToken 만료 코드
+        }
+    }
+
+    private fun handleT004() {
+        lifecycleScope.launch {
+            viewModel.getNewTokens().join()
+            viewModel.getArticlesPaging(null).collectLatest {
+                adapter.submitData(it)
+            }
+        }
     }
 
     companion object {

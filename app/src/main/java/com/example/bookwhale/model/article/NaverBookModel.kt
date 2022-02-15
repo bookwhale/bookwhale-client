@@ -15,4 +15,6 @@ data class NaverBookModel(
     val bookListPrice : String,
     val bookPubDate : String?,
     val bookSummary : String
-): Parcelable
+): Parcelable {
+    constructor(): this("","","","","","","","")
+}
