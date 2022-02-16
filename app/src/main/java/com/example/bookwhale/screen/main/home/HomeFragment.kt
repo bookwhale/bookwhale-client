@@ -6,6 +6,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentHomeBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
@@ -28,7 +29,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 
     override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
 
-    val adapter by lazy {
+    private val adapter by lazy {
         PagingAdapter(
             adapterListener = object : ArticleListListener {
                 override fun onClickItem(model: ArticleModel) {
@@ -43,6 +44,14 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
         initButton()
 
         recyclerView.adapter = adapter
+
+        adapter.addLoadStateListener { loadState ->
+            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapter.itemCount < 1) {
+                noArticleTextView.isVisible = true
+            } else {
+                noArticleTextView.isGone = true
+            }
+        }
 
         lifecycleScope.launch {
             getArticles(null)
@@ -75,28 +84,6 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
         }
     }
 
-    /**
-     * 매우 불완전한 코드이므로 수정할 예정.
-     *
-     * */
-//    private fun clickFavoriteButton(articleId: Int) {
-//
-//        viewModel.favoriteList?.forEach {
-//            if(it.articleId == articleId) {
-//                viewModel.deleteFavoriteInHome(it.favoriteId)
-//                return
-//            } else {
-//                viewModel.addFavoriteInHome(articleId)
-//            }
-//        }?.run {
-//            viewModel.addFavoriteInHome(articleId)
-//        }
-//    }
-
-    private fun notifyData() {
-        //adapter.submitList(viewModel.articleList as List<ArticleModel>)
-    }
-
     override fun observeData() {
         viewModel.homeArticleStateLiveData.observe(this) {
             when(it) {
@@ -116,11 +103,6 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     private fun handleSuccess() {
         binding.progressBar.isGone = true
 
-        if(adapter.itemCount==0) {
-            binding.noArticleTextView.isVisible = true
-        } else {
-            binding.noArticleTextView.isGone = true
-        }
     }
 
     private fun handleError(state: HomeState.Error) {
