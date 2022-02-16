@@ -25,4 +25,6 @@ interface ArticleRepository {
     suspend fun deleteFavoriteArticle(favoriteId: Int) : NetworkResult<Boolean>
 
     suspend fun getAllArticlesPaging(search: String? = null) : NetworkResult<Flow<PagingData<ArticleModel>>>
+
+    suspend fun getMyArticles() : NetworkResult<List<ArticleModel>>
 }

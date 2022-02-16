@@ -13,6 +13,8 @@ import com.example.bookwhale.MyApp.Companion.appContext
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentMyBinding
 import com.example.bookwhale.screen.base.BaseFragment
+import com.example.bookwhale.screen.main.MainActivity
+import com.example.bookwhale.screen.splash.SplashActivity
 import com.example.bookwhale.util.load
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.FlowPreview
@@ -42,6 +44,8 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
             when(it) {
                 is MyState.Uninitialized -> Unit
                 is MyState.Loading -> handleLoading()
+                is MyState.logOutSuccess -> handleLogOut()
+                is MyState.withDrawSuccess -> handleWithDraw()
                 is MyState.Success -> handleSuccess(it)
                 is MyState.Error -> handleError(it)
             }
@@ -74,6 +78,14 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
 
             selectSingleImage()
         }
+
+        logoutTextView.setOnClickListener {
+            viewModel.logOut()
+        }
+
+        withdrawTextView.setOnClickListener {
+            viewModel.withDraw()
+        }
     }
 
 
@@ -86,14 +98,37 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
             }
     }
 
-    private fun handleLoading() {}
+    private fun handleLoading() {
+        binding.progressBar.isVisible = true
+    }
+
+    private fun handleWithDraw() {
+        binding.progressBar.isGone = true
+        viewModel.deleteSavedToken()
+        val intent = SplashActivity.newIntent(requireContext())
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+        Toast.makeText(requireContext(), getString(R.string.success_withdraw), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun handleLogOut() {
+        binding.progressBar.isGone = true
+        viewModel.deleteSavedToken()
+        val intent = SplashActivity.newIntent(requireContext())
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+        Toast.makeText(requireContext(), getString(R.string.success_logout), Toast.LENGTH_SHORT).show()
+    }
+
 
     private fun handleSuccess(state: MyState.Success) {
+        binding.progressBar.isGone = true
         binding.profileTextView.text = state.myInfo.nickName
         state.myInfo.profileImage?.let { url -> binding.profileImageView.load(url) }
     }
 
     private fun handleError(state: MyState.Error) {
+        binding.progressBar.isGone = true
         Toast.makeText(requireContext(), getString(R.string.error_unKnown, state.code), Toast.LENGTH_SHORT).show()
     }
 

@@ -47,7 +47,9 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                 true -> {
                     onSearch = false
                     toolBarLayout.transitionToStart()
-                    doSearch()
+                    lifecycleScope.launch {
+                        doSearch()
+                    }
                 }
                 false -> {
                     onSearch = true
@@ -82,6 +84,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                 }
                 R.id.menu_myPost -> {
                     showFragment(MyPostFragment.newInstance(), MyPostFragment.TAG)
+                    viewModel.getMyArticles()
                     true
                 }
                 R.id.menu_chat -> {
@@ -111,20 +114,19 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                 .commitAllowingStateLoss()
         }
     }
-
-    private fun handleSearch() {}
-    private fun handleNotification() {}
-
     override fun observeData()  {
 
     }
 
-    private fun doSearch() = with(binding) {
-        lifecycleScope.launch {
-            viewModel.getArticlesPaging(searchEditText.text.toString()).collectLatest {
-                (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).adapter.submitData(it)
-            }
-        }
+    private suspend fun doSearch() = with(binding) {
+//        lifecycleScope.launch {
+//            viewModel.getArticlesPaging(searchEditText.text.toString()).collectLatest {
+//                (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).adapter.submitData(it)
+//            }
+//        }
+
+        (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).getArticles(searchEditText.text.toString())
+
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         searchEditText.text.clear()
     }
@@ -162,9 +164,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     companion object {
         fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
-
-        const val PAGE = 0
-        const val SIZE = 10
     }
 
 

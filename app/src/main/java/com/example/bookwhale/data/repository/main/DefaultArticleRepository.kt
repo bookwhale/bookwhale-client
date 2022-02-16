@@ -133,5 +133,31 @@ class DefaultArticleRepository(
         )
     }
 
+    override suspend fun getMyArticles(): NetworkResult<List<ArticleModel>> = withContext(ioDispatcher) {
+        val response = serverApiService.getMyArticles()
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                response.body()!!.mapIndexed { index, data ->
+                    ArticleModel(
+                        id = index.toLong(),
+                        articleId = data.articleId,
+                        articleImage = data.articleImage,
+                        articleTitle = data.articleTitle,
+                        articlePrice = data.articlePrice,
+                        bookStatus = data.bookStatus,
+                        sellingLocation = data.sellingLocation,
+                        chatCount = data.chatCount,
+                        favoriteCount = data.favoriteCount,
+                        beforeTime = data.beforeTime
+                    )
+                }
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
 
 }

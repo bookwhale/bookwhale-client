@@ -1,6 +1,6 @@
 package com.example.bookwhale.screen.main.mypost
 
-import com.example.bookwhale.model.main.favorite.FavoriteModel
+import com.example.bookwhale.model.main.home.ArticleModel
 
 sealed class MyPostState {
 
@@ -9,7 +9,7 @@ sealed class MyPostState {
     object Loading : MyPostState()
 
     data class Success(
-        val favorites : List<FavoriteModel>
+        val myArticles : List<ArticleModel>
     ) : MyPostState()
 
     data class Error(

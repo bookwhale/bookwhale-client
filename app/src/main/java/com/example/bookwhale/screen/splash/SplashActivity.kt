@@ -1,5 +1,6 @@
 package com.example.bookwhale.screen.splash
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
@@ -80,6 +81,10 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     private fun handleUnExcepted(code: String) {
         binding.progressBar.isGone = true
         Toast.makeText(this, getString(R.string.error_unKnown, code), Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        fun newIntent(context: Context) = Intent(context, SplashActivity::class.java)
     }
 
 }

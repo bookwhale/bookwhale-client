@@ -52,6 +52,10 @@ interface ServerApiService {
     @POST("api/article")
     suspend fun postArticle(@Part images: List<MultipartBody.Part>, @Part("articleRequest")articleRequest: ArticleDTO): Response<Unit>
 
+    // 내 게시물
+    @GET("api/articles/me")
+    suspend fun getMyArticles(): Response<List<GetAllArticlesResponse>>
+
     // 채팅방
     @GET("api/room")
     suspend fun getChatList() : Response<List<GetChatListResponse>>
@@ -66,6 +70,12 @@ interface ServerApiService {
     @Multipart
     @PATCH("api/user/profile")
     suspend fun updateProfile(@Part profileImage: MultipartBody.Part): Response<Unit>
+
+    @POST("api/oauth/logout")
+    suspend fun logOut(): Response<Unit>
+
+    @POST("api/oauth/withdrawal")
+    suspend fun withDraw(): Response<Unit>
 
 
 }
