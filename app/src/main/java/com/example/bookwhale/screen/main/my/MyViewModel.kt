@@ -61,7 +61,39 @@ class MyViewModel(
                 code = response.code
             )
         }
+    }
 
+    fun logOut() = viewModelScope.launch {
+        profileStateLiveData.value = MyState.Loading
+
+        val response = myRepository.logOut()
+
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            profileStateLiveData.value = MyState.logOutSuccess
+        } else {
+            profileStateLiveData.value = MyState.Error(
+                code = response.code
+            )
+        }
+    }
+
+    fun withDraw() = viewModelScope.launch {
+        profileStateLiveData.value = MyState.Loading
+
+        val response = myRepository.withDraw()
+
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            profileStateLiveData.value = MyState.withDrawSuccess
+        } else {
+            profileStateLiveData.value = MyState.Error(
+                code = response.code
+            )
+        }
+    }
+
+    fun deleteSavedToken() {
+        myPreferenceManager.removeAccessToken()
+        myPreferenceManager.removeRefreshToken()
     }
 
 }

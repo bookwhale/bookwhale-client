@@ -10,6 +10,10 @@ sealed class MyState {
 
     object Loading : MyState()
 
+    object logOutSuccess : MyState()
+
+    object withDrawSuccess : MyState()
+
     data class Success(
         val myInfo : ProfileModel
     ) : MyState()

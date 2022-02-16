@@ -45,9 +45,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
         recyclerView.adapter = adapter
 
         lifecycleScope.launch {
-            viewModel.getArticlesPaging(null).collectLatest {
-                adapter.submitData(it)
-            }
+            getArticles(null)
         }
 
         swipeRefreshLayout.setOnRefreshListener {
@@ -55,6 +53,14 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
             swipeRefreshLayout.isRefreshing = false
         }
 
+    }
+
+     suspend fun getArticles(search: String?) {
+        lifecycleScope.launch {
+            viewModel.getArticlesPaging(search).collectLatest {
+                adapter.submitData(it)
+            }
+        }
     }
 
     override fun onResume() {
@@ -108,10 +114,13 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     }
 
     private fun handleSuccess() {
-        Log.e(TAG,"handleSuccess")
         binding.progressBar.isGone = true
-        //adapter.submitList(state.articles)
-        binding.noArticleTextView.isVisible = adapter.itemCount != 0
+
+        if(adapter.itemCount==0) {
+            binding.noArticleTextView.isVisible = true
+        } else {
+            binding.noArticleTextView.isGone = true
+        }
     }
 
     private fun handleError(state: HomeState.Error) {

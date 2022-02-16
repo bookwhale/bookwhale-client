@@ -1,9 +1,14 @@
 package com.example.bookwhale.widget.viewholder.main.home
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.base.BaseViewModel
+import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.listener.main.home.ArticleListListener
@@ -23,9 +28,6 @@ class ArticleListViewHolder(
             binding.root.setOnClickListener {
                 adapterListener.onClickItem(model)
             }
-//            binding.heartImageView.setOnClickListener {
-//                adapterListener.onClickHeart(model)
-//            }
         }
     }
 
@@ -41,6 +43,18 @@ class ArticleListViewHolder(
             heartTextView.text = model.favoriteCount.toString()
             qualityTextView.text = model.bookStatus
             locationTextView.text = model.sellingLocation
+            thumbNailImageView.load(model.articleImage.toString(), 4f, CenterCrop())
+
+            if(model.chatCount == 0) {
+                chatGroup.isGone = true
+            } else {
+                chatGroup.isVisible = true
+            }
+            if(model.favoriteCount == 0) {
+                heartGroup.isGone = true
+            } else {
+                heartGroup.isVisible = true
+            }
         }
     }
 }

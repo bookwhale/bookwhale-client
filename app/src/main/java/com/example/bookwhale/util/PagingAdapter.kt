@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -51,18 +52,26 @@ class PagingViewHolder(
 ): RecyclerView.ViewHolder(binding.root) {
 
     @SuppressLint("SetTextI18n")
-    fun bind(model: ArticleModel) {
-        binding.timeTextView.text = model.beforeTime
-        binding.titleTextView.text = model.articleTitle
-        binding.locationTextView.text = model.sellingLocation
-        binding.qualityTextView.text = model.bookStatus
-        binding.chatTextView.text = model.chatCount.toString()
-        binding.priceTextView.text = "${model.articlePrice}원"
-        binding.heartTextView.text = model.favoriteCount.toString()
-        binding.thumbNailImageView.load(model.articleImage.toString(), 4f, CenterCrop())
+    fun bind(model: ArticleModel) = with(binding) {
+        timeTextView.text = model.beforeTime
+        titleTextView.text = model.articleTitle
+        locationTextView.text = model.sellingLocation
+        qualityTextView.text = model.bookStatus
+        chatTextView.text = model.chatCount.toString()
+        priceTextView.text = "${model.articlePrice}원"
+        heartTextView.text = model.favoriteCount.toString()
+        thumbNailImageView.load(model.articleImage.toString(), 4f, CenterCrop())
 
-        if(model.chatCount == 0) binding.chatGroup.isGone = true
-        if(model.favoriteCount == 0) binding.heartGroup.isGone = true
+        if(model.chatCount == 0) {
+            chatGroup.isGone = true
+        } else {
+            chatGroup.isVisible = true
+        }
+        if(model.favoriteCount == 0) {
+            heartGroup.isGone = true
+        } else {
+            heartGroup.isVisible = true
+        }
     }
 
     fun bindViews(model: ArticleModel, adapterListener: AdapterListener) {

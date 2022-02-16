@@ -58,4 +58,30 @@ class DefaultMyRepository(
             NetworkResult.error(code = errorCode)
         }
     }
+
+    override suspend fun logOut(): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.logOut()
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                true
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
+    override suspend fun withDraw(): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.withDraw()
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                true
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
 }
