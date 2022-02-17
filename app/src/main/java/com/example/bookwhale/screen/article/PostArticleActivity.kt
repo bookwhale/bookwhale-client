@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -49,6 +51,21 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
     private var naverBookInfo = NaverBookModel()
 
     private val resourcesProvider by inject<ResourcesProvider>()
+
+    private val getContent =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if(result.resultCode == Activity.RESULT_OK) {
+                result.data?.let {
+                    val model = it.getParcelableExtra<NaverBookModel>("naverBookModel")
+                    model?.let { data ->
+                        naverBookInfo = data
+                        handleNaverBookApi()
+                    }
+                } ?: kotlin.run {
+                    Toast.makeText(this, getString(R.string.loadError_searchBook), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
     private lateinit var handlePathOz: HandlePathOz
     private lateinit var postInfo: ArticleDTO
@@ -98,10 +115,12 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
     @FlowPreview
     private fun initButton() = with(binding) {
         officialBookNameTextView.setOnClickListener {
-            startActivityForResult(SearchActivity.newIntent(this@PostArticleActivity), NAVER_BOOK_REQUEST_CODE)
+            //startActivityForResult(SearchActivity.newIntent(this@PostArticleActivity), NAVER_BOOK_REQUEST_CODE)
+            getContent.launch(SearchActivity.newIntent(this@PostArticleActivity))
         }
         officialBookImageLayout.setOnClickListener {
-            startActivityForResult(SearchActivity.newIntent(this@PostArticleActivity), NAVER_BOOK_REQUEST_CODE)
+            //startActivityForResult(SearchActivity.newIntent(this@PostArticleActivity), NAVER_BOOK_REQUEST_CODE)
+            getContent.launch(SearchActivity.newIntent(this@PostArticleActivity))
         }
         uploadPhotoLayout.setOnClickListener {
             selectMultipleImage()
@@ -307,24 +326,24 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(resultCode != Activity.RESULT_OK) return
-        when (requestCode) {
-            NAVER_BOOK_REQUEST_CODE -> {
-                data?.let {
-                    val model = it.getParcelableExtra<NaverBookModel>("naverBookModel")
-                    model?.let { data ->
-                        naverBookInfo = data
-                        handleNaverBookApi()
-                    }
-                } ?: kotlin.run {
-                    Toast.makeText(this, getString(R.string.loadError_searchBook), Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if(resultCode != Activity.RESULT_OK) return
+//        when (requestCode) {
+//            NAVER_BOOK_REQUEST_CODE -> {
+//                data?.let {
+//                    val model = it.getParcelableExtra<NaverBookModel>("naverBookModel")
+//                    model?.let { data ->
+//                        naverBookInfo = data
+//                        handleNaverBookApi()
+//                    }
+//                } ?: kotlin.run {
+//                    Toast.makeText(this, getString(R.string.loadError_searchBook), Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
+//    }
 
 
     override fun observeData() {
