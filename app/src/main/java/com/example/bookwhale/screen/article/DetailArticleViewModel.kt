@@ -21,15 +21,31 @@ class DetailArticleViewModel(
 ): BaseViewModel() {
 
     val detailArticleStateLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
+    val detailLoadFavoriteLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     fun loadArticle(articleId: Int) = viewModelScope.launch {
 
         detailArticleStateLiveData.value = DetailArticleState.Loading
 
         val articleResponse = detailRepository.getDetailArticle(articleId)
+
+        if(articleResponse.status == NetworkResult.Status.SUCCESS) {
+            detailArticleStateLiveData.value = DetailArticleState.Success(
+                articleResponse.data!!
+            )
+        } else {
+            detailArticleStateLiveData.value = DetailArticleState.Error(articleResponse.code)
+        }
+
+    }
+
+    fun loadFavorites() = viewModelScope.launch {
+
+        detailLoadFavoriteLiveData.value = DetailArticleState.Loading
+
         val favoriteResponse = articleRepository.getFavoriteArticles()
 
         if (favoriteResponse.status == NetworkResult.Status.SUCCESS) {
-            detailArticleStateLiveData.value = DetailArticleState.FavoriteSuccess(
+            detailLoadFavoriteLiveData.value = DetailArticleState.FavoriteSuccess(
                 favoriteList = favoriteResponse.data!!.map {
                     FavoriteModel(
                         id = it.hashCode().toLong(),
@@ -47,17 +63,8 @@ class DetailArticleViewModel(
                 }
             )
         } else {
-            detailArticleStateLiveData.value = DetailArticleState.Error(favoriteResponse.code)
+            detailLoadFavoriteLiveData.value = DetailArticleState.Error(favoriteResponse.code)
         }
-
-        if(articleResponse.status == NetworkResult.Status.SUCCESS) {
-            detailArticleStateLiveData.value = DetailArticleState.Success(
-                articleResponse.data!!
-            )
-        } else {
-            detailArticleStateLiveData.value = DetailArticleState.Error(articleResponse.code)
-        }
-
     }
 
 
