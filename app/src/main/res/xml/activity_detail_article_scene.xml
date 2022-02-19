@@ -20,6 +20,9 @@
             motion:layout_constraintTop_toBottomOf="@id/toolBarLayout"
             motion:layout_constraintStart_toStartOf="parent" />
 
+        <ConstraintOverride
+            android:id="@+id/progressBar"
+            motion:visibilityMode="ignore" />
 
     </ConstraintSet>
 

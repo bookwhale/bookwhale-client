@@ -48,8 +48,10 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
         adapter.addLoadStateListener { loadState ->
             if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapter.itemCount < 1) {
                 noArticleTextView.isVisible = true
+                binding.progressBar.isGone = true
             } else {
                 noArticleTextView.isGone = true
+                binding.progressBar.isGone = true
             }
         }
 
@@ -101,7 +103,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     }
 
     private fun handleSuccess() {
-        binding.progressBar.isGone = true
+        //binding.progressBar.isGone = true
 
     }
 
