@@ -25,7 +25,7 @@
         android:text="@string/checkAutoLogin"
         android:layout_marginTop="32dp"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/fix_white"
         app:layout_constraintEnd_toEndOf="@id/splashImageView"
         app:layout_constraintStart_toStartOf="@id/splashImageView"
         app:layout_constraintTop_toBottomOf="@id/splashImageView"/>
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:indeterminateTint="@color/white"
+        android:indeterminateTint="@color/fix_white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/splashTextView"
         app:layout_constraintEnd_toEndOf="parent"/>
