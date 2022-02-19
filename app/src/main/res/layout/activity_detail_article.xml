@@ -200,8 +200,10 @@
                     android:layout_marginHorizontal="16dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_gravity="center"
+                    android:textColor="@color/fix_white"
+                    android:textSize="13sp"/>
 
                 <TextView
                     android:id="@+id/articleTitle"
@@ -297,7 +299,10 @@
                     android:layout_marginBottom="16dp"
                     android:src="@drawable/ic_view"
                     app:layout_constraintEnd_toStartOf="@id/viewTextView"
-                    app:layout_constraintTop_toTopOf="@id/viewTextView" />
+                    app:layout_constraintTop_toTopOf="@id/viewTextView"
+                    android:layout_gravity="center"
+                    android:textColor="@color/fix_white"
+                    android:textSize="13sp"/>
 
                 <TextView
                     android:id="@+id/descriptionTextView"
