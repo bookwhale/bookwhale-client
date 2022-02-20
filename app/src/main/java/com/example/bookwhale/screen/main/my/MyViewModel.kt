@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.data.response.my.LogOutDTO
 import com.example.bookwhale.data.response.my.NickNameRequestDTO
 import com.example.bookwhale.model.main.my.ProfileModel
 import com.example.bookwhale.screen.base.BaseViewModel
@@ -66,7 +67,12 @@ class MyViewModel(
     fun logOut() = viewModelScope.launch {
         profileStateLiveData.value = MyState.Loading
 
-        val response = myRepository.logOut()
+        val logOutDTO = LogOutDTO(
+            apiToken = myPreferenceManager.getAccessToken()!!,
+            refreshToken = myPreferenceManager.getRefreshToken()!!
+        )
+
+        val response = myRepository.logOut(logOutDTO)
 
         if(response.status == NetworkResult.Status.SUCCESS) {
             profileStateLiveData.value = MyState.logOutSuccess
@@ -80,7 +86,12 @@ class MyViewModel(
     fun withDraw() = viewModelScope.launch {
         profileStateLiveData.value = MyState.Loading
 
-        val response = myRepository.withDraw()
+        val logOutDTO = LogOutDTO(
+            apiToken = myPreferenceManager.getAccessToken()!!,
+            refreshToken = myPreferenceManager.getRefreshToken()!!
+        )
+
+        val response = myRepository.withDraw(logOutDTO)
 
         if(response.status == NetworkResult.Status.SUCCESS) {
             profileStateLiveData.value = MyState.withDrawSuccess

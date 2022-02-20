@@ -3,6 +3,7 @@ package com.example.bookwhale.data.repository.chat
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,6 +29,19 @@ class DefaultChatRepository(
                         opponentDelete = it.opponentDelete
                     )
                 }
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
+    override suspend fun makeNewChat(makeChatDTO: MakeChatDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.makeNewChat(makeChatDTO)
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                true
             )
         } else {
             val errorCode = ErrorConverter.convert(response.errorBody()?.string())

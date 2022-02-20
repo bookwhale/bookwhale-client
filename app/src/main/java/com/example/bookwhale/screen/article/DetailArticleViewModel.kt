@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.repository.article.DetailRepository
+import com.example.bookwhale.data.repository.chat.ChatRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
@@ -17,7 +19,8 @@ import kotlinx.coroutines.launch
 
 class DetailArticleViewModel(
     private val detailRepository: DetailRepository,
-    private val articleRepository: ArticleRepository
+    private val articleRepository: ArticleRepository,
+    private val chatRepository: ChatRepository
 ): BaseViewModel() {
 
     val detailArticleStateLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
@@ -77,6 +80,10 @@ class DetailArticleViewModel(
 
     fun deleteFavorite(articleId: Int) = viewModelScope.launch {
         articleRepository.deleteFavoriteArticle(articleId)
+    }
+
+    fun makeNewChat(makeChatDTO: MakeChatDTO) = viewModelScope.launch {
+        chatRepository.makeNewChat(makeChatDTO)
     }
 
 }

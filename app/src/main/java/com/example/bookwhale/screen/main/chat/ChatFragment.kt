@@ -1,5 +1,8 @@
 package com.example.bookwhale.screen.main.chat
 
+import android.util.Log
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.example.bookwhale.databinding.FragmentChatBinding
 import com.example.bookwhale.databinding.FragmentFavoriteBinding
@@ -36,6 +39,10 @@ class ChatFragment: BaseFragment<ChatViewModel, FragmentChatBinding>() {
         )
     }
 
+    override fun initViews() = with(binding) {
+        recyclerView.adapter = adapter
+    }
+
     override fun observeData()  {
         viewModel.chatStateLiveData.observe(viewLifecycleOwner) {
             when(it) {
@@ -52,7 +59,10 @@ class ChatFragment: BaseFragment<ChatViewModel, FragmentChatBinding>() {
     }
 
     private fun handleSuccess(state: ChatState.Success) {
+        Log.e("state?",state.chatList.toString())
         adapter.submitList(state.chatList)
+
+        if(state.chatList.isNotEmpty()) binding.noChatTextView.isGone = true
     }
 
     private fun handleError() {

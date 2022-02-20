@@ -4,11 +4,13 @@ import com.example.bookwhale.data.response.article.ArticleDTO
 import com.example.bookwhale.data.response.article.GetDetailArticleResponse
 import com.example.bookwhale.data.response.article.GetNaverBookApiResponse
 import com.example.bookwhale.data.response.chat.GetChatListResponse
+import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.data.response.favorite.GetFavoritesResponse
 import com.example.bookwhale.data.response.home.GetAllArticlesResponse
 import com.example.bookwhale.data.response.login.LoginResponse
 import com.example.bookwhale.data.response.login.TokenRequestDTO
+import com.example.bookwhale.data.response.my.LogOutDTO
 import com.example.bookwhale.data.response.my.MyInfoResponse
 import com.example.bookwhale.data.response.my.NickNameRequestDTO
 import okhttp3.MultipartBody
@@ -60,6 +62,9 @@ interface ServerApiService {
     @GET("api/room")
     suspend fun getChatList() : Response<List<GetChatListResponse>>
 
+    @POST("api/room")
+    suspend fun makeNewChat(@Body makeChatDTO: MakeChatDTO) : Response<Unit>
+
     // 내 정보
     @GET("api/user/me")
     suspend fun getMyInfo() : Response<MyInfoResponse>
@@ -72,10 +77,10 @@ interface ServerApiService {
     suspend fun updateProfile(@Part profileImage: MultipartBody.Part): Response<Unit>
 
     @POST("api/oauth/logout")
-    suspend fun logOut(): Response<Unit>
+    suspend fun logOut(@Body logOutDTO: LogOutDTO): Response<Unit>
 
     @POST("api/oauth/withdrawal")
-    suspend fun withDraw(): Response<Unit>
+    suspend fun withDraw(@Body logOutDTO: LogOutDTO): Response<Unit>
 
 
 }

@@ -60,6 +60,7 @@ object ModelViewHolderMapper {
                 resourcesProvider
             )
 
+
         }
         return viewHolder as ModelViewHolder<M>
     }
