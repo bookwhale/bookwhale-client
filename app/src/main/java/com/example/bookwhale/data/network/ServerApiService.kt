@@ -6,6 +6,7 @@ import com.example.bookwhale.data.response.article.GetNaverBookApiResponse
 import com.example.bookwhale.data.response.chat.GetChatListResponse
 import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
+import com.example.bookwhale.data.response.favorite.AddFavoriteResponse
 import com.example.bookwhale.data.response.favorite.GetFavoritesResponse
 import com.example.bookwhale.data.response.home.GetAllArticlesResponse
 import com.example.bookwhale.data.response.login.LoginResponse
@@ -37,7 +38,7 @@ interface ServerApiService {
     suspend fun getFavorites() : Response<List<GetFavoritesResponse>>
 
     @POST("api/user/me/favorite")
-    suspend fun addFavorites(@Body addFavoriteDTO: AddFavoriteDTO) : Response<Unit>
+    suspend fun addFavorites(@Body addFavoriteDTO: AddFavoriteDTO) : Response<AddFavoriteResponse>
 
     @DELETE("api/user/me/favorite/{favoriteId}")
     suspend fun deleteFavorites(@Path("favoriteId")favoriteId : Int) : Response<Unit>

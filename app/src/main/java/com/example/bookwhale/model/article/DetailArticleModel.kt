@@ -16,6 +16,7 @@ data class DetailArticleModel(
     val images: List<DetailImageModel>,
     val bookResponse: BookResponse,
     val viewCount : Int,
+    val myFavoriteId : Int?,
     val favoriteCount : Int,
     val beforeTime : String,
     val myArticle : Boolean,

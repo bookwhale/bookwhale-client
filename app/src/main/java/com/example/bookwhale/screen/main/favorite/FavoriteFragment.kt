@@ -49,6 +49,11 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
         viewModel.getFavorites()
     }
 //
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFavorites()
+    }
+
     override fun observeData() {
         viewModel.favoriteArticleStateLiveData.observe(this) {
             when(it) {

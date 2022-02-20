@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -114,16 +115,23 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             override fun onSingleClick(view: View) {
                 if(myFavorite) {
                     lifecycleScope.launch {
-                        viewModel.deleteFavorite(favoriteId).join()
-                        unFilledHeartButton.setImageResource(R.drawable.ic_heart)
-                        favoriteId++
-                        myFavorite = false
+                        val response = viewModel.deleteFavorite(favoriteId).await()
+                        if(response) {
+                            unFilledHeartButton.setImageResource(R.drawable.ic_heart)
+                            myFavorite = false
+                        } else {
+                            Toast.makeText(this@DetailArticleActivity, getString(R.string.error_noFavorite), Toast.LENGTH_SHORT).show()
+                        }
                     }
                 } else {
                     lifecycleScope.launch {
-                        viewModel.addFavorite(articleId.toInt())
-                        unFilledHeartButton.setImageResource(R.drawable.ic_heart_filled)
-                        myFavorite = true
+                        favoriteId = viewModel.addFavorite(articleId.toInt()).await()
+                        if(favoriteId == 0) {
+                            Toast.makeText(this@DetailArticleActivity, getString(R.string.error_noFavorite), Toast.LENGTH_SHORT).show()
+                        } else {
+                            unFilledHeartButton.setImageResource(R.drawable.ic_heart_filled)
+                            myFavorite = true
+                        }
                     }
                 }
             }
@@ -173,6 +181,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         officialPublisherTextView.text = "출판 ${state.article.bookResponse.bookPublisher}"
 
         myFavorite = state.article.myFavorite
+        state.article.myFavoriteId?.let { favoriteId = it }
         myArticle = state.article.myArticle
         sellerId = state.article.sellerId
 
