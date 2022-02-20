@@ -13,6 +13,7 @@ import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.main.favorite.FavoriteState
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -71,15 +72,23 @@ class DetailArticleViewModel(
     }
 
 
-    fun addFavorite(articleId: Int) = viewModelScope.launch {
-        articleRepository.addFavoriteArticle(AddFavoriteDTO(
+    fun addFavorite(articleId: Int): Deferred<Int> = viewModelScope.async {
+        val response = articleRepository.addFavoriteArticle(AddFavoriteDTO(
             articleId = articleId
         ))
 
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            response.data!!
+        } else {
+            0
+        }
+
     }
 
-    fun deleteFavorite(articleId: Int) = viewModelScope.launch {
-        articleRepository.deleteFavoriteArticle(articleId)
+    fun deleteFavorite(articleId: Int): Deferred<Boolean> = viewModelScope.async {
+        val response = articleRepository.deleteFavoriteArticle(articleId)
+
+        response.status == NetworkResult.Status.SUCCESS
     }
 
     fun makeNewChat(makeChatDTO: MakeChatDTO) = viewModelScope.launch {

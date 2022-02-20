@@ -91,13 +91,13 @@ class DefaultArticleRepository(
 
     }
 
-    override suspend fun addFavoriteArticle(addFavoriteDTO: AddFavoriteDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
+    override suspend fun addFavoriteArticle(addFavoriteDTO: AddFavoriteDTO): NetworkResult<Int> = withContext(ioDispatcher) {
 
         val response = serverApiService.addFavorites(addFavoriteDTO)
 
         if(response.isSuccessful) {
             NetworkResult.success(
-                true
+                response.body()!!.favoriteId
             )
         } else {
             val errorCode = ErrorConverter.convert(response.errorBody()?.string())

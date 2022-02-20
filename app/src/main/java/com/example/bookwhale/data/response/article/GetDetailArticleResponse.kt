@@ -14,6 +14,7 @@ data class GetDetailArticleResponse(
     val images: List<String>,
     val bookResponse: BookResponse,
     val viewCount : Int,
+    val myFavoriteId : Int?,
     val favoriteCount : Int,
     val beforeTime : String,
     val myArticle : Boolean,

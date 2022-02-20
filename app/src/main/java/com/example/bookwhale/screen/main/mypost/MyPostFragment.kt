@@ -49,6 +49,11 @@ class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
         viewModel.getMyArticles()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getMyArticles()
+    }
+
     override fun observeData() {
         viewModel.myArticleStateLiveData.observe(this) {
             when(it) {
