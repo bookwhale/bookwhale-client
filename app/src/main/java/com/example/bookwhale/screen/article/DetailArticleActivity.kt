@@ -80,12 +80,14 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             finish()
         }
 
+
         chatLayout.setOnClickListener {
             viewModel.makeNewChat(MakeChatDTO(
                 articleId = articleId.toInt(),
                 sellerId = sellerId
             ))
         }
+
     }
 
     private fun handleArrowButton() = with(binding) {
