@@ -42,7 +42,7 @@ val appModule = module {
     viewModel { MyViewModel(get()) }
     viewModel { SplashViewModel(get()) }
     viewModel { ChatViewModel(get()) }
-    viewModel { DetailArticleViewModel(get(), get()) }
+    viewModel { DetailArticleViewModel(get(), get(), get()) }
     viewModel { PostArticleViewModel(get()) }
     viewModel { SearchViewModel(get()) }
 

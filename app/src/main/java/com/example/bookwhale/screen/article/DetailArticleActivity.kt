@@ -13,6 +13,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.R
+import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.databinding.ActivityDetailArticleBinding
 import com.example.bookwhale.model.article.DetailImageModel
 import com.example.bookwhale.model.main.favorite.FavoriteModel
@@ -58,6 +59,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
     private var myFavorite = false
     private var myArticle = false
     private var favoriteId = 0
+    private var sellerId = 0
 
     override fun initViews(): Unit = with(binding) {
 
@@ -78,8 +80,12 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             finish()
         }
 
-        locationLayout.setOnClickListener {
-            Log.e("value?",viewModel.detailArticleStateLiveData.value.toString())
+
+        chatLayout.setOnClickListener {
+            viewModel.makeNewChat(MakeChatDTO(
+                articleId = articleId.toInt(),
+                sellerId = sellerId
+            ))
         }
 
     }
@@ -168,6 +174,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
         myFavorite = state.article.myFavorite
         myArticle = state.article.myArticle
+        sellerId = state.article.sellerId
 
         if(myFavorite) {
             unFilledHeartButton.setImageResource(R.drawable.ic_heart_filled)
