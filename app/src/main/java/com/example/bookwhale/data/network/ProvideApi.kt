@@ -17,14 +17,27 @@ fun provideArticleApiService(retrofit: Retrofit): ServerApiService {
     return retrofit.create(ServerApiService::class.java)
 }
 
-
-
 fun provideArticleRetrofit(
     okHttpClient: OkHttpClient,
     gsonConverterFactory: GsonConverterFactory
 ): Retrofit {
     return Retrofit.Builder()
         .baseUrl(Url.SERVER_URL)
+        .addConverterFactory(gsonConverterFactory)
+        .client(okHttpClient)
+        .build()
+}
+
+fun provideChatApiService(retrofit: Retrofit): ChatApiService {
+    return retrofit.create(ChatApiService::class.java)
+}
+
+fun provideChatRetrofit(
+    okHttpClient: OkHttpClient,
+    gsonConverterFactory: GsonConverterFactory
+): Retrofit {
+    return Retrofit.Builder()
+        .baseUrl(Url.CHAT_URL)
         .addConverterFactory(gsonConverterFactory)
         .client(okHttpClient)
         .build()

@@ -4,6 +4,7 @@ import com.example.bookwhale.data.response.article.ArticleDTO
 import com.example.bookwhale.data.response.article.GetDetailArticleResponse
 import com.example.bookwhale.data.response.article.GetNaverBookApiResponse
 import com.example.bookwhale.data.response.chat.GetChatListResponse
+import com.example.bookwhale.data.response.chat.GetChatMessageResponse
 import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.data.response.favorite.AddFavoriteResponse
@@ -65,6 +66,9 @@ interface ServerApiService {
 
     @POST("api/room")
     suspend fun makeNewChat(@Body makeChatDTO: MakeChatDTO) : Response<Unit>
+
+    @GET("api/message/{roomId}")
+    suspend fun getChatMessages(@Path("roomId")roomId: Int, @Query("page")page: Int, @Query("size")size: Int) : Response<List<GetChatMessageResponse>>
 
     // 내 정보
     @GET("api/user/me")
