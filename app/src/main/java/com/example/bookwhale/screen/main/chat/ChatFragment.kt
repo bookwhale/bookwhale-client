@@ -9,6 +9,7 @@ import com.example.bookwhale.databinding.FragmentFavoriteBinding
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseFragment
+import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.screen.main.favorite.FavoriteFragment
 import com.example.bookwhale.screen.main.favorite.FavoriteState
@@ -33,7 +34,7 @@ class ChatFragment: BaseFragment<ChatViewModel, FragmentChatBinding>() {
             resourcesProvider,
             adapterListener = object : ChatListener {
                 override fun onClickItem(model: ChatModel) {
-                    //
+                    startActivity(ChatRoomActivity.newIntent(requireContext(), model))
                 }
             }
         )

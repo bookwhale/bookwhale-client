@@ -1,9 +1,11 @@
 package com.example.bookwhale.data.repository.chat
 
+import com.example.bookwhale.data.network.ChatApiService
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.chat.MakeChatDTO
+import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -11,6 +13,7 @@ import kotlinx.coroutines.withContext
 
 class DefaultChatRepository(
     private val serverApiService: ServerApiService,
+    private val chatApiService: ChatApiService,
     private val ioDispatcher: CoroutineDispatcher
 ) : ChatRepository {
     override suspend fun getChatList(): NetworkResult<List<ChatModel>> = withContext(ioDispatcher) {
@@ -42,6 +45,26 @@ class DefaultChatRepository(
         if(response.isSuccessful) {
             NetworkResult.success(
                 true
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
+    override suspend fun getChatRoomDetail(roomId: Int): NetworkResult<List<ChatMessageModel>> = withContext(ioDispatcher) {
+        val response = chatApiService.getChatMessages(roomId, 0, 10)
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                response.body()!!.map {
+                    ChatMessageModel(
+                        senderId = it.senderId,
+                        senderIdentity = it.senderIdentity,
+                        content = it.content,
+                        createdDate = it.createdDate
+                    )
+                }
             )
         } else {
             val errorCode = ErrorConverter.convert(response.errorBody()?.string())
