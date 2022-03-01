@@ -21,14 +21,11 @@ class ChatPagingAdapter(
     private val adapterListener: AdapterListener
 ) : PagingDataAdapter<ChatMessageModel, RecyclerView.ViewHolder>(diffCallback) {
 
-    private val ITEM_VIEW_TYPE_IMAGE = 0
-    private val ITEM_VIEW_TYPE_TEXT = 1
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when(viewType) {
-            ITEM_VIEW_TYPE_IMAGE -> MyChatPagingViewHolder(ViewholderMyChatBinding.inflate(layoutInflater, parent, false))
-            ITEM_VIEW_TYPE_TEXT -> OpponentChatPagingViewHolder(ViewholderOpponentChatBinding.inflate(layoutInflater, parent, false))
+            MY_MESSAGE -> MyChatPagingViewHolder(ViewholderMyChatBinding.inflate(layoutInflater, parent, false))
+            OPPONENT_MESSAGE -> OpponentChatPagingViewHolder(ViewholderOpponentChatBinding.inflate(layoutInflater, parent, false))
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
@@ -51,8 +48,8 @@ class ChatPagingAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)?.type) {
-            MessageType.MY -> ITEM_VIEW_TYPE_IMAGE
-            MessageType.OPPONENT -> ITEM_VIEW_TYPE_TEXT
+            MessageType.MY -> MY_MESSAGE
+            MessageType.OPPONENT -> OPPONENT_MESSAGE
             null -> throw UnsupportedOperationException("Unknown view")
         }
     }
@@ -66,7 +63,12 @@ class ChatPagingAdapter(
             override fun areContentsTheSame(oldItem: ChatMessageModel, newItem: ChatMessageModel): Boolean {
                 return oldItem == newItem
             }
-        } }
+        }
+
+
+        const val MY_MESSAGE = 0
+        const val OPPONENT_MESSAGE = 1
+    }
 }
 
 class MyChatPagingViewHolder(
