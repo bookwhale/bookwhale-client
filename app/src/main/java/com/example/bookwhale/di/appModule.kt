@@ -37,7 +37,7 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get()) }
     viewModel { TestViewModel() }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { MyViewModel(get()) }
@@ -51,7 +51,7 @@ val appModule = module {
     single<MyRepository> { DefaultMyRepository(get(), get()) }
     single<LoginRepository> { DefaultLoginRepository(get(), get()) }
     single<ArticleRepository> { DefaultArticleRepository(get(), get(), get()) }
-    single<ChatRepository> { DefaultChatRepository(get(), get(), get()) }
+    single<ChatRepository> { DefaultChatRepository(get(), get(), get(), get()) }
     single<DetailRepository> { DefaultDetailRepository(get(), get()) }
     single<PostArticleRepository> { DefaultPostArticleRepository(get(), get()) }
 

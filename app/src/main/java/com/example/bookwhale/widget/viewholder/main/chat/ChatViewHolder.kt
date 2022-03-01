@@ -33,7 +33,9 @@ class ChatViewHolder(
     override fun bindData(model: ChatModel) {
         super.bindData(model)
         with(binding) {
-            profileImageView.load(model.opponentProfile, 4f, CenterCrop())
+            model.opponentProfile?.let {
+                profileImageView.load(it, 4f, CenterCrop())
+            }
             profileTextView.text = model.opponentIdentity
             model.articleImage?.let{
                 articleImageView.load(it, 4f, CenterCrop())
