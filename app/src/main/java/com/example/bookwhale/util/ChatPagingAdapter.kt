@@ -12,6 +12,7 @@ import com.example.bookwhale.databinding.ViewholderNaverbooklistBinding
 import com.example.bookwhale.databinding.ViewholderOpponentChatBinding
 import com.example.bookwhale.model.article.NaverBookModel
 import com.example.bookwhale.model.main.chat.ChatMessageModel
+import com.example.bookwhale.model.main.chat.MessageType
 import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.listener.main.article.NaverBookListener
 
@@ -49,7 +50,11 @@ class ChatPagingAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return super.getItemViewType(position)
+        return when (getItem(position)?.type) {
+            MessageType.MY -> ITEM_VIEW_TYPE_IMAGE
+            MessageType.OPPONENT -> ITEM_VIEW_TYPE_TEXT
+            null -> throw UnsupportedOperationException("Unknown view")
+        }
     }
 
     companion object {
@@ -69,7 +74,7 @@ class MyChatPagingViewHolder(
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: ChatMessageModel) {
-
+        binding.myTextView.text = model.content
     }
 }
 
@@ -78,7 +83,7 @@ class OpponentChatPagingViewHolder(
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: ChatMessageModel) {
-
+        binding.opponentTextView.text = model.content
     }
 }
 

@@ -13,6 +13,6 @@ data class ChatModel(
     val articleId : Int,
     var articleImage : String?,
     val opponentIdentity : String,
-    val opponentProfile : String,
+    var opponentProfile : String?,
     val opponentDelete: Boolean
 ) : Model(id, type), Parcelable

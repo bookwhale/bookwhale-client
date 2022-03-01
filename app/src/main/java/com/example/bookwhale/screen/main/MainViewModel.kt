@@ -9,6 +9,7 @@ import androidx.paging.map
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.repository.login.LoginRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
+import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.data.response.login.TokenRequestDTO
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val articleRepository: ArticleRepository,
+    private val myRepository: MyRepository
 ): BaseViewModel() {
 
     val homeArticleStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
@@ -86,4 +88,13 @@ class MainViewModel(
         }
     }
 
+    fun getMyInfo() = viewModelScope.launch {
+        val response = myRepository.getMyInfo()
+
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            myPreferenceManager.putId(response.data!!.userId)
+        } else {
+
+        }
+    }
 }

@@ -5,18 +5,26 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.databinding.ActivityChatRoomBinding
 import com.example.bookwhale.databinding.ActivityDetailArticleBinding
 import com.example.bookwhale.model.article.DetailImageModel
 import com.example.bookwhale.model.article.NaverBookModel
+import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.main.chat.ChatModel
+import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.article.DetailArticleActivity
 import com.example.bookwhale.screen.article.DetailArticleViewModel
 import com.example.bookwhale.screen.article.PostArticleActivity
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.util.ChatPagingAdapter
+import com.example.bookwhale.util.PagingAdapter
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.AdapterListener
+import com.example.bookwhale.widget.listener.main.home.ArticleListListener
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -31,10 +39,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
     private val chatModel by lazy { intent.getParcelableExtra<ChatModel>(CHAT_MODEL) }
 
     private val adapter by lazy {
-        ModelRecyclerAdapter<DetailImageModel, ChatRoomViewModel>(
-            listOf(),
-            viewModel,
-            resourcesProvider,
+        ChatPagingAdapter(
             adapterListener = object : AdapterListener {
             }
         )
@@ -42,8 +47,15 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
     override fun initViews() {
         Log.e("chatModel",chatModel.toString())
+
+        binding.recyclerView.adapter = adapter
+
         chatModel?.let {
-            viewModel.load(it.roomId)
+            lifecycleScope.launch {
+                viewModel.getPreviousMessages(it.roomId).collectLatest {
+                    adapter.submitData(it)
+                }
+            }
         }
     }
 

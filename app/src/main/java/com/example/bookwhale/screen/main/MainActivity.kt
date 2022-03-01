@@ -39,6 +39,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         initBottomNav()
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         initButton()
+        viewModel.getMyInfo()
     }
 
     private fun initButton() = with(binding) {
