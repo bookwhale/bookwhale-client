@@ -57,6 +57,23 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 }
             }
         }
+
+        initButtons()
+
+    }
+
+    private fun initButtons() = with(binding) {
+        sendButton.setOnClickListener {
+            putMessage()
+        }
+    }
+
+    private fun getMessageText() : String = with(binding) {
+        return editText.text.toString()
+    }
+
+    private fun putMessage() {
+        viewModel.runStomp(chatModel!!.roomId, getMessageText())
     }
 
     override fun observeData() {
