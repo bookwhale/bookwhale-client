@@ -93,6 +93,7 @@ class MainViewModel(
 
         if(response.status == NetworkResult.Status.SUCCESS) {
             myPreferenceManager.putId(response.data!!.userId)
+            myPreferenceManager.putName(response.data!!.nickName)
         } else {
 
         }

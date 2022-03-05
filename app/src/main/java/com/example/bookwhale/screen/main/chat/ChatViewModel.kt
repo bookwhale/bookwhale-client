@@ -31,27 +31,3 @@ class ChatViewModel(
         }
     }
 }
-
-//        if(response.status == NetworkResult.Status.SUCCESS) {
-//
-//            articleList = response.data!!.map {
-//                ArticleModel(
-//                    id = it.hashCode().toLong(),
-//                    articleId = it.articleId,
-//                    articleImage = it.articleImage,
-//                    articleTitle = it.articleTitle,
-//                    articlePrice = it.articlePrice,
-//                    bookStatus = it.bookStatus,
-//                    sellingLocation = it.sellingLocation,
-//                    chatCount = it.chatCount,
-//                    favoriteCount = it.favoriteCount,
-//                    beforeTime = it.beforeTime
-//                )
-//            }
-//            homeArticleStateLiveData.value = HomeState.Success(articleList!! as List<ArticleModel>)
-//            Log.e("localArticleList",articleList.toString())
-//        } else {
-//            homeArticleStateLiveData.value = HomeState.Error(
-//                response.code
-//            )
-//        }

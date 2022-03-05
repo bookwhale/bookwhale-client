@@ -4,11 +4,13 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.bookwhale.data.network.ChatApiService
 import com.example.bookwhale.model.main.chat.ChatMessageModel
+import com.example.bookwhale.model.main.chat.MessageType
 
 
 class ChatPagingSource(
     private val chatApiService: ChatApiService,
-    private val roomId: Int
+    private val roomId: Int,
+    private val userId: Int
 ) : PagingSource<Int, ChatMessageModel>() {
     override suspend fun load(
         params: LoadParams<Int>
@@ -16,12 +18,22 @@ class ChatPagingSource(
         return try {
             val next = params.key ?: 0
             val response = chatApiService.getChatMessages(roomId, next, 10).body()!!.map {
-                ChatMessageModel(
-                    senderId = it.senderId,
-                    senderIdentity = it.senderIdentity,
-                    content = it.content,
-                    createdDate = it.createdDate
-                )
+                if (it.senderId == userId) {
+                    ChatMessageModel(
+                        senderId = it.senderId,
+                        type = MessageType.MY,
+                        senderIdentity = it.senderIdentity,
+                        content = it.content,
+                        createdDate = it.createdDate
+                    )
+                } else {
+                    ChatMessageModel(
+                        senderId = it.senderId,
+                        senderIdentity = it.senderIdentity,
+                        content = it.content,
+                        createdDate = it.createdDate
+                    )
+                }
             }
             LoadResult.Page(
                 data = response,

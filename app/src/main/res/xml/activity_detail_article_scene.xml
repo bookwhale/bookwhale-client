@@ -24,6 +24,10 @@
             android:id="@+id/progressBar"
             motion:visibilityMode="ignore" />
 
+        <ConstraintOverride
+            android:id="@+id/chatLayout"
+            motion:visibilityMode="ignore" />
+
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">

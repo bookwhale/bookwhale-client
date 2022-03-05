@@ -12,6 +12,7 @@ import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseViewModel
+import com.example.bookwhale.screen.main.chat.ChatState
 import com.example.bookwhale.screen.main.favorite.FavoriteState
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
@@ -26,6 +27,8 @@ class DetailArticleViewModel(
 
     val detailArticleStateLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     val detailLoadFavoriteLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
+    val loadChatListLiveData = MutableLiveData<Boolean>(false) // true = 이미 존재하는 채팅방
+
     fun loadArticle(articleId: Int) = viewModelScope.launch {
 
         detailArticleStateLiveData.value = DetailArticleState.Loading
@@ -92,7 +95,32 @@ class DetailArticleViewModel(
     }
 
     fun makeNewChat(makeChatDTO: MakeChatDTO) = viewModelScope.launch {
-        chatRepository.makeNewChat(makeChatDTO)
+        Log.e("현재 게시글 id", makeChatDTO.articleId.toString())
+        val isExist = loadChatRoomList(makeChatDTO.articleId)
+        if (!isExist) {
+            chatRepository.makeNewChat(makeChatDTO)
+            loadChatListLiveData.value = false
+        }
+        else {
+            loadChatListLiveData.value = true
+        }
     }
+
+    private suspend fun loadChatRoomList(articleId: Int) : Boolean = viewModelScope.async {
+        val response = chatRepository.getChatList()
+
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            val chatList = response.data!!
+            chatList.forEach {
+                if(it.articleId == articleId) {
+                    return@async true
+                }
+            }
+        } else {
+            return@async false
+        }
+
+        return@async false
+    }.await()
 
 }

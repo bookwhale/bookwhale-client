@@ -30,7 +30,6 @@ class DefaultChatRepository(
         val response = serverApiService.getChatList()
 
         if(response.isSuccessful) {
-            Log.e("chatModel?",response.body()!!.toString())
             NetworkResult.success(
                 response.body()!!.mapIndexed { index, it ->
                     ChatModel(
@@ -97,7 +96,7 @@ class DefaultChatRepository(
         val response = Pager(
             PagingConfig(pageSize = 10)
         ) {
-            ChatPagingSource(chatApiService, roomId)
+            ChatPagingSource(chatApiService, roomId, myPreferenceManager.getId())
         }.flow
 
         NetworkResult.success(
