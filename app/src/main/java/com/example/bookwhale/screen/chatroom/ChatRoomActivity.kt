@@ -1,32 +1,26 @@
 package com.example.bookwhale.screen.chatroom
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
+import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.databinding.ActivityChatRoomBinding
-import com.example.bookwhale.databinding.ActivityDetailArticleBinding
-import com.example.bookwhale.model.article.DetailImageModel
-import com.example.bookwhale.model.article.NaverBookModel
-import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.main.chat.ChatModel
-import com.example.bookwhale.model.main.home.ArticleModel
-import com.example.bookwhale.screen.article.DetailArticleActivity
-import com.example.bookwhale.screen.article.DetailArticleViewModel
-import com.example.bookwhale.screen.article.PostArticleActivity
 import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.util.ChatPagingAdapter
-import com.example.bookwhale.util.PagingAdapter
-import com.example.bookwhale.util.provider.ResourcesProvider
-import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.AdapterListener
-import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
+import org.json.JSONObject
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import ua.naiksoftware.stomp.dto.LifecycleEvent
+import ua.naiksoftware.stomp.dto.StompHeader
+
+import ua.naiksoftware.stomp.Stomp
 
 class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding>() {
 
@@ -34,22 +28,38 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
     override fun getViewBinding(): ActivityChatRoomBinding = ActivityChatRoomBinding.inflate(layoutInflater)
 
-    private val resourcesProvider by inject<ResourcesProvider>()
-
     private val chatModel by lazy { intent.getParcelableExtra<ChatModel>(CHAT_MODEL) }
 
+    private val myPreferenceManager = object:
+        KoinComponent {val myPreferenceManager: MyPreferenceManager by inject()}.myPreferenceManager
+
+    private val url = "ws://52.79.148.89:8081/ws/websocket" // 소켓에 연결하는 엔드포인트가 /socket일때 다음과 같음
+    private val stompClient =  Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
+
     private val adapter by lazy {
-        ChatPagingAdapter(
-            adapterListener = object : AdapterListener {
-            }
-        )
+        ChatPagingAdapter(chatModel?.opponentProfile)
     }
 
     override fun initViews() {
-        Log.e("chatModel",chatModel.toString())
+
+        lifecycleScope.launch {
+            runStomp(chatModel!!.roomId, getMessageText())
+        }
 
         binding.recyclerView.adapter = adapter
 
+        getMessages()
+
+        initButtons()
+    }
+
+    private fun initButtons() = with(binding) {
+        sendButton.setOnClickListener {
+            sendMessage(chatModel!!.roomId, getMessageText())
+        }
+    }
+
+    private fun getMessages() = with(binding) {
         chatModel?.let {
             lifecycleScope.launch {
                 viewModel.getPreviousMessages(it.roomId).collectLatest {
@@ -57,14 +67,40 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 }
             }
         }
-
-        initButtons()
-
     }
 
-    private fun initButtons() = with(binding) {
-        sendButton.setOnClickListener {
-            putMessage()
+    @SuppressLint("CheckResult")
+    private fun runStomp(roomId: Int, message: String){
+
+        stompClient.topic("/sub/chat/room/${roomId}").subscribe { topicMessage ->
+            Log.i("message Recieve", topicMessage.payload)
+            getMessages()
+        }
+
+        val headerList = arrayListOf<StompHeader>()
+        headerList.add(StompHeader("roomId",roomId.toString()))
+        headerList.add(StompHeader("senderId", myPreferenceManager.getId().toString()))
+        headerList.add(StompHeader("senderIdentity", myPreferenceManager.getName()))
+        headerList.add(StompHeader("content", message))
+        stompClient.connect(headerList)
+
+        stompClient.lifecycle().subscribe { lifecycleEvent ->
+            when (lifecycleEvent.type) {
+                LifecycleEvent.Type.OPENED -> {
+                    Log.i("OPEND", "!!")
+                }
+                LifecycleEvent.Type.CLOSED -> {
+                    Log.i("CLOSED", "!!")
+
+                }
+                LifecycleEvent.Type.ERROR -> {
+                    Log.i("ERROR", "!!")
+                    Log.e("CONNECT ERROR", lifecycleEvent.exception.toString())
+                }
+                else ->{
+                    Log.i("ELSE", lifecycleEvent.message)
+                }
+            }
         }
     }
 
@@ -72,16 +108,16 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         return editText.text.toString()
     }
 
-    private fun putMessage() {
-        viewModel.runStomp(chatModel!!.roomId, getMessageText())
-    }
+    private fun sendMessage(roomId: Int, message: String) {
+        val data = JSONObject()
+        data.put("roomId", roomId.toString())
+        data.put("senderId", myPreferenceManager.getId().toString())
+        data.put("senderIdentity", myPreferenceManager.getName())
+        data.put("content", message)
 
-    override fun observeData() {
-        //
-    }
+        stompClient.send("/pub/chat/message", data.toString()).subscribe()
 
-    private fun initChatRoom() = with(binding) {
-
+        binding.editText.text.clear()
     }
 
     companion object {
@@ -92,5 +128,9 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
         const val CHATROOM_ID = "0"
         const val CHAT_MODEL = "chatModel"
+    }
+
+    override fun observeData() {
+        //
     }
 }

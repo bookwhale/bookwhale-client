@@ -16,6 +16,7 @@ class MyPreferenceManager(
 
         const val EMAIL = "EMAIL"
         const val ID = "ID"
+        const val NAME = "NAME"
         const val KEY_ID_TOKEN = "ID_TOKEN"
         const val KEY_ACCESS_TOKEN = "ACCESS_TOKEN"
         const val KEY_REFRESH_TOKEN = "REFRESH_TOKEN"
@@ -223,4 +224,19 @@ class MyPreferenceManager(
         editor.putInt(ID, -1)
         editor.apply()
     }
+
+    fun putName(id: String) {
+        editor.putString(NAME, id)
+        editor.apply()
+    }
+
+    fun getName(): String? {
+        return prefs.getString(NAME, null)
+    }
+
+    fun removeName() {
+        editor.putString(NAME, null)
+        editor.apply()
+    }
+
 }

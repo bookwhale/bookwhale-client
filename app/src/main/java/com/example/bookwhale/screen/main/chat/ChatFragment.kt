@@ -60,7 +60,6 @@ class ChatFragment: BaseFragment<ChatViewModel, FragmentChatBinding>() {
     }
 
     private fun handleSuccess(state: ChatState.Success) {
-        Log.e("state?",state.chatList.toString())
         adapter.submitList(state.chatList)
 
         if(state.chatList.isNotEmpty()) binding.noChatTextView.isGone = true

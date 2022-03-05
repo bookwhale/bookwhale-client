@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/second_blue"
     tools:context=".screen.chatroom.ChatRoomActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,6 +52,9 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:stackFromBottom="true"
+        app:reverseLayout="true"
+        android:layout_marginBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +65,7 @@
         android:id="@+id/inputTextLayout"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/second_blue"
+        android:background="@color/fix_white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">

@@ -1,6 +1,8 @@
 package com.example.bookwhale.screen.chatroom
 
+import android.annotation.SuppressLint
 import android.util.Log
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -11,6 +13,7 @@ import com.example.bookwhale.model.main.chat.MessageType
 import com.example.bookwhale.screen.base.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import ua.naiksoftware.stomp.Stomp
@@ -55,46 +58,18 @@ class ChatRoomViewModel(
 
         val response = chatRepository.getPreviousMessages(roomId)
 
+        Log.e("my",myPreferenceManager.getId().toString())
+
         return response.data!!.cachedIn(viewModelScope)
     }
 
-    fun runStomp(roomId: Int, message: String){
 
-        stompClient.topic("/sub/chat/room/${roomId}").subscribe { topicMessage ->
-            Log.i("message Recieve", topicMessage.payload)
-        }
-
-        val headerList = arrayListOf<StompHeader>()
-        headerList.add(StompHeader("roomId",roomId.toString()))
-        headerList.add(StompHeader("senderId", myPreferenceManager.getId().toString()))
-        headerList.add(StompHeader("senderIdentity", "seoplee"))
-        headerList.add(StompHeader("content", "Hello, World!"))
-        stompClient.connect(headerList)
-
-        stompClient.lifecycle().subscribe { lifecycleEvent ->
-            when (lifecycleEvent.type) {
-                LifecycleEvent.Type.OPENED -> {
-                    Log.i("OPEND", "!!")
-                }
-                LifecycleEvent.Type.CLOSED -> {
-                    Log.i("CLOSED", "!!")
-
-                }
-                LifecycleEvent.Type.ERROR -> {
-                    Log.i("ERROR", "!!")
-                    Log.e("CONNECT ERROR", lifecycleEvent.exception.toString())
-                }
-                else ->{
-                    Log.i("ELSE", lifecycleEvent.message)
-                }
-            }
-        }
-
+    fun sendMessage(roomId: Int, message: String) {
         val data = JSONObject()
         data.put("roomId", roomId.toString())
         data.put("senderId", myPreferenceManager.getId().toString())
-        data.put("senderIdentity", "seoplee")
-        data.put("content", "Hello, World!")
+        data.put("senderIdentity", myPreferenceManager.getName())
+        data.put("content", message)
 
         stompClient.send("/pub/chat/message", data.toString()).subscribe()
     }

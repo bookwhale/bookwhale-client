@@ -17,8 +17,10 @@ import com.example.bookwhale.R
 import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.databinding.ActivityDetailArticleBinding
 import com.example.bookwhale.model.article.DetailImageModel
+import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.screen.main.MainActivity
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.screen.main.favorite.FavoriteState
@@ -70,6 +72,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         viewModel.loadFavorites()
 
         initButton()
+        observeChatData()
 
     }
 
@@ -151,6 +154,15 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         }
     }
 
+    private fun observeChatData() {
+        viewModel.loadChatListLiveData.observe(this) {
+            when(it) {
+                false -> Unit
+                true -> Toast.makeText(this@DetailArticleActivity, "이미 존재하는 채팅방 입니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun handleLoading() = with(binding) {
         binding.progressBar.isVisible = true
     }
@@ -189,6 +201,14 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             unFilledHeartButton.setImageResource(R.drawable.ic_heart_filled)
         }
         else unFilledHeartButton.setImageResource(R.drawable.ic_heart)
+
+        if(myArticle) {
+            Log.e("myArticle","myArticle")
+            chatLayout.isGone = true
+        } else {
+            Log.e("myArtic222le","my222Article")
+            chatLayout.isVisible = true
+        }
 
         adapter.submitList(state.article.images)
         //if(state.article.images.isEmpty()) adapter.submitList(listOf(DetailImageModel(id = 0, arti)))

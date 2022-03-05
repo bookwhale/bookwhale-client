@@ -18,14 +18,14 @@ import com.example.bookwhale.widget.listener.main.article.NaverBookListener
 
 
 class ChatPagingAdapter(
-    private val adapterListener: AdapterListener
+    private val senderProfileImage: String?
 ) : PagingDataAdapter<ChatMessageModel, RecyclerView.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when(viewType) {
             MY_MESSAGE -> MyChatPagingViewHolder(ViewholderMyChatBinding.inflate(layoutInflater, parent, false))
-            OPPONENT_MESSAGE -> OpponentChatPagingViewHolder(ViewholderOpponentChatBinding.inflate(layoutInflater, parent, false))
+            OPPONENT_MESSAGE -> OpponentChatPagingViewHolder(ViewholderOpponentChatBinding.inflate(layoutInflater, parent, false), senderProfileImage)
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
@@ -81,11 +81,15 @@ class MyChatPagingViewHolder(
 }
 
 class OpponentChatPagingViewHolder(
-    private val binding: ViewholderOpponentChatBinding
+    private val binding: ViewholderOpponentChatBinding,
+    private val senderProfileImage: String?
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: ChatMessageModel) {
         binding.opponentTextView.text = model.content
+        senderProfileImage?.let {
+            binding.opponentProfileImageView.load(it, 16f, CenterCrop())
+        }
     }
 }
 
