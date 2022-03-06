@@ -91,7 +91,6 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 }
                 LifecycleEvent.Type.CLOSED -> {
                     Log.i("CLOSED", "!!")
-
                 }
                 LifecycleEvent.Type.ERROR -> {
                     Log.i("ERROR", "!!")
