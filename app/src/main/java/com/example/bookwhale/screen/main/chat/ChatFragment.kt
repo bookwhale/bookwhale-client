@@ -3,6 +3,7 @@ package com.example.bookwhale.screen.main.chat
 import android.util.Log
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.bookwhale.databinding.FragmentChatBinding
 import com.example.bookwhale.databinding.FragmentFavoriteBinding
@@ -20,15 +21,15 @@ import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class ChatFragment: BaseFragment<ChatViewModel, FragmentChatBinding>() {
-    override val viewModel by viewModel<ChatViewModel>()
+class ChatFragment: BaseFragment<MainViewModel, FragmentChatBinding>() {
+    override val viewModel by activityViewModels<MainViewModel>()
 
     override fun getViewBinding(): FragmentChatBinding = FragmentChatBinding.inflate(layoutInflater)
 
     private val resourcesProvider by inject<ResourcesProvider>()
 
     private val adapter by lazy {
-        ModelRecyclerAdapter<ChatModel, ChatViewModel>(
+        ModelRecyclerAdapter<ChatModel, MainViewModel>(
             listOf(),
             viewModel,
             resourcesProvider,
@@ -41,6 +42,9 @@ class ChatFragment: BaseFragment<ChatViewModel, FragmentChatBinding>() {
     }
 
     override fun initViews() = with(binding) {
+
+        viewModel.loadChatList()
+
         recyclerView.adapter = adapter
     }
 

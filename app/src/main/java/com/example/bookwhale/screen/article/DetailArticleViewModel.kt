@@ -95,7 +95,6 @@ class DetailArticleViewModel(
     }
 
     fun makeNewChat(makeChatDTO: MakeChatDTO) = viewModelScope.launch {
-        Log.e("현재 게시글 id", makeChatDTO.articleId.toString())
         val isExist = loadChatRoomList(makeChatDTO.articleId)
         if (!isExist) {
             chatRepository.makeNewChat(makeChatDTO)
