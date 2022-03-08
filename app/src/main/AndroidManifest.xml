@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Bookwhale"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".screen.chatroom.ChatRoomActivity"
+            android:exported="false" />
+        <activity
             android:name=".screen.article.SearchActivity"
             android:exported="false" />
         <activity

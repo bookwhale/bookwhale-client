@@ -39,6 +39,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         initBottomNav()
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         initButton()
+        viewModel.getMyInfo()
     }
 
     private fun initButton() = with(binding) {
@@ -89,6 +90,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                 }
                 R.id.menu_chat -> {
                     showFragment(ChatFragment.newInstance(), ChatFragment.TAG)
+                    viewModel.loadChatList()
                     true
                 }
                 R.id.menu_my -> {

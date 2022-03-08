@@ -19,6 +19,7 @@ import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.screen.article.DetailArticleViewModel
 import com.example.bookwhale.screen.article.PostArticleViewModel
 import com.example.bookwhale.screen.article.SearchViewModel
+import com.example.bookwhale.screen.chatroom.ChatRoomViewModel
 import com.example.bookwhale.screen.main.my.MyViewModel
 import com.example.bookwhale.screen.login.LoginViewModel
 import com.example.bookwhale.screen.main.MainViewModel
@@ -36,20 +37,20 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
     viewModel { TestViewModel() }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { MyViewModel(get()) }
     viewModel { SplashViewModel(get()) }
-    viewModel { ChatViewModel(get()) }
-    viewModel { DetailArticleViewModel(get(), get()) }
+    viewModel { DetailArticleViewModel(get(), get(), get()) }
     viewModel { PostArticleViewModel(get()) }
     viewModel { SearchViewModel(get()) }
+    viewModel { ChatRoomViewModel(get()) }
 
     single<MyRepository> { DefaultMyRepository(get(), get()) }
     single<LoginRepository> { DefaultLoginRepository(get(), get()) }
     single<ArticleRepository> { DefaultArticleRepository(get(), get(), get()) }
-    single<ChatRepository> { DefaultChatRepository(get(), get()) }
+    single<ChatRepository> { DefaultChatRepository(get(), get(), get(), get()) }
     single<DetailRepository> { DefaultDetailRepository(get(), get()) }
     single<PostArticleRepository> { DefaultPostArticleRepository(get(), get()) }
 
@@ -65,6 +66,9 @@ val appModule = module {
     //Retrofit
     single(named("article")) { provideArticleRetrofit(get(), get()) }
     single { provideArticleApiService(get(qualifier = named("article"))) }
+
+    single(named("chat")) { provideChatRetrofit(get(), get()) }
+    single { provideChatApiService(get(qualifier = named("chat"))) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }

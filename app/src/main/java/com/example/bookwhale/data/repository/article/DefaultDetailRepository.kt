@@ -47,6 +47,7 @@ class DefaultDetailRepository(
                     bookResponse = response.body()!!.bookResponse,
                     viewCount = response.body()!!.viewCount,
                     favoriteCount = response.body()!!.favoriteCount,
+                    myFavoriteId = response.body()!!.myFavoriteId,
                     beforeTime = response.body()!!.beforeTime,
                     myArticle = response.body()!!.myArticle,
                     myFavorite = response.body()!!.myFavorite

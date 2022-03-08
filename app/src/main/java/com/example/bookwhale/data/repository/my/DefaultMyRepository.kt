@@ -5,6 +5,7 @@ import com.example.bookwhale.data.entity.my.MyInfoEntity
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.data.response.my.LogOutDTO
 import com.example.bookwhale.data.response.my.NickNameRequestDTO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -59,8 +60,8 @@ class DefaultMyRepository(
         }
     }
 
-    override suspend fun logOut(): NetworkResult<Boolean> = withContext(ioDispatcher) {
-        val response = serverApiService.logOut()
+    override suspend fun logOut(logOutDTO: LogOutDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.logOut(logOutDTO)
 
         if(response.isSuccessful) {
             NetworkResult.success(
@@ -72,8 +73,8 @@ class DefaultMyRepository(
         }
     }
 
-    override suspend fun withDraw(): NetworkResult<Boolean> = withContext(ioDispatcher) {
-        val response = serverApiService.withDraw()
+    override suspend fun withDraw(logOutDTO: LogOutDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.withDraw(logOutDTO)
 
         if(response.isSuccessful) {
             NetworkResult.success(

@@ -1,8 +1,11 @@
 package com.example.bookwhale.model.main.chat
 
+import android.os.Parcelable
 import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.Model
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ChatModel(
     override val id: Long,
     override val type: CellType = CellType.CHAT_LIST,
@@ -10,6 +13,6 @@ data class ChatModel(
     val articleId : Int,
     var articleImage : String?,
     val opponentIdentity : String,
-    val opponentProfile : String,
+    var opponentProfile : String?,
     val opponentDelete: Boolean
-) : Model(id, type)
+) : Model(id, type), Parcelable

@@ -9,6 +9,7 @@ import com.example.bookwhale.databinding.FragmentFavoriteBinding
 import com.example.bookwhale.databinding.FragmentMypostBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.screen.article.DetailArticleActivity
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.screen.main.favorite.FavoriteFragment
@@ -36,7 +37,7 @@ class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
             resourcesProvider,
             adapterListener = object : ArticleListListener {
                 override fun onClickItem(model: ArticleModel) {
-                    Log.e("onClick",model.toString())
+                    startActivity(DetailArticleActivity.newIntent(requireContext(), model.articleId.toString()))
                 }
             }
         )
@@ -45,6 +46,11 @@ class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
     override fun initViews(): Unit = with(binding) {
         recyclerView.adapter = adapter
 
+        viewModel.getMyArticles()
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getMyArticles()
     }
 

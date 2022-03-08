@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentFavoriteBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
+import com.example.bookwhale.screen.article.DetailArticleActivity
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.util.provider.ResourcesProvider
@@ -32,7 +33,7 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
             resourcesProvider,
             adapterListener = object : FavoriteListener {
                 override fun onClickItem(model: FavoriteModel) {
-                    //
+                    startActivity(DetailArticleActivity.newIntent(requireContext(), model.articleId.toString()))
                 }
 
                 override fun onClickHeart(model: FavoriteModel) {
@@ -48,6 +49,11 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
         viewModel.getFavorites()
     }
 //
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFavorites()
+    }
+
     override fun observeData() {
         viewModel.favoriteArticleStateLiveData.observe(this) {
             when(it) {

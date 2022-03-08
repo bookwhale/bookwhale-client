@@ -11,6 +11,7 @@ import br.com.onimur.handlepathoz.HandlePathOzListener
 import br.com.onimur.handlepathoz.model.PathOz
 import com.example.bookwhale.MyApp.Companion.appContext
 import com.example.bookwhale.R
+import com.example.bookwhale.data.response.my.LogOutDTO
 import com.example.bookwhale.databinding.FragmentMyBinding
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainActivity
