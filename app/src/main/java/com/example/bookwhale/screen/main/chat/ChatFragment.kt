@@ -60,17 +60,18 @@ class ChatFragment: BaseFragment<MainViewModel, FragmentChatBinding>() {
     }
 
     private fun handleLoading() {
-        //
+        binding.progressBar.isVisible = true
     }
 
     private fun handleSuccess(state: ChatState.Success) {
-        adapter.submitList(state.chatList)
+        binding.progressBar.isGone = true
 
+        adapter.submitList(state.chatList)
         if(state.chatList.isNotEmpty()) binding.noChatTextView.isGone = true
     }
 
     private fun handleError() {
-//
+        binding.progressBar.isVisible = true
     }
 
     companion object {

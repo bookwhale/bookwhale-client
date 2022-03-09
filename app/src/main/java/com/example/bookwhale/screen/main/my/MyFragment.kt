@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import br.com.onimur.handlepathoz.HandlePathOz
 import br.com.onimur.handlepathoz.HandlePathOzListener
 import br.com.onimur.handlepathoz.model.PathOz
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.MyApp.Companion.appContext
 import com.example.bookwhale.R
 import com.example.bookwhale.data.response.my.LogOutDTO
@@ -125,7 +126,7 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
     private fun handleSuccess(state: MyState.Success) {
         binding.progressBar.isGone = true
         binding.profileTextView.text = state.myInfo.nickName
-        state.myInfo.profileImage?.let { url -> binding.profileImageView.load(url) }
+        state.myInfo.profileImage?.let { url -> binding.profileImageView.load(url, 16f, CenterCrop()) }
     }
 
     private fun handleError(state: MyState.Error) {
