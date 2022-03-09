@@ -85,7 +85,7 @@ class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
 
     private fun handleSuccess(state: MyPostState.Success) {
         binding.progressBar.isGone = true
-        adapter.submitList(state.myArticles)
+        adapter.submitList(state.myArticles.reversed())
         if(state.myArticles.isEmpty()) {
             binding.noArticleTextView.isVisible = true
         } else {
