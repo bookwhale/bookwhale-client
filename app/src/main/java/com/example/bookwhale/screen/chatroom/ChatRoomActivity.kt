@@ -57,6 +57,10 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         sendButton.setOnClickListener {
             sendMessage(chatModel!!.roomId, getMessageText())
         }
+
+        backButton.setOnClickListener {
+            finish()
+        }
     }
 
     private fun getMessages() = with(binding) {
