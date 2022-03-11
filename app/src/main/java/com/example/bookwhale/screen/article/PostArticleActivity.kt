@@ -4,13 +4,17 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -33,6 +37,8 @@ import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.main.article.PostImageListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import gun0912.tedimagepicker.builder.TedImagePicker
+import gun0912.tedimagepicker.builder.listener.OnErrorListener
+import gun0912.tedimagepicker.builder.type.MediaType
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -42,7 +48,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
-class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArticleBinding>(), HandlePathOzListener.MultipleUri {
+class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArticleBinding>() {
 
     override val viewModel by viewModel<PostArticleViewModel>()
 
@@ -67,7 +73,6 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
             }
         }
 
-    private lateinit var handlePathOz: HandlePathOz
     private lateinit var postInfo: ArticleDTO
     private val files: ArrayList<MultipartBody.Part> = ArrayList()
     private var statusRadioText : String = DEFAULT_STATUS
@@ -109,7 +114,6 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         binding.recyclerView.adapter = adapter
 
         initButton()
-        initHandlePathOz()
     }
 
     @FlowPreview
@@ -155,26 +159,46 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
     @FlowPreview
     private fun selectMultipleImage() {
-
         val currentSize = imageUriList.size
 
         TedImagePicker.with(this)
             .max(MAX_IMAGE_NUM - currentSize, getString(R.string.maxImageNum))
-            .startMultiImage { uriList ->
-                imageUriList.addAll(uriList)
-                handlePathOz.getListRealPath(imageUriList)
+            .mediaType(MediaType.IMAGE)
+            .startMultiImage{ uriList ->
+                val filePathColumn =
+                    arrayOf(
+                        MediaStore.MediaColumns.DATA
+                    )
+
+                for (i in uriList.indices) {
+
+                    val cursor: Cursor? = this.contentResolver.query(
+                        uriList[i],
+                        filePathColumn,
+                        null,
+                        null,
+                        null)
+
+                    cursor?.let {
+                        if (cursor.moveToFirst()) {
+                            val columnIndex: Int = cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
+                            val absolutePathOfImage: String = cursor.getString(columnIndex)
+
+                            imageUriList.add(Uri.parse(absolutePathOfImage))
+
+                            cursor.close()
+                        }
+                    }
+                    addRecyclerViewList(imageUriList)
+                }
+
             }
     }
 
-    private fun initHandlePathOz() {
-        handlePathOz = HandlePathOz(MyApp.appContext!!, this)
-    }
-
-    override fun onRequestHandlePathOz(listPathOz: List<PathOz>, tr: Throwable?): Unit = with(binding) {
-
+    private fun addRecyclerViewList(uriList : List<Uri>) = with(binding) {
         imageModelList.clear()
         imageModelList.addAll(
-            listPathOz.mapIndexed { index, data ->
+            uriList.mapIndexed { index, data ->
                 DetailImageModel(
                     id = index.toLong(),
                     type = CellType.TEMP_IMAGE_LIST,
@@ -185,9 +209,7 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
         adapter.submitList(imageModelList)
         adapter.notifyItemRangeChanged(0, imageModelList.size)
-
         uploadPhotoTextView.text = getString(R.string.currentImageNum, imageModelList.size)
-
     }
 
     private fun locationClicked() {
