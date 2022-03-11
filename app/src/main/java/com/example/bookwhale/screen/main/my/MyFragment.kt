@@ -1,9 +1,14 @@
 package com.example.bookwhale.screen.main.my
 
+import android.content.ContentUris
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import br.com.onimur.handlepathoz.HandlePathOz
@@ -19,6 +24,8 @@ import com.example.bookwhale.screen.main.MainActivity
 import com.example.bookwhale.screen.splash.SplashActivity
 import com.example.bookwhale.util.load
 import gun0912.tedimagepicker.builder.TedImagePicker
+import gun0912.tedimagepicker.builder.listener.OnErrorListener
+import gun0912.tedimagepicker.builder.type.MediaType
 import kotlinx.coroutines.FlowPreview
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -27,15 +34,12 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
 
-class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzListener.SingleUri {
+class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     override val viewModel by viewModel<MyViewModel>()
 
     override fun getViewBinding(): FragmentMyBinding = FragmentMyBinding.inflate(layoutInflater)
 
-    private lateinit var handlePathOz: HandlePathOz
-
     override fun initViews() {
-        initHandlePathOz()
         handleButton()
 
     }
@@ -91,13 +95,39 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
     }
 
 
-    @FlowPreview
     private fun selectSingleImage() {
-
         TedImagePicker.with(requireContext())
-            .start { uri ->
-                handlePathOz.getRealPath(uri)
+            .mediaType(MediaType.IMAGE)
+            .start{ uri: Uri ->
+                val filePathColumn =
+                    arrayOf(
+                        MediaStore.MediaColumns.DATA
+                    )
+                val cursor: Cursor? = requireContext().contentResolver.query(
+                    uri,
+                    filePathColumn,
+                    null,
+                    null,
+                    null)
+
+                cursor?.let {
+                    if (cursor.moveToFirst()) {
+                        val columnIndex: Int = cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
+                        val absolutePathOfImage: String = cursor.getString(columnIndex)
+                        Uri.parse(absolutePathOfImage)
+
+                        uploadFile(File(absolutePathOfImage))
+
+                        cursor.close()
+                    }
+                }
             }
+    }
+
+    private fun uploadFile(file: File) {
+        var requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+        var body : MultipartBody.Part = MultipartBody.Part.createFormData("profileImage",file.name,requestBody)
+        viewModel.updateProfileImage(body)
     }
 
     private fun handleLoading() {
@@ -134,19 +164,19 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>(), HandlePathOzL
         Toast.makeText(requireContext(), getString(R.string.error_unKnown, state.code), Toast.LENGTH_SHORT).show()
     }
 
-    private fun initHandlePathOz() {
-        handlePathOz = HandlePathOz(appContext!!, this)
-    }
-
-    override fun onRequestHandlePathOz(pathOz: PathOz, tr: Throwable?) {
-
-        Log.e("file path is what?",pathOz.path.toString())
-
-        var file = File(pathOz.path)
-        var requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-        var body : MultipartBody.Part = MultipartBody.Part.createFormData("profileImage",file.name,requestBody)
-        viewModel.updateProfileImage(body)
-    }
+//    private fun initHandlePathOz() {
+//        handlePathOz = HandlePathOz(appContext!!, this)
+//    }
+//
+//    override fun onRequestHandlePathOz(pathOz: PathOz, tr: Throwable?) {
+//
+//        Log.e("file path is what?",pathOz.path.toString())
+//
+//        var file = File(pathOz.path)
+//        var requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+//        var body : MultipartBody.Part = MultipartBody.Part.createFormData("profileImage",file.name,requestBody)
+//        viewModel.updateProfileImage(body)
+//    }
 
     companion object {
 
