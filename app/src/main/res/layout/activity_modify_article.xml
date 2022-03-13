@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screen.article.ModifyArticleActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolBarLayout"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layoutDescription="@xml/activity_main_xml_toolbarlayout_scene"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/toolBarLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/postButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_post"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@android:color/transparent"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/officialBookNameTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:text="@string/searchBookName"
+        android:textColor="@color/primary_gray"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolBarLayout"
+        app:layout_constraintEnd_toStartOf="@id/officialBookImageLayout"
+        tools:text="책을 검색해주세요" />
+
+    <TextView
+        android:id="@+id/officialWriterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/bookWriter"
+        android:textColor="@color/primary_gray"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/officialBookNameTextView"
+        tools:text="글" />
+
+    <TextView
+        android:id="@+id/officialPublisherTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/bookPublisher"
+        android:textColor="@color/primary_gray"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/officialWriterTextView"
+        tools:text="출판" />
+
+    <TextView
+        android:id="@+id/officialPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/bookPrice"
+        android:textColor="@color/primary_gray"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/officialPublisherTextView"
+        tools:text="가격" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/officialBookImageLayout"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginEnd="16dp"
+        app:cardBackgroundColor="@color/primary_gray"
+        app:cardCornerRadius="16dp"
+        android:focusable="true"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@id/officialPriceTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/officialBookNameTextView">
+
+        <ImageView
+            android:id="@+id/searchImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_search" />
+
+        <ImageView
+            android:id="@+id/officialBookImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:src="@drawable/image_book" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/uploadPhotoLayout"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/bg_uploadphoto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/officialPriceTextView">
+
+        <ImageButton
+            android:id="@+id/uploadPhotoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/uploadPhotoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/uploadPhotoButton"
+            android:text="@string/photoCount"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:orientation="horizontal"
+        android:layout_marginEnd="16dp"
+        android:stackFromBottom="true"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toEndOf="@id/uploadPhotoLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"
+        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"/>
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/firstImageView"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
+    <!--        tools:src="@drawable/image_book" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/secondImageVIew"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/firstImageView"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
+    <!--        tools:src="@drawable/image_book" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/thirdImageView"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/secondImageVIew"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
+    <!--        tools:src="@drawable/image_book" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/forthImageView"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/thirdImageView"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
+    <!--        tools:src="@drawable/image_book" />-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/fifthImageView"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/forthImageView"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
+    <!--        tools:src="@drawable/image_book" />-->
+
+    <EditText
+        android:id="@+id/articleNameTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:maxLines="2"
+        android:maxLength="20"
+        app:layout_constraintWidth_percent="1"
+        app:layout_constraintHorizontal_bias="0"
+        android:hint="@string/articleTitle"
+        android:background="@android:color/transparent"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/uploadPhotoLayout" />
+
+    <EditText
+        android:id="@+id/articlePriceTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:maxLines="1"
+        android:maxLength="10"
+        android:hint="@string/articlePrice"
+        android:inputType="number"
+        android:background="@android:color/transparent"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/articleNameTextView" />
+
+    <TextView
+        android:id="@+id/qualityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/articleStatus"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locationTextView" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:checkedButton="@id/radio_high"
+        app:layout_constraintBottom_toBottomOf="@id/qualityTextView"
+        app:layout_constraintStart_toEndOf="@id/qualityTextView"
+        app:layout_constraintTop_toTopOf="@id/qualityTextView">
+
+        <RadioButton
+            android:id="@+id/radio_best"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layoutDirection="rtl"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/statusBest"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+        <RadioButton
+            android:id="@+id/radio_high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layoutDirection="rtl"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/statusHigh"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/radio_mid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layoutDirection="rtl"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/statusMid"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/radio_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layoutDirection="rtl"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/statusLow"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/locationTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:hint="@string/location"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/articlePriceTextView" />
+
+    <EditText
+        android:id="@+id/descriptionTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="@android:color/transparent"
+        android:gravity="start|top"
+        android:hint="@string/inputDescription"
+        android:textColorHighlight="@color/primary_blue"
+        android:textCursorDrawable="@drawable/bg_cursor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/qualityTextView" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

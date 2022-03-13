@@ -4,11 +4,8 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -17,26 +14,17 @@ import com.example.bookwhale.R
 import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.databinding.ActivityDetailArticleBinding
 import com.example.bookwhale.model.article.DetailImageModel
-import com.example.bookwhale.model.main.chat.ChatModel
-import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseActivity
-import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.screen.main.MainActivity
-import com.example.bookwhale.screen.main.MainViewModel
-import com.example.bookwhale.screen.main.favorite.FavoriteState
-import com.example.bookwhale.screen.main.home.HomeFragment
-import com.example.bookwhale.screen.test.TestViewModel
 import com.example.bookwhale.util.OnSingleClickListener
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.AdapterListener
-import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.android.scope.scope
 import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetailArticleBinding>() {
 
@@ -82,6 +70,18 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
         backButton.setOnClickListener {
             finish()
+        }
+
+        toolBarLogo.setOnClickListener{
+            Log.e("articleid",articleId)
+            /*val intent = Intent(this@DetailArticleActivity, ModifyArticleActivity::class.java)
+            intent.putExtra("articleId")
+            startActivity(intent)
+
+            fun newIntent(context: Context, articleId: String) = Intent(context, DetailArticleActivity::class.java).apply {
+                putExtra(ARTICLE_ID, articleId)
+            }*/
+            startActivity(ModifyArticleActivity.newIntent(this@DetailArticleActivity, articleId))
         }
 
 

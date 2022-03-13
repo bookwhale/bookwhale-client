@@ -56,6 +56,10 @@ interface ServerApiService {
     @POST("api/article")
     suspend fun postArticle(@Part images: List<MultipartBody.Part>, @Part("articleRequest")articleRequest: ArticleDTO): Response<Unit>
 
+    // 게시물 수정
+    @POST("api/article/1")
+    suspend fun modifyArticle(@Part images: List<MultipartBody.Part>, @Part("articleUpdaterequest")articleUpdaterequest: ArticleDTO): Response<Unit>
+
     // 내 게시물
     @GET("api/articles/me")
     suspend fun getMyArticles(): Response<List<GetAllArticlesResponse>>

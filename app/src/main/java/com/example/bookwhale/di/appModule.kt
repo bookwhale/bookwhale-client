@@ -4,10 +4,7 @@ import com.example.bookwhale.data.db.provideArticleDao
 import com.example.bookwhale.data.db.provideDB
 import com.example.bookwhale.data.network.*
 import com.example.bookwhale.data.preference.MyPreferenceManager
-import com.example.bookwhale.data.repository.article.DefaultDetailRepository
-import com.example.bookwhale.data.repository.article.DefaultPostArticleRepository
-import com.example.bookwhale.data.repository.article.DetailRepository
-import com.example.bookwhale.data.repository.article.PostArticleRepository
+import com.example.bookwhale.data.repository.article.*
 import com.example.bookwhale.data.repository.chat.ChatRepository
 import com.example.bookwhale.data.repository.chat.DefaultChatRepository
 import com.example.bookwhale.data.repository.login.DefaultLoginRepository
@@ -17,6 +14,7 @@ import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.my.DefaultMyRepository
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.screen.article.DetailArticleViewModel
+import com.example.bookwhale.screen.article.ModifyArticleViewModel
 import com.example.bookwhale.screen.article.PostArticleViewModel
 import com.example.bookwhale.screen.article.SearchViewModel
 import com.example.bookwhale.screen.chatroom.ChatRoomViewModel
@@ -44,6 +42,7 @@ val appModule = module {
     viewModel { SplashViewModel(get()) }
     viewModel { DetailArticleViewModel(get(), get(), get()) }
     viewModel { PostArticleViewModel(get()) }
+    viewModel { ModifyArticleViewModel(get(), get()) }
     viewModel { SearchViewModel(get()) }
     viewModel { ChatRoomViewModel(get()) }
 
@@ -53,6 +52,7 @@ val appModule = module {
     single<ChatRepository> { DefaultChatRepository(get(), get(), get(), get()) }
     single<DetailRepository> { DefaultDetailRepository(get(), get()) }
     single<PostArticleRepository> { DefaultPostArticleRepository(get(), get()) }
+    single<ModifyArticleRepository> { DefaultModifyArticleRepository(get(), get()) }
 
     single { Dispatchers.IO }
     single { Dispatchers.Main }
