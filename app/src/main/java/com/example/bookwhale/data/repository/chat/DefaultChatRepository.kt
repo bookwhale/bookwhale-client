@@ -39,6 +39,7 @@ class DefaultChatRepository(
                         articleImage = it.articleImage,
                         opponentIdentity = it.opponentIdentity,
                         opponentProfile = it.opponentProfile,
+                        lastContent = it.lastContent,
                         opponentDelete = it.opponentDelete
                     )
                 }
