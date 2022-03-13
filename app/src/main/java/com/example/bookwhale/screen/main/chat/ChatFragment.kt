@@ -5,6 +5,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.databinding.FragmentChatBinding
 import com.example.bookwhale.databinding.FragmentFavoriteBinding
 import com.example.bookwhale.model.main.chat.ChatModel
@@ -14,10 +15,13 @@ import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.screen.main.favorite.FavoriteFragment
 import com.example.bookwhale.screen.main.favorite.FavoriteState
+import com.example.bookwhale.screen.main.home.HomeState
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.main.chat.ChatListener
 import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -54,24 +58,36 @@ class ChatFragment: BaseFragment<MainViewModel, FragmentChatBinding>() {
                 is ChatState.Uninitialized -> Unit
                 is ChatState.Loading -> handleLoading()
                 is ChatState.Success -> handleSuccess(it)
-                is ChatState.Error -> handleError()
+                is ChatState.Error -> handleError(it)
             }
         }
     }
 
     private fun handleLoading() {
-        //
+        binding.progressBar.isVisible = true
     }
 
     private fun handleSuccess(state: ChatState.Success) {
-        adapter.submitList(state.chatList)
+        binding.progressBar.isGone = true
 
+        adapter.submitList(state.chatList)
         if(state.chatList.isNotEmpty()) binding.noChatTextView.isGone = true
     }
 
-    private fun handleError() {
-//
+    private fun handleError(state: ChatState.Error) {
+        binding.progressBar.isGone = true
+        when(state.code!!) {
+            "T_004" -> handleT004() // AccessToken 만료 코드
+        }
     }
+
+    private fun handleT004() {
+        lifecycleScope.launch {
+            viewModel.getNewTokens().join()
+            viewModel.fetchData()
+        }
+    }
+
 
     companion object {
 
