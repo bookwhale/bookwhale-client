@@ -1,7 +1,6 @@
 package com.example.bookwhale.data.repository.my
 
-import android.util.Log
-import com.example.bookwhale.data.entity.my.MyInfoEntity
+import com.example.bookwhale.model.auth.MyInfoModel
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
@@ -15,12 +14,12 @@ class DefaultMyRepository(
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher
 ): MyRepository {
-    override suspend fun getMyInfo(): NetworkResult<MyInfoEntity> = withContext(ioDispatcher) {
+    override suspend fun getMyInfo(): NetworkResult<MyInfoModel> = withContext(ioDispatcher) {
         val response = serverApiService.getMyInfo()
 
         if (response.isSuccessful) {
              NetworkResult.success(
-                 MyInfoEntity(
+                 MyInfoModel(
                      userId = response.body()!!.userId,
                      email = response.body()!!.email,
                      nickName = response.body()!!.nickName,

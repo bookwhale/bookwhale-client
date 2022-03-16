@@ -1,6 +1,6 @@
-package com.example.bookwhale.data.entity.my
+package com.example.bookwhale.model.auth
 
-data class MyInfoEntity (
+data class MyInfoModel (
     val userId: Int,
     val nickName: String,
     val email: String,

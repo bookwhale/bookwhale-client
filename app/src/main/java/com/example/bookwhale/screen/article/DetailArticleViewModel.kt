@@ -57,15 +57,15 @@ class DetailArticleViewModel(
                     FavoriteModel(
                         id = it.hashCode().toLong(),
                         favoriteId = it.favoriteId,
-                        articleId = it.articleEntity.articleId,
-                        articleImage = it.articleEntity.articleImage,
-                        articleTitle = it.articleEntity.articleTitle,
-                        articlePrice = it.articleEntity.articlePrice,
-                        bookStatus = it.articleEntity.bookStatus,
-                        sellingLocation = it.articleEntity.sellingLocation,
-                        chatCount = it.articleEntity.chatCount,
-                        favoriteCount = it.articleEntity.favoriteCount,
-                        beforeTime = it.articleEntity.beforeTime
+                        articleId = it.articleModel.articleId,
+                        articleImage = it.articleModel.articleImage,
+                        articleTitle = it.articleModel.articleTitle,
+                        articlePrice = it.articleModel.articlePrice,
+                        bookStatus = it.articleModel.bookStatus,
+                        sellingLocation = it.articleModel.sellingLocation,
+                        chatCount = it.articleModel.chatCount,
+                        favoriteCount = it.articleModel.favoriteCount,
+                        beforeTime = it.articleModel.beforeTime
                     )
                 }
             )

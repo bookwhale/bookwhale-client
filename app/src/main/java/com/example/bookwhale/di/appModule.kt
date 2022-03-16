@@ -1,7 +1,5 @@
 package com.example.bookwhale.di
 
-import com.example.bookwhale.data.db.provideArticleDao
-import com.example.bookwhale.data.db.provideDB
 import com.example.bookwhale.data.network.*
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.repository.article.DefaultDetailRepository
@@ -49,7 +47,7 @@ val appModule = module {
 
     single<MyRepository> { DefaultMyRepository(get(), get()) }
     single<LoginRepository> { DefaultLoginRepository(get(), get()) }
-    single<ArticleRepository> { DefaultArticleRepository(get(), get(), get()) }
+    single<ArticleRepository> { DefaultArticleRepository(get(), get()) }
     single<ChatRepository> { DefaultChatRepository(get(), get(), get(), get()) }
     single<DetailRepository> { DefaultDetailRepository(get(), get()) }
     single<PostArticleRepository> { DefaultPostArticleRepository(get(), get()) }
@@ -72,10 +70,6 @@ val appModule = module {
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }
-
-    // Room
-    single { provideDB(androidApplication()) }
-    single { provideArticleDao(get()) }
 
     // paging3
     single { MainPagingSource(get()) }
