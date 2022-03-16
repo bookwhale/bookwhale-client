@@ -1,9 +1,8 @@
 package com.example.bookwhale.screen.login
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.bookwhale.data.entity.login.LoginEntity
+import com.example.bookwhale.model.auth.LoginModel
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.repository.login.LoginRepository
 import com.example.bookwhale.screen.base.BaseViewModel
@@ -20,7 +19,7 @@ class LoginViewModel(
         val response = loginRepository.getNaverLoginInfo(code)
 
         response.apiToken?.let{
-            loginStateLiveData.value = LoginState.Success(LoginEntity(
+            loginStateLiveData.value = LoginState.Success(LoginModel(
                 apiToken = response.apiToken,
                 refreshToken = response.refreshToken
             ))
@@ -35,7 +34,7 @@ class LoginViewModel(
         val response = loginRepository.getKaKaoLoginInfo(code)
 
         response.apiToken?.let{
-            loginStateLiveData.value = LoginState.Success(LoginEntity(
+            loginStateLiveData.value = LoginState.Success(LoginModel(
                 apiToken = response.apiToken,
                 refreshToken = response.refreshToken
             ))

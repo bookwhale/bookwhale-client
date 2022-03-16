@@ -1,16 +1,15 @@
 package com.example.bookwhale.data.repository.login
 
-import com.example.bookwhale.data.entity.login.LoginEntity
+import com.example.bookwhale.model.auth.LoginModel
 import com.example.bookwhale.data.response.NetworkResult
-import com.example.bookwhale.data.response.login.LoginGoogleResponse
 import com.example.bookwhale.data.response.login.TokenRequestDTO
 
 interface LoginRepository {
 
-    suspend fun getNaverLoginInfo(code: String) : LoginEntity
+    suspend fun getNaverLoginInfo(code: String) : LoginModel
 
-    suspend fun getKaKaoLoginInfo(code: String) : LoginEntity
+    suspend fun getKaKaoLoginInfo(code: String) : LoginModel
 
-    suspend fun getNewTokens(tokenRequestDTO: TokenRequestDTO) : NetworkResult<LoginEntity>
+    suspend fun getNewTokens(tokenRequestDTO: TokenRequestDTO) : NetworkResult<LoginModel>
 
 }

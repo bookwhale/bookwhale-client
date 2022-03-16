@@ -1,6 +1,7 @@
 package com.example.bookwhale.widget.viewholder.main.chat
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.databinding.ViewholderChatBinding
 import com.example.bookwhale.model.main.chat.ChatModel
@@ -39,6 +40,11 @@ class ChatViewHolder(
             profileTextView.text = model.opponentIdentity
             model.articleImage?.let{
                 articleImageView.load(it, 4f, CenterCrop())
+            }
+            if(model.lastContent.isNullOrEmpty()) {
+                lastChatTextView.text = resourcesProvider.getString(R.string.noChatMessage)
+            } else {
+                lastChatTextView.text = model.lastContent
             }
         }
     }

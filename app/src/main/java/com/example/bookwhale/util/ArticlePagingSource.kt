@@ -1,11 +1,8 @@
 package com.example.bookwhale.util
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.bookwhale.data.entity.home.ArticleEntity
 import com.example.bookwhale.data.network.ServerApiService
-import com.example.bookwhale.data.response.home.GetAllArticlesResponse
 import com.example.bookwhale.model.main.home.ArticleModel
 
 class ArticlePagingSource(

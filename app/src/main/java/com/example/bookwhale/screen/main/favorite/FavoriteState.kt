@@ -1,6 +1,5 @@
 package com.example.bookwhale.screen.main.favorite
 
-import com.example.bookwhale.data.entity.login.LoginEntity
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 
 sealed class FavoriteState {

@@ -21,9 +21,6 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
         NaverPagingAdapter(
             adapterListener = object : NaverBookListener {
                 override fun onClickItem(model: NaverBookModel) {
-//                    val intent = PostArticleActivity.newIntent(this@SearchActivity, model)
-//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-//                    startActivity(intent)
                     setResult(Activity.RESULT_OK, Intent().apply {
                         putExtra(NAVER_BOOK_MODEL, model)
                     })
