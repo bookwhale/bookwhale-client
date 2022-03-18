@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textColor="@color/black"
+            android:textColor="@color/fix_black"
             tools:text="상대방 메세지상대방 메세지상대방 메세지상대방 메세지상대방 메세지상대방 메세지"/>
 
 
