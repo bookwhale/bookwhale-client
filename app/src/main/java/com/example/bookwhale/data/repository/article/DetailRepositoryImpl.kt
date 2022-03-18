@@ -9,12 +9,12 @@ import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.model.article.DetailArticleModel
 import com.example.bookwhale.model.article.DetailImageModel
 import com.example.bookwhale.model.article.NaverBookModel
-import com.example.bookwhale.util.NaverBookPagingSource
+import com.example.bookwhale.widget.adapter.NaverBookPagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
-class DefaultDetailRepository(
+class DetailRepositoryImpl(
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher
 ) : DetailRepository {

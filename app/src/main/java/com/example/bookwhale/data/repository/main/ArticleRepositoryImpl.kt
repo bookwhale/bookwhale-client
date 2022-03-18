@@ -9,12 +9,12 @@ import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.model.main.home.ArticleModel
-import com.example.bookwhale.util.ArticlePagingSource
+import com.example.bookwhale.widget.adapter.ArticlePagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
-class DefaultArticleRepository(
+class ArticleRepositoryImpl(
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher
 ): ArticleRepository {

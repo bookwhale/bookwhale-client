@@ -1,7 +1,5 @@
 package com.example.bookwhale.screen.splash
 
-import com.example.bookwhale.model.main.my.ProfileModel
-
 sealed class SplashState {
 
     object Uninitialized : SplashState()

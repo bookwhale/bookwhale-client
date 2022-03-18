@@ -1,7 +1,6 @@
-package com.example.bookwhale.util
+package com.example.bookwhale.widget.adapter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
@@ -11,10 +10,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
-import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.util.load
 import com.example.bookwhale.widget.listener.AdapterListener
-import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
 import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 
 class PagingAdapter(

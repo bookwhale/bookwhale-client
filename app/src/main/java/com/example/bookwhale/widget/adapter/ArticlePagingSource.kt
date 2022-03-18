@@ -1,4 +1,4 @@
-package com.example.bookwhale.util
+package com.example.bookwhale.widget.adapter
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

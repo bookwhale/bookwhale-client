@@ -19,7 +19,7 @@ import java.net.URI
 import java.net.URI.create
 
 
-class DefaultPostArticleRepository(
+class PostArticleRepositoryImpl(
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher,
 ): PostArticleRepository {

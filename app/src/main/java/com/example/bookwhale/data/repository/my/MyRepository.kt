@@ -1,6 +1,6 @@
 package com.example.bookwhale.data.repository.my
 
-import com.example.bookwhale.model.auth.MyInfoModel
+import com.example.bookwhale.model.main.my.MyInfoModel
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.my.LogOutDTO
 import com.example.bookwhale.data.response.my.NickNameRequestDTO

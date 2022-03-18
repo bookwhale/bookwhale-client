@@ -1,13 +1,12 @@
 package com.example.bookwhale.screen.main.my
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.my.LogOutDTO
 import com.example.bookwhale.data.response.my.NickNameRequestDTO
-import com.example.bookwhale.model.main.my.ProfileModel
+import com.example.bookwhale.model.auth.ProfileModel
 import com.example.bookwhale.screen.base.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

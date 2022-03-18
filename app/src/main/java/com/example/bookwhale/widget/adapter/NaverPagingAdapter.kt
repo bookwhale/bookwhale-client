@@ -1,4 +1,4 @@
-package com.example.bookwhale.util
+package com.example.bookwhale.widget.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.databinding.ViewholderNaverbooklistBinding
 import com.example.bookwhale.model.article.NaverBookModel
+import com.example.bookwhale.util.load
 import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.listener.main.article.NaverBookListener
 

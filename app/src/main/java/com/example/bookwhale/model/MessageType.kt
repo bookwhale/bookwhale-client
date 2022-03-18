@@ -1,4 +1,4 @@
-package com.example.bookwhale.model.main.chat
+package com.example.bookwhale.model
 
 enum class MessageType {
     MY,

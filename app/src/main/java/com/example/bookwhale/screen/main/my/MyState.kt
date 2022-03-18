@@ -1,8 +1,6 @@
 package com.example.bookwhale.screen.main.my
 
-import com.example.bookwhale.model.main.favorite.FavoriteModel
-import com.example.bookwhale.model.main.my.ProfileModel
-import com.example.bookwhale.screen.main.favorite.FavoriteState
+import com.example.bookwhale.model.auth.ProfileModel
 
 sealed class MyState {
 

@@ -1,13 +1,12 @@
 package com.example.bookwhale.screen.article
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.databinding.ActivitySearchBinding
 import com.example.bookwhale.model.article.NaverBookModel
 import com.example.bookwhale.screen.base.BaseActivity
-import com.example.bookwhale.util.NaverPagingAdapter
+import com.example.bookwhale.widget.adapter.NaverPagingAdapter
 import com.example.bookwhale.widget.listener.main.article.NaverBookListener
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -21,7 +20,7 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
         NaverPagingAdapter(
             adapterListener = object : NaverBookListener {
                 override fun onClickItem(model: NaverBookModel) {
-                    setResult(Activity.RESULT_OK, Intent().apply {
+                    setResult(RESULT_OK, Intent().apply {
                         putExtra(NAVER_BOOK_MODEL, model)
                     })
                     finish()

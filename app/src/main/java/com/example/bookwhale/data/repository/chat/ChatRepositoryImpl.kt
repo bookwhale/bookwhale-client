@@ -1,6 +1,5 @@
 package com.example.bookwhale.data.repository.chat
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -12,15 +11,13 @@ import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.main.chat.ChatModel
-import com.example.bookwhale.model.main.chat.MessageType
-import com.example.bookwhale.model.main.home.ArticleModel
-import com.example.bookwhale.util.ArticlePagingSource
-import com.example.bookwhale.util.ChatPagingSource
+import com.example.bookwhale.model.MessageType
+import com.example.bookwhale.widget.adapter.ChatPagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
-class DefaultChatRepository(
+class ChatRepositoryImpl(
     private val serverApiService: ServerApiService,
     private val myPreferenceManager: MyPreferenceManager,
     private val chatApiService: ChatApiService,

@@ -9,8 +9,7 @@ import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.databinding.ActivityChatRoomBinding
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseActivity
-import com.example.bookwhale.util.ChatPagingAdapter
-import com.example.bookwhale.widget.listener.AdapterListener
+import com.example.bookwhale.widget.adapter.ChatPagingAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
