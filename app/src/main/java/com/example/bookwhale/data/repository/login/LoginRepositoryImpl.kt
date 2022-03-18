@@ -8,7 +8,7 @@ import com.example.bookwhale.data.response.login.TokenRequestDTO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class DefaultLoginRepository(
+class LoginRepositoryImpl(
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher
 ):LoginRepository {

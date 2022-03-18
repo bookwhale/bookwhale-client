@@ -2,7 +2,6 @@ package com.example.bookwhale.screen.article
 
 import com.example.bookwhale.model.article.DetailArticleModel
 import com.example.bookwhale.model.main.favorite.FavoriteModel
-import com.example.bookwhale.model.main.my.ProfileModel
 
 sealed class DetailArticleState {
 

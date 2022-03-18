@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.bookwhale.R
 
-class DefaultResourcesProvider(
+class ResourcesProviderImpl(
     private val context: Context
 ): ResourcesProvider {
     override fun getString(@StringRes resId: Int): String = context.getString(resId)

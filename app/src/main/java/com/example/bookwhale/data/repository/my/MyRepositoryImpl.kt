@@ -1,6 +1,6 @@
 package com.example.bookwhale.data.repository.my
 
-import com.example.bookwhale.model.auth.MyInfoModel
+import com.example.bookwhale.model.main.my.MyInfoModel
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
-class DefaultMyRepository(
+class MyRepositoryImpl(
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher
 ): MyRepository {

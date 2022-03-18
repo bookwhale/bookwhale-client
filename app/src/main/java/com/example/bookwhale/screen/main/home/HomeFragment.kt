@@ -1,28 +1,21 @@
 package com.example.bookwhale.screen.main.home
 
 import android.util.Log
-import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentHomeBinding
-import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.article.DetailArticleActivity
 import com.example.bookwhale.screen.article.PostArticleActivity
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainViewModel
-import com.example.bookwhale.util.PagingAdapter
-import com.example.bookwhale.util.provider.ResourcesProvider
-import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
-import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
+import com.example.bookwhale.widget.adapter.PagingAdapter
 import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 
 class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     override val viewModel by activityViewModels<MainViewModel>()

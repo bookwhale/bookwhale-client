@@ -1,24 +1,17 @@
 package com.example.bookwhale.screen.chatroom
 
-import android.annotation.SuppressLint
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.bookwhale.data.repository.chat.ChatRepository
-import com.example.bookwhale.model.article.NaverBookModel
 import com.example.bookwhale.model.main.chat.ChatMessageModel
-import com.example.bookwhale.model.main.chat.MessageType
+import com.example.bookwhale.model.MessageType
 import com.example.bookwhale.screen.base.BaseViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import ua.naiksoftware.stomp.Stomp
-import ua.naiksoftware.stomp.dto.LifecycleEvent
-import ua.naiksoftware.stomp.dto.StompHeader
 
 class ChatRoomViewModel(
     private val chatRepository: ChatRepository
@@ -57,9 +50,6 @@ class ChatRoomViewModel(
     suspend fun getPreviousMessages(roomId: Int) : Flow<PagingData<ChatMessageModel>> {
 
         val response = chatRepository.getPreviousMessages(roomId)
-
-        Log.e("my",myPreferenceManager.getId().toString())
-
         return response.data!!.cachedIn(viewModelScope)
     }
 

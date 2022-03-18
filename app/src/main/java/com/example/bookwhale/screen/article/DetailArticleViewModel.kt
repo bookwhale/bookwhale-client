@@ -1,6 +1,5 @@
 package com.example.bookwhale.screen.article
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.repository.article.DetailRepository
@@ -9,13 +8,9 @@ import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
-import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseViewModel
-import com.example.bookwhale.screen.main.chat.ChatState
-import com.example.bookwhale.screen.main.favorite.FavoriteState
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 

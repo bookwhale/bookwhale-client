@@ -1,10 +1,10 @@
-package com.example.bookwhale.util
+package com.example.bookwhale.widget.adapter
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.bookwhale.data.network.ChatApiService
 import com.example.bookwhale.model.main.chat.ChatMessageModel
-import com.example.bookwhale.model.main.chat.MessageType
+import com.example.bookwhale.model.MessageType
 
 
 class ChatPagingSource(

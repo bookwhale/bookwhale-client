@@ -1,7 +1,6 @@
 package com.example.bookwhale.widget.viewholder.main.home
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.bumptech.glide.load.resource.bitmap.CenterCrop

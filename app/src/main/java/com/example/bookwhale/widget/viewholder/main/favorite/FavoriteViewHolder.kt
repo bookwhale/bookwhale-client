@@ -11,7 +11,6 @@ import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
-import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
 
 class FavoriteViewHolder(

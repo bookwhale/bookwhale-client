@@ -1,6 +1,5 @@
 package com.example.bookwhale.widget.viewholder.article
 
-import androidx.core.net.toUri
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.databinding.ViewholderTempimageBinding
 import com.example.bookwhale.model.article.DetailImageModel

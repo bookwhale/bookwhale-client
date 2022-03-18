@@ -1,8 +1,8 @@
 package com.example.bookwhale.model.main.my
 
-import com.example.bookwhale.model.Model
-
-data class ProfileModel(
+data class MyInfoModel (
+    val userId: Int,
     val nickName: String,
+    val email: String,
     val profileImage: String?
 )
