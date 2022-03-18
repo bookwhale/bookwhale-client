@@ -4,17 +4,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.bookwhale.data.repository.article.DetailRepository
 import com.example.bookwhale.data.repository.chat.ChatRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.screen.article.DetailArticleState
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.main.chat.ChatState
 import com.example.bookwhale.screen.main.favorite.FavoriteState
 import com.example.bookwhale.screen.main.home.HomeState
 import com.example.bookwhale.screen.main.mypost.MyPostState
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -110,4 +115,5 @@ class MainViewModel(
             )
         }
     }
+
 }

@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.databinding.ActivityChatRoomBinding
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.util.load
 import com.example.bookwhale.widget.adapter.ChatPagingAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -32,7 +34,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
     private val myPreferenceManager = object:
         KoinComponent {val myPreferenceManager: MyPreferenceManager by inject()}.myPreferenceManager
 
-    private val url = "ws://52.79.148.89:8081/ws/websocket" // 소켓에 연결하는 엔드포인트가 /socket일때 다음과 같음
+    private val url = "ws://52.79.148.89:8081/ws/websocket"
     private val stompClient =  Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
 
     private val adapter by lazy {
@@ -48,8 +50,8 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         binding.recyclerView.adapter = adapter
 
         getMessages()
-
         initButtons()
+        loadArticleInfo()
     }
 
     private fun initButtons() = with(binding) {
@@ -67,6 +69,18 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
             lifecycleScope.launch {
                 viewModel.getPreviousMessages(it.roomId).collectLatest {
                     adapter.submitData(it)
+                }
+            }
+        }
+    }
+
+    private fun loadArticleInfo() {
+        chatModel?.let {
+            lifecycleScope.launch {
+                viewModel.loadArticleAsync(it.articleId).join()
+                binding.articleTitleTextView.text = viewModel.articleTitle.value
+                it.articleImage?.let {
+                    binding.articleImageView.load(it, 4f, CenterCrop())
                 }
             }
         }
@@ -130,6 +144,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
         const val CHATROOM_ID = "0"
         const val CHAT_MODEL = "chatModel"
+        const val CHAT_TITLE = "chatTitle"
     }
 
     override fun observeData() {
