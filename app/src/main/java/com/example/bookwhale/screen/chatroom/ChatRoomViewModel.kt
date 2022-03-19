@@ -25,7 +25,6 @@ import ua.naiksoftware.stomp.dto.StompHeader
 
 class ChatRoomViewModel(
     private val chatRepository: ChatRepository
-
 ): BaseViewModel() {
 
     val chatRoomState = MutableLiveData<ChatRoomState>(ChatRoomState.Uninitialized)
