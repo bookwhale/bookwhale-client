@@ -23,6 +23,7 @@ class DetailArticleViewModel(
     val detailArticleStateLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     val detailLoadFavoriteLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     val loadChatListLiveData = MutableLiveData<Boolean>(false) // true = 이미 존재하는 채팅방
+    val roomId = MutableLiveData<Int>(0)
 
     fun loadArticle(articleId: Int) = viewModelScope.launch {
 
@@ -70,7 +71,7 @@ class DetailArticleViewModel(
     }
 
 
-    fun addFavorite(articleId: Int): Deferred<Int> = viewModelScope.async {
+    fun addFavoriteAsync(articleId: Int): Deferred<Int> = viewModelScope.async {
         val response = articleRepository.addFavoriteArticle(AddFavoriteDTO(
             articleId = articleId
         ))
@@ -83,7 +84,7 @@ class DetailArticleViewModel(
 
     }
 
-    fun deleteFavorite(articleId: Int): Deferred<Boolean> = viewModelScope.async {
+    fun deleteFavoriteAsync(articleId: Int): Deferred<Boolean> = viewModelScope.async {
         val response = articleRepository.deleteFavoriteArticle(articleId)
 
         response.status == NetworkResult.Status.SUCCESS
@@ -94,6 +95,7 @@ class DetailArticleViewModel(
         if (!isExist) {
             chatRepository.makeNewChat(makeChatDTO)
             loadChatListLiveData.value = false
+            loadChatRoomList(makeChatDTO.articleId)
         }
         else {
             loadChatListLiveData.value = true
@@ -107,6 +109,7 @@ class DetailArticleViewModel(
             val chatList = response.data!!
             chatList.forEach {
                 if(it.articleId == articleId) {
+                    roomId.value = it.roomId
                     return@async true
                 }
             }

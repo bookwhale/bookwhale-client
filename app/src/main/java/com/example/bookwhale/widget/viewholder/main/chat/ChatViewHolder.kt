@@ -33,10 +33,14 @@ class ChatViewHolder(
         with(binding) {
             model.opponentProfile?.let {
                 profileImageView.load(it, 4f, CenterCrop())
+            }?: kotlin.run {
+                profileImageView.setImageResource(R.drawable.ic_default_profile)
             }
             profileTextView.text = model.opponentIdentity
             model.articleImage?.let{
                 articleImageView.load(it, 4f, CenterCrop())
+            }?: run {
+                articleImageView.setImageResource(R.drawable.ic_logo)
             }
             if(model.lastContent.isNullOrEmpty()) {
                 lastChatTextView.text = resourcesProvider.getString(R.string.noChatMessage)
