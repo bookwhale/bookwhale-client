@@ -33,6 +33,7 @@ class ChatRepositoryImpl(
                         id = index.toLong(),
                         roomId = it.roomId,
                         articleId = it.articleId,
+                        articleTitle = it.articleTitle,
                         articleImage = it.articleImage,
                         opponentIdentity = it.opponentIdentity,
                         opponentProfile = it.opponentProfile,

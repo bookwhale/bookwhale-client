@@ -11,9 +11,13 @@ data class ChatModel(
     override val type: CellType = CellType.CHAT_LIST,
     val roomId: Int,
     val articleId : Int,
+    val articleTitle : String,
     var articleImage : String?,
     val opponentIdentity : String,
     var opponentProfile : String?,
     var lastContent : String?,
     val opponentDelete: Boolean
-) : Model(id, type), Parcelable
+) : Model(id, type), Parcelable {
+    constructor(): this(0,CellType.CHAT_LIST,0,0,"","","","","",false)
+
+}

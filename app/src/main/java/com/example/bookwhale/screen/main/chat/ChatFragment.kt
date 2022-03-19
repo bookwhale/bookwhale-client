@@ -1,5 +1,6 @@
 package com.example.bookwhale.screen.main.chat
 
+import android.util.Log
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -29,7 +30,7 @@ class ChatFragment: BaseFragment<MainViewModel, FragmentChatBinding>() {
             resourcesProvider,
             adapterListener = object : ChatListener {
                 override fun onClickItem(model: ChatModel) {
-                    startActivity(ChatRoomActivity.newIntent(requireContext(), model))
+                    startActivity(ChatRoomActivity.newIntent(requireContext(), model.roomId.toString()))
                 }
             }
         )
@@ -40,6 +41,12 @@ class ChatFragment: BaseFragment<MainViewModel, FragmentChatBinding>() {
         viewModel.loadChatList()
 
         recyclerView.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.loadChatList()
     }
 
     override fun observeData()  {
