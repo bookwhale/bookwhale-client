@@ -7,6 +7,4 @@ interface FavoriteListener: AdapterListener {
 
     fun onClickItem(model: FavoriteModel)
 
-    fun onClickHeart(model: FavoriteModel)
-
 }

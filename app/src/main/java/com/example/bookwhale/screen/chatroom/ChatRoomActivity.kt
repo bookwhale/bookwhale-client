@@ -3,6 +3,7 @@ package com.example.bookwhale.screen.chatroom
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -10,6 +11,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityChatRoomBinding
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseActivity
@@ -132,7 +134,12 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         binding.progressBar.isGone = true
         when(state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
+            else -> handleUnexpected(state.code)
         }
+    }
+
+    private fun handleUnexpected(code: String) {
+        Toast.makeText(this, getString(R.string.error_unKnown, code), Toast.LENGTH_SHORT).show()
     }
 
     private fun handleT004() {

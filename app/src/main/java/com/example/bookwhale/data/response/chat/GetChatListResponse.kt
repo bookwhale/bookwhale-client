@@ -1,7 +1,5 @@
 package com.example.bookwhale.data.response.chat
 
-import com.example.bookwhale.data.response.home.GetAllArticlesResponse
-
 data class GetChatListResponse(
     val roomId: Int,
     val articleId : Int,

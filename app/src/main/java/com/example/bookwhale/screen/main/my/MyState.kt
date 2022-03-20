@@ -8,9 +8,9 @@ sealed class MyState {
 
     object Loading : MyState()
 
-    object logOutSuccess : MyState()
+    object LogOutSuccess : MyState()
 
-    object withDrawSuccess : MyState()
+    object WithDrawSuccess : MyState()
 
     data class Success(
         val myInfo : ProfileModel
