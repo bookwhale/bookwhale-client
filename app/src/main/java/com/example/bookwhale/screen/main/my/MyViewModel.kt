@@ -74,7 +74,7 @@ class MyViewModel(
         val response = myRepository.logOut(logOutDTO)
 
         if(response.status == NetworkResult.Status.SUCCESS) {
-            profileStateLiveData.value = MyState.logOutSuccess
+            profileStateLiveData.value = MyState.LogOutSuccess
         } else {
             profileStateLiveData.value = MyState.Error(
                 code = response.code
@@ -93,7 +93,7 @@ class MyViewModel(
         val response = myRepository.withDraw(logOutDTO)
 
         if(response.status == NetworkResult.Status.SUCCESS) {
-            profileStateLiveData.value = MyState.withDrawSuccess
+            profileStateLiveData.value = MyState.WithDrawSuccess
         } else {
             profileStateLiveData.value = MyState.Error(
                 code = response.code

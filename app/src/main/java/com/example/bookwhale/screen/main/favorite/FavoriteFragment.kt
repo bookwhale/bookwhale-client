@@ -31,10 +31,6 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
                 override fun onClickItem(model: FavoriteModel) {
                     startActivity(DetailArticleActivity.newIntent(requireContext(), model.articleId.toString()))
                 }
-
-                override fun onClickHeart(model: FavoriteModel) {
-                    //clickFavoriteButton(model)
-                }
             }
         )
     }
@@ -44,7 +40,7 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
 
         viewModel.getFavorites()
     }
-//
+
     override fun onResume() {
         super.onResume()
         viewModel.getFavorites()

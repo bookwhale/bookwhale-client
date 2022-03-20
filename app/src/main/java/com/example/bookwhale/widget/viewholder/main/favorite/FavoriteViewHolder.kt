@@ -26,14 +26,8 @@ class FavoriteViewHolder(
             binding.root.setOnClickListener {
                 adapterListener.onClickItem(model)
             }
-
-            binding.heartImageView.setOnClickListener {
-                adapterListener.onClickHeart(model)
-
-            }
         }
     }
-
 
     @SuppressLint("SetTextI18n")
     override fun bindData(model: FavoriteModel) {

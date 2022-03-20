@@ -5,7 +5,7 @@ import com.example.bookwhale.data.response.article.BookResponse
 data class DetailArticleModel(
     val sellerId: Int,
     val sellerIdentity : String,
-    val sellerProfileImage : String,
+    var sellerProfileImage : String?,
     val articleId : Int,
     val title : String,
     val price : String,

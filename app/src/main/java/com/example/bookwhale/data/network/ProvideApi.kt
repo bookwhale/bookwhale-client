@@ -1,6 +1,5 @@
 package com.example.bookwhale.data.network
 
-import android.content.Context
 import com.example.bookwhale.BuildConfig
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.url.Url

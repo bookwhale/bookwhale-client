@@ -209,7 +209,12 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
         when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
+            else -> handleUnexpected(state.code)
         }
+    }
+
+    private fun handleUnexpected(code: String) {
+        Toast.makeText(this, getString(R.string.error_unKnown, code), Toast.LENGTH_SHORT).show()
     }
 
     private fun handleT004() {
