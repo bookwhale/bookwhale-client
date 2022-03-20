@@ -1,9 +1,10 @@
 package com.example.bookwhale.widget.viewholder.main.favorite
 
-import android.annotation.SuppressLint
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.bookwhale.MyApp.Companion.appContext
+import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseViewModel
@@ -12,6 +13,7 @@ import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
+import org.koin.android.ext.koin.androidApplication
 
 class FavoriteViewHolder(
     private val binding: ViewholderArticlelistBinding,
@@ -29,12 +31,11 @@ class FavoriteViewHolder(
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun bindData(model: FavoriteModel) {
         super.bindData(model)
         with(binding) {
             titleTextView.text = model.articleTitle
-            priceTextView.text = "${model.articlePrice}원"
+            priceTextView.text = resourcesProvider.getString(R.string.price, model.articlePrice)
             locationTextView.text = model.sellingLocation
             timeTextView.text = model.beforeTime
             chatTextView.text = model.chatCount.toString()

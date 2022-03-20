@@ -1,7 +1,6 @@
 package com.example.bookwhale.screen.article
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.View
@@ -12,9 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.R
 import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.databinding.ActivityDetailArticleBinding
-import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.article.DetailImageModel
-import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.util.OnSingleClickListener
@@ -166,22 +163,21 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun handleSuccess(state: DetailArticleState.Success) = with(binding) {
         binding.progressBar.isGone = true
 
         articleTitle.text = state.article.title
         articleTitle.visibility = View.GONE
-        articlePriceTextView.text = "${state.article.price}원"
+        articlePriceTextView.text = getString(R.string.price, state.article.price)
         qualityTextView.text = state.article.bookStatus
         locationTextView.text = state.article.sellingLocation
         descriptionTextView.text = state.article.description
         viewTextView.text = state.article.viewCount.toString()
         officialBookNameTextView.text = state.article.bookResponse.bookTitle
         officialBookImageView.load(state.article.bookResponse.bookThumbnail)
-        officialPriceTextView.text = "${state.article.bookResponse.bookListPrice}원"
-        officialWriterTextView.text = "글 ${state.article.bookResponse.bookAuthor}"
-        officialPublisherTextView.text = "출판 ${state.article.bookResponse.bookPublisher}"
+        officialPriceTextView.text = getString(R.string.price, state.article.bookResponse.bookListPrice)
+        officialWriterTextView.text = getString(R.string.writer, state.article.bookResponse.bookAuthor)
+        officialPublisherTextView.text = getString(R.string.publisher, state.article.bookResponse.bookPublisher)
 
         myFavorite = state.article.myFavorite
         state.article.myFavoriteId?.let { favoriteId = it }
@@ -229,7 +225,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             when (it) {
                 false -> Unit
                 true -> Toast.makeText(this@DetailArticleActivity,
-                    "이미 존재하는 채팅방 입니다.",
+                    getString(R.string.alreadyExistRoom),
                     Toast.LENGTH_SHORT).show()
             }
         }

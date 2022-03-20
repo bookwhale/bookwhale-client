@@ -1,6 +1,5 @@
 package com.example.bookwhale.widget.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
@@ -9,19 +8,23 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.util.load
+import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 
 class PagingAdapter(
+    private val resourcesProvider: ResourcesProvider,
     private val adapterListener: AdapterListener
 ) : PagingDataAdapter<ArticleModel, PagingViewHolder>(diffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagingViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return PagingViewHolder(
-            ViewholderArticlelistBinding.inflate(layoutInflater, parent, false)
+            ViewholderArticlelistBinding.inflate(layoutInflater, parent, false),
+            resourcesProvider
         )
     }
 
@@ -46,17 +49,17 @@ class PagingAdapter(
 }
 
 class PagingViewHolder(
-    private val binding: ViewholderArticlelistBinding
+    private val binding: ViewholderArticlelistBinding,
+    private val resourcesProvider: ResourcesProvider
 ): RecyclerView.ViewHolder(binding.root) {
 
-    @SuppressLint("SetTextI18n")
     fun bind(model: ArticleModel) = with(binding) {
         timeTextView.text = model.beforeTime
         titleTextView.text = model.articleTitle
         locationTextView.text = model.sellingLocation
         qualityTextView.text = model.bookStatus
         chatTextView.text = model.chatCount.toString()
-        priceTextView.text = "${model.articlePrice}원"
+        priceTextView.text = resourcesProvider.getString(R.string.price, model.articlePrice)
         heartTextView.text = model.favoriteCount.toString()
         thumbNailImageView.load(model.articleImage.toString(), 4f, CenterCrop())
 

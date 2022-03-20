@@ -12,18 +12,23 @@ import com.example.bookwhale.screen.article.DetailArticleActivity
 import com.example.bookwhale.screen.article.PostArticleActivity
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainViewModel
+import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.PagingAdapter
 import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     override val viewModel by activityViewModels<MainViewModel>()
 
     override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
 
+    private val resourcesProvider by inject<ResourcesProvider>()
+
     private val adapter by lazy {
         PagingAdapter(
+            resourcesProvider = resourcesProvider,
             adapterListener = object : ArticleListListener {
                 override fun onClickItem(model: ArticleModel) {
                     startActivity(DetailArticleActivity.newIntent(requireContext(), model.articleId.toString()))

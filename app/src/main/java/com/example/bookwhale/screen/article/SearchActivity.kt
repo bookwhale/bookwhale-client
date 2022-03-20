@@ -10,10 +10,12 @@ import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivitySearchBinding
 import com.example.bookwhale.model.article.NaverBookModel
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.NaverPagingAdapter
 import com.example.bookwhale.widget.listener.main.article.NaverBookListener
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
@@ -22,8 +24,11 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
 
     override fun getViewBinding(): ActivitySearchBinding = ActivitySearchBinding.inflate(layoutInflater)
 
+    private val resourcesProvider by inject<ResourcesProvider>()
+
     private val adapter by lazy {
         NaverPagingAdapter(
+            resourcesProvider = resourcesProvider,
             adapterListener = object : NaverBookListener {
                 override fun onClickItem(model: NaverBookModel) {
                     setResult(RESULT_OK, Intent().apply {
