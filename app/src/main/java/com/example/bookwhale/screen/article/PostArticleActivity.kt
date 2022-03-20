@@ -1,6 +1,5 @@
 package com.example.bookwhale.screen.article
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -133,15 +132,14 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun handleNaverBookApi() = with(binding) {
         naverBookInfo?.let {
             officialBookImageView.isVisible = true
             officialBookImageView.load(it.bookThumbnail,4f, CenterCrop())
             officialBookNameTextView.text = it.bookTitle.replace("<b>","").replace("</b>","")
-            officialWriterTextView.text = "글 ${it.bookAuthor.replace("<b>","").replace("</b>","")}"
-            officialPublisherTextView.text = "출판 ${it.bookPublisher.replace("<b>","").replace("</b>","")}"
-            officialPriceTextView.text = "${it.bookListPrice.replace("<b>","").replace("</b>","")}원"
+            officialWriterTextView.text = getString(R.string.writer, it.bookAuthor.replace("<b>","").replace("</b>",""))
+            officialPublisherTextView.text = getString(R.string.publisher, it.bookPublisher.replace("<b>","").replace("</b>",""))
+            officialPriceTextView.text = getString(R.string.price, it.bookListPrice.replace("<b>","").replace("</b>",""))
             officialBookNameTextView.setTextColor(ContextCompat.getColor(this@PostArticleActivity, R.color.black))
             officialWriterTextView.setTextColor(ContextCompat.getColor(this@PostArticleActivity, R.color.black))
             officialPublisherTextView.setTextColor(ContextCompat.getColor(this@PostArticleActivity, R.color.black))
