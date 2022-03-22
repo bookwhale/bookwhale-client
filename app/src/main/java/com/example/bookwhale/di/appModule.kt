@@ -1,17 +1,15 @@
 package com.example.bookwhale.di
 
-import com.example.bookwhale.data.db.provideArticleDao
-import com.example.bookwhale.data.db.provideDB
 import com.example.bookwhale.data.network.*
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.repository.article.*
 import com.example.bookwhale.data.repository.chat.ChatRepository
-import com.example.bookwhale.data.repository.chat.DefaultChatRepository
-import com.example.bookwhale.data.repository.login.DefaultLoginRepository
+import com.example.bookwhale.data.repository.chat.ChatRepositoryImpl
+import com.example.bookwhale.data.repository.login.LoginRepositoryImpl
 import com.example.bookwhale.data.repository.login.LoginRepository
-import com.example.bookwhale.data.repository.main.DefaultArticleRepository
+import com.example.bookwhale.data.repository.main.ArticleRepositoryImpl
 import com.example.bookwhale.data.repository.main.ArticleRepository
-import com.example.bookwhale.data.repository.my.DefaultMyRepository
+import com.example.bookwhale.data.repository.my.MyRepositoryImpl
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.screen.article.DetailArticleViewModel
 import com.example.bookwhale.screen.article.ModifyArticleViewModel
@@ -21,11 +19,9 @@ import com.example.bookwhale.screen.chatroom.ChatRoomViewModel
 import com.example.bookwhale.screen.main.my.MyViewModel
 import com.example.bookwhale.screen.login.LoginViewModel
 import com.example.bookwhale.screen.main.MainViewModel
-import com.example.bookwhale.screen.main.chat.ChatViewModel
 import com.example.bookwhale.screen.splash.SplashViewModel
-import com.example.bookwhale.screen.test.TestViewModel
-import com.example.bookwhale.util.paging.MainPagingSource
-import com.example.bookwhale.util.provider.DefaultResourcesProvider
+import com.example.bookwhale.widget.adapter.MainPagingSource
+import com.example.bookwhale.util.provider.ResourcesProviderImpl
 import com.example.bookwhale.util.provider.ResourcesProvider
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
@@ -36,7 +32,6 @@ import org.koin.dsl.module
 val appModule = module {
 
     viewModel { MainViewModel(get(), get(), get()) }
-    viewModel { TestViewModel() }
     viewModel { LoginViewModel(get(), get()) }
     viewModel { MyViewModel(get()) }
     viewModel { SplashViewModel(get()) }
@@ -46,19 +41,19 @@ val appModule = module {
     viewModel { SearchViewModel(get()) }
     viewModel { ChatRoomViewModel(get()) }
 
-    single<MyRepository> { DefaultMyRepository(get(), get()) }
-    single<LoginRepository> { DefaultLoginRepository(get(), get()) }
-    single<ArticleRepository> { DefaultArticleRepository(get(), get(), get()) }
-    single<ChatRepository> { DefaultChatRepository(get(), get(), get(), get()) }
-    single<DetailRepository> { DefaultDetailRepository(get(), get()) }
-    single<PostArticleRepository> { DefaultPostArticleRepository(get(), get()) }
+    single<MyRepository> { MyRepositoryImpl(get(), get()) }
+    single<LoginRepository> { LoginRepositoryImpl(get(), get()) }
+    single<ArticleRepository> { ArticleRepositoryImpl(get(), get()) }
+    single<ChatRepository> { ChatRepositoryImpl(get(), get(), get(), get()) }
+    single<DetailRepository> { DetailRepositoryImpl(get(), get()) }
+    single<PostArticleRepository> { PostArticleRepositoryImpl(get(), get()) }
     single<ModifyArticleRepository> { DefaultModifyArticleRepository(get(), get()) }
 
     single { Dispatchers.IO }
     single { Dispatchers.Main }
 
     //ResourcesProvider
-    single<ResourcesProvider> { DefaultResourcesProvider(androidApplication()) }
+    single<ResourcesProvider> { ResourcesProviderImpl(androidApplication()) }
 
     //SharedPreference
     single { MyPreferenceManager(androidApplication()) }
@@ -72,10 +67,6 @@ val appModule = module {
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }
-
-    // Room
-    single { provideDB(androidApplication()) }
-    single { provideArticleDao(get()) }
 
     // paging3
     single { MainPagingSource(get()) }

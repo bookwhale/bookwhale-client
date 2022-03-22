@@ -1,29 +1,26 @@
 package com.example.bookwhale.screen.main
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
-import com.example.bookwhale.data.preference.MyPreferenceManager
+import com.example.bookwhale.data.repository.article.DetailRepository
 import com.example.bookwhale.data.repository.chat.ChatRepository
-import com.example.bookwhale.data.repository.login.LoginRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.data.response.NetworkResult
-import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
-import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.screen.article.DetailArticleState
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.main.chat.ChatState
 import com.example.bookwhale.screen.main.favorite.FavoriteState
 import com.example.bookwhale.screen.main.home.HomeState
 import com.example.bookwhale.screen.main.mypost.MyPostState
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -62,15 +59,15 @@ class MainViewModel(
                 FavoriteModel(
                     id = it.hashCode().toLong(),
                     favoriteId = it.favoriteId,
-                    articleId = it.articleEntity.articleId,
-                    articleImage = it.articleEntity.articleImage,
-                    articleTitle = it.articleEntity.articleTitle,
-                    articlePrice = it.articleEntity.articlePrice,
-                    bookStatus = it.articleEntity.bookStatus,
-                    sellingLocation = it.articleEntity.sellingLocation,
-                    chatCount = it.articleEntity.chatCount,
-                    favoriteCount = it.articleEntity.favoriteCount,
-                    beforeTime = it.articleEntity.beforeTime
+                    articleId = it.articleModel.articleId,
+                    articleImage = it.articleModel.articleImage,
+                    articleTitle = it.articleModel.articleTitle,
+                    articlePrice = it.articleModel.articlePrice,
+                    bookStatus = it.articleModel.bookStatus,
+                    sellingLocation = it.articleModel.sellingLocation,
+                    chatCount = it.articleModel.chatCount,
+                    favoriteCount = it.articleModel.favoriteCount,
+                    beforeTime = it.articleModel.beforeTime
                 )
             }
             favoriteArticleStateLiveData.value = FavoriteState.Success(favoriteList!!)
@@ -118,4 +115,5 @@ class MainViewModel(
             )
         }
     }
+
 }

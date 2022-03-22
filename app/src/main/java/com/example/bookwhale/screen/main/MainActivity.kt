@@ -33,7 +33,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     private val disposable = CompositeDisposable() // Disposable 관리
     private val backBtnSubject = PublishSubject.create<Boolean>() // backBtn 이벤트를 발생시킬 수 있는 Subject
-    private val BACK_BTN_EXIT_TIMEOUT = 2000 // 연속된 Back 버튼의 시간 간격 (2초안에 백버튼 2번 클릭시 앱 종료)
 
     override fun initViews(): Unit = with(binding) {
         initBottomNav()
@@ -166,6 +165,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     companion object {
         fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
+
+        const val BACK_BTN_EXIT_TIMEOUT = 2000 // 연속된 Back 버튼의 시간 간격 (2초안에 백버튼 2번 클릭시 앱 종료)
     }
 
 

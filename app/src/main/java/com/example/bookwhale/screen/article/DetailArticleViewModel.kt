@@ -1,6 +1,5 @@
 package com.example.bookwhale.screen.article
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.repository.article.DetailRepository
@@ -9,13 +8,9 @@ import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
-import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseViewModel
-import com.example.bookwhale.screen.main.chat.ChatState
-import com.example.bookwhale.screen.main.favorite.FavoriteState
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
@@ -28,6 +23,7 @@ class DetailArticleViewModel(
     val detailArticleStateLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     val detailLoadFavoriteLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     val loadChatListLiveData = MutableLiveData<Boolean>(false) // true = 이미 존재하는 채팅방
+    val roomId = MutableLiveData<Int>(0)
 
     fun loadArticle(articleId: Int) = viewModelScope.launch {
 
@@ -57,15 +53,15 @@ class DetailArticleViewModel(
                     FavoriteModel(
                         id = it.hashCode().toLong(),
                         favoriteId = it.favoriteId,
-                        articleId = it.articleEntity.articleId,
-                        articleImage = it.articleEntity.articleImage,
-                        articleTitle = it.articleEntity.articleTitle,
-                        articlePrice = it.articleEntity.articlePrice,
-                        bookStatus = it.articleEntity.bookStatus,
-                        sellingLocation = it.articleEntity.sellingLocation,
-                        chatCount = it.articleEntity.chatCount,
-                        favoriteCount = it.articleEntity.favoriteCount,
-                        beforeTime = it.articleEntity.beforeTime
+                        articleId = it.articleModel.articleId,
+                        articleImage = it.articleModel.articleImage,
+                        articleTitle = it.articleModel.articleTitle,
+                        articlePrice = it.articleModel.articlePrice,
+                        bookStatus = it.articleModel.bookStatus,
+                        sellingLocation = it.articleModel.sellingLocation,
+                        chatCount = it.articleModel.chatCount,
+                        favoriteCount = it.articleModel.favoriteCount,
+                        beforeTime = it.articleModel.beforeTime
                     )
                 }
             )
@@ -75,7 +71,7 @@ class DetailArticleViewModel(
     }
 
 
-    fun addFavorite(articleId: Int): Deferred<Int> = viewModelScope.async {
+    fun addFavoriteAsync(articleId: Int): Deferred<Int> = viewModelScope.async {
         val response = articleRepository.addFavoriteArticle(AddFavoriteDTO(
             articleId = articleId
         ))
@@ -88,7 +84,7 @@ class DetailArticleViewModel(
 
     }
 
-    fun deleteFavorite(articleId: Int): Deferred<Boolean> = viewModelScope.async {
+    fun deleteFavoriteAsync(articleId: Int): Deferred<Boolean> = viewModelScope.async {
         val response = articleRepository.deleteFavoriteArticle(articleId)
 
         response.status == NetworkResult.Status.SUCCESS
@@ -99,6 +95,7 @@ class DetailArticleViewModel(
         if (!isExist) {
             chatRepository.makeNewChat(makeChatDTO)
             loadChatListLiveData.value = false
+            loadChatRoomList(makeChatDTO.articleId)
         }
         else {
             loadChatListLiveData.value = true
@@ -112,6 +109,7 @@ class DetailArticleViewModel(
             val chatList = response.data!!
             chatList.forEach {
                 if(it.articleId == articleId) {
+                    roomId.value = it.roomId
                     return@async true
                 }
             }

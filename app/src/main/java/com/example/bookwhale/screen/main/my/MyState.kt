@@ -1,8 +1,6 @@
 package com.example.bookwhale.screen.main.my
 
-import com.example.bookwhale.model.main.favorite.FavoriteModel
-import com.example.bookwhale.model.main.my.ProfileModel
-import com.example.bookwhale.screen.main.favorite.FavoriteState
+import com.example.bookwhale.model.auth.ProfileModel
 
 sealed class MyState {
 
@@ -10,9 +8,9 @@ sealed class MyState {
 
     object Loading : MyState()
 
-    object logOutSuccess : MyState()
+    object LogOutSuccess : MyState()
 
-    object withDrawSuccess : MyState()
+    object WithDrawSuccess : MyState()
 
     data class Success(
         val myInfo : ProfileModel

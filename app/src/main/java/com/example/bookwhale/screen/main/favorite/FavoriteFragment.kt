@@ -1,12 +1,9 @@
 package com.example.bookwhale.screen.main.favorite
 
-import android.util.Log
-import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentFavoriteBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.article.DetailArticleActivity
@@ -17,7 +14,6 @@ import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
     override val viewModel by activityViewModels<MainViewModel>()
@@ -35,10 +31,6 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
                 override fun onClickItem(model: FavoriteModel) {
                     startActivity(DetailArticleActivity.newIntent(requireContext(), model.articleId.toString()))
                 }
-
-                override fun onClickHeart(model: FavoriteModel) {
-                    //clickFavoriteButton(model)
-                }
             }
         )
     }
@@ -48,7 +40,7 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
 
         viewModel.getFavorites()
     }
-//
+
     override fun onResume() {
         super.onResume()
         viewModel.getFavorites()

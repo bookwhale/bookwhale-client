@@ -1,29 +1,21 @@
 package com.example.bookwhale.screen.article
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import br.com.onimur.handlepathoz.HandlePathOz
-import br.com.onimur.handlepathoz.HandlePathOzListener
-import br.com.onimur.handlepathoz.model.PathOz
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.example.bookwhale.MyApp
 import com.example.bookwhale.R
 import com.example.bookwhale.data.response.article.ArticleDTO
 import com.example.bookwhale.databinding.ActivityPostArticleBinding
@@ -37,7 +29,6 @@ import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.main.article.PostImageListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import gun0912.tedimagepicker.builder.TedImagePicker
-import gun0912.tedimagepicker.builder.listener.OnErrorListener
 import gun0912.tedimagepicker.builder.type.MediaType
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
@@ -141,15 +132,14 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun handleNaverBookApi() = with(binding) {
         naverBookInfo?.let {
             officialBookImageView.isVisible = true
             officialBookImageView.load(it.bookThumbnail,4f, CenterCrop())
             officialBookNameTextView.text = it.bookTitle.replace("<b>","").replace("</b>","")
-            officialWriterTextView.text = "글 ${it.bookAuthor.replace("<b>","").replace("</b>","")}"
-            officialPublisherTextView.text = "출판 ${it.bookPublisher.replace("<b>","").replace("</b>","")}"
-            officialPriceTextView.text = "${it.bookListPrice.replace("<b>","").replace("</b>","")}원"
+            officialWriterTextView.text = getString(R.string.writer, it.bookAuthor.replace("<b>","").replace("</b>",""))
+            officialPublisherTextView.text = getString(R.string.publisher, it.bookPublisher.replace("<b>","").replace("</b>",""))
+            officialPriceTextView.text = getString(R.string.price, it.bookListPrice.replace("<b>","").replace("</b>",""))
             officialBookNameTextView.setTextColor(ContextCompat.getColor(this@PostArticleActivity, R.color.black))
             officialWriterTextView.setTextColor(ContextCompat.getColor(this@PostArticleActivity, R.color.black))
             officialPublisherTextView.setTextColor(ContextCompat.getColor(this@PostArticleActivity, R.color.black))

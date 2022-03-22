@@ -1,32 +1,20 @@
 package com.example.bookwhale.screen.main.my
 
-import android.content.ContentUris
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import br.com.onimur.handlepathoz.HandlePathOz
-import br.com.onimur.handlepathoz.HandlePathOzListener
-import br.com.onimur.handlepathoz.model.PathOz
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.example.bookwhale.MyApp.Companion.appContext
 import com.example.bookwhale.R
-import com.example.bookwhale.data.response.my.LogOutDTO
 import com.example.bookwhale.databinding.FragmentMyBinding
 import com.example.bookwhale.screen.base.BaseFragment
-import com.example.bookwhale.screen.main.MainActivity
 import com.example.bookwhale.screen.splash.SplashActivity
 import com.example.bookwhale.util.load
 import gun0912.tedimagepicker.builder.TedImagePicker
-import gun0912.tedimagepicker.builder.listener.OnErrorListener
 import gun0912.tedimagepicker.builder.type.MediaType
-import kotlinx.coroutines.FlowPreview
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -41,22 +29,19 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
 
     override fun initViews() {
         handleButton()
-
     }
 
     override fun observeData() {
-
         viewModel.profileStateLiveData.observe(this) {
             when(it) {
                 is MyState.Uninitialized -> Unit
                 is MyState.Loading -> handleLoading()
-                is MyState.logOutSuccess -> handleLogOut()
-                is MyState.withDrawSuccess -> handleWithDraw()
+                is MyState.LogOutSuccess -> handleLogOut()
+                is MyState.WithDrawSuccess -> handleWithDraw()
                 is MyState.Success -> handleSuccess(it)
                 is MyState.Error -> handleError(it)
             }
         }
-
     }
 
     private fun handleButton() = with(binding) {
@@ -164,24 +149,8 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         Toast.makeText(requireContext(), getString(R.string.error_unKnown, state.code), Toast.LENGTH_SHORT).show()
     }
 
-//    private fun initHandlePathOz() {
-//        handlePathOz = HandlePathOz(appContext!!, this)
-//    }
-//
-//    override fun onRequestHandlePathOz(pathOz: PathOz, tr: Throwable?) {
-//
-//        Log.e("file path is what?",pathOz.path.toString())
-//
-//        var file = File(pathOz.path)
-//        var requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-//        var body : MultipartBody.Part = MultipartBody.Part.createFormData("profileImage",file.name,requestBody)
-//        viewModel.updateProfileImage(body)
-//    }
-
     companion object {
-
         fun newInstance() = MyFragment()
-
         const val TAG = "MyFragment"
     }
 

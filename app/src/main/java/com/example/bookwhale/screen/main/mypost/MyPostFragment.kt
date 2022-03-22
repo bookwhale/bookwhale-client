@@ -1,26 +1,19 @@
 package com.example.bookwhale.screen.main.mypost
 
-import android.util.Log
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.bookwhale.databinding.FragmentFavoriteBinding
 import com.example.bookwhale.databinding.FragmentMypostBinding
-import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.article.DetailArticleActivity
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainViewModel
-import com.example.bookwhale.screen.main.favorite.FavoriteFragment
-import com.example.bookwhale.screen.main.favorite.FavoriteState
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
-import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
 import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
     override val viewModel by activityViewModels<MainViewModel>()

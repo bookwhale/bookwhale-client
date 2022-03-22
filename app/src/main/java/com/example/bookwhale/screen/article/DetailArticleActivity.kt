@@ -1,7 +1,6 @@
 package com.example.bookwhale.screen.article
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -15,7 +14,7 @@ import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.databinding.ActivityDetailArticleBinding
 import com.example.bookwhale.model.article.DetailImageModel
 import com.example.bookwhale.screen.base.BaseActivity
-import com.example.bookwhale.screen.main.MainActivity
+import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.util.OnSingleClickListener
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
@@ -30,7 +29,8 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
     override val viewModel by viewModel<DetailArticleViewModel>()
 
-    override fun getViewBinding(): ActivityDetailArticleBinding = ActivityDetailArticleBinding.inflate(layoutInflater)
+    override fun getViewBinding(): ActivityDetailArticleBinding =
+        ActivityDetailArticleBinding.inflate(layoutInflater)
 
     private val resourcesProvider by inject<ResourcesProvider>()
 
@@ -71,11 +71,18 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         backButton.setOnClickListener {
             finish()
         }
-        chatLayout.setOnClickListener {
-            viewModel.makeNewChat(MakeChatDTO(
-                articleId = articleId.toInt(),
-                sellerId = sellerId
-            ))
+
+        chatLayout.setOnClickListener { // 채팅방 개설
+            lifecycleScope.launch {
+                viewModel.makeNewChat(MakeChatDTO(
+                    articleId = articleId.toInt(),
+                    sellerId = sellerId
+                )).join() // 채팅방이 다 개설되는것을 대기한 후 이동한다.
+
+                startActivity(ChatRoomActivity.newIntent(this@DetailArticleActivity,
+                    viewModel.roomId.value.toString()))
+            }
+
         }
 
     }
@@ -84,9 +91,12 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         arrowUpAndDown.setOnClickListener {
 
             val currentDegree = arrowUpAndDown.rotation
-            ObjectAnimator.ofFloat(arrowUpAndDown, View.ROTATION, currentDegree, currentDegree + 180f) .setDuration(200) .start()
+            ObjectAnimator.ofFloat(arrowUpAndDown,
+                View.ROTATION,
+                currentDegree,
+                currentDegree + 180f).setDuration(200).start()
 
-            if(isEnd) {
+            if (isEnd) {
                 layout.transitionToStart()
                 officialLayout.transitionToStart()
                 isEnd = false
@@ -102,21 +112,25 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
         unFilledHeartButton.setOnClickListener(object : OnSingleClickListener() {
             override fun onSingleClick(view: View) {
-                if(myFavorite) {
+                if (myFavorite) {
                     lifecycleScope.launch {
-                        val response = viewModel.deleteFavorite(favoriteId).await()
-                        if(response) {
+                        val response = viewModel.deleteFavoriteAsync(favoriteId).await()
+                        if (response) {
                             unFilledHeartButton.setImageResource(R.drawable.ic_heart)
                             myFavorite = false
                         } else {
-                            Toast.makeText(this@DetailArticleActivity, getString(R.string.error_noFavorite), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@DetailArticleActivity,
+                                getString(R.string.error_noFavorite),
+                                Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
                     lifecycleScope.launch {
-                        favoriteId = viewModel.addFavorite(articleId.toInt()).await()
-                        if(favoriteId == 0) {
-                            Toast.makeText(this@DetailArticleActivity, getString(R.string.error_noFavorite), Toast.LENGTH_SHORT).show()
+                        favoriteId = viewModel.addFavoriteAsync(articleId.toInt()).await()
+                        if (favoriteId == 0) {
+                            Toast.makeText(this@DetailArticleActivity,
+                                getString(R.string.error_noFavorite),
+                                Toast.LENGTH_SHORT).show()
                         } else {
                             unFilledHeartButton.setImageResource(R.drawable.ic_heart_filled)
                             myFavorite = true
@@ -140,15 +154,6 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         }
     }
 
-    private fun observeChatData() {
-        viewModel.loadChatListLiveData.observe(this) {
-            when(it) {
-                false -> Unit
-                true -> Toast.makeText(this@DetailArticleActivity, "이미 존재하는 채팅방 입니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     private fun handleLoading() = with(binding) {
         binding.progressBar.isVisible = true
     }
@@ -157,39 +162,36 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         binding.progressBar.isGone = true
 
         state.favoriteList.forEach { // 현재 게시물 favoriteId 찾아오기
-            if(it.articleId.toString() == articleId) favoriteId = it.favoriteId
+            if (it.articleId.toString() == articleId) favoriteId = it.favoriteId
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun handleSuccess(state: DetailArticleState.Success) =with(binding){
+    private fun handleSuccess(state: DetailArticleState.Success) = with(binding) {
         binding.progressBar.isGone = true
 
         articleTitle.text = state.article.title
         articleTitle.visibility = View.GONE
-        articlePriceTextView.text = "${state.article.price}원"
+        articlePriceTextView.text = getString(R.string.price, state.article.price)
         qualityTextView.text = state.article.bookStatus
         locationTextView.text = state.article.sellingLocation
         descriptionTextView.text = state.article.description
         viewTextView.text = state.article.viewCount.toString()
         officialBookNameTextView.text = state.article.bookResponse.bookTitle
         officialBookImageView.load(state.article.bookResponse.bookThumbnail)
-        officialPriceTextView.text = "${state.article.bookResponse.bookListPrice}원"
-        officialWriterTextView.text = "글 ${state.article.bookResponse.bookAuthor}"
-        officialPublisherTextView.text = "출판 ${state.article.bookResponse.bookPublisher}"
+        officialPriceTextView.text = getString(R.string.price, state.article.bookResponse.bookListPrice)
+        officialWriterTextView.text = getString(R.string.writer, state.article.bookResponse.bookAuthor)
+        officialPublisherTextView.text = getString(R.string.publisher, state.article.bookResponse.bookPublisher)
 
         myFavorite = state.article.myFavorite
         state.article.myFavoriteId?.let { favoriteId = it }
         myArticle = state.article.myArticle
         sellerId = state.article.sellerId
 
-        if(myFavorite) {
+        if (myFavorite) {
             unFilledHeartButton.setImageResource(R.drawable.ic_heart_filled)
-        }
-        else unFilledHeartButton.setImageResource(R.drawable.ic_heart)
+        } else unFilledHeartButton.setImageResource(R.drawable.ic_heart)
 
-        if(myArticle) {
-            Log.e("myArticle","myArticle")
+        if (myArticle) {
             chatLayout.isGone = true
             unFilledHeartButton.isGone = true
             modifyButton.isVisible = true
@@ -197,7 +199,6 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
                 startActivity(ModifyArticleActivity.newIntent(this@DetailArticleActivity, articleId))
             }
         } else {
-            Log.e("myArtic222le","my222Article")
             chatLayout.isVisible = true
         }
 
@@ -210,9 +211,14 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
     private fun handleError(state: DetailArticleState.Error) = with(binding) {
         binding.progressBar.isGone = true
 
-        when(state.code!!) {
+        when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
+            else -> handleUnexpected(state.code)
         }
+    }
+
+    private fun handleUnexpected(code: String) {
+        Toast.makeText(this, getString(R.string.error_unKnown, code), Toast.LENGTH_SHORT).show()
     }
 
     private fun handleT004() {
@@ -222,11 +228,23 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         }
     }
 
+    private fun observeChatData() {
+        viewModel.loadChatListLiveData.observe(this) {
+            when (it) {
+                false -> Unit
+                true -> Toast.makeText(this@DetailArticleActivity,
+                    getString(R.string.alreadyExistRoom),
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     companion object {
 
-        fun newIntent(context: Context, articleId: String) = Intent(context, DetailArticleActivity::class.java).apply {
-            putExtra(ARTICLE_ID, articleId)
-        }
+        fun newIntent(context: Context, articleId: String) =
+            Intent(context, DetailArticleActivity::class.java).apply {
+                putExtra(ARTICLE_ID, articleId)
+            }
 
         const val ARTICLE_ID = "0"
     }
