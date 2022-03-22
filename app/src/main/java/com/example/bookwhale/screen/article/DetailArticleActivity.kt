@@ -71,20 +71,6 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         backButton.setOnClickListener {
             finish()
         }
-
-        toolBarLogo.setOnClickListener{
-            Log.e("articleid",articleId)
-            /*val intent = Intent(this@DetailArticleActivity, ModifyArticleActivity::class.java)
-            intent.putExtra("articleId")
-            startActivity(intent)
-
-            fun newIntent(context: Context, articleId: String) = Intent(context, DetailArticleActivity::class.java).apply {
-                putExtra(ARTICLE_ID, articleId)
-            }*/
-            startActivity(ModifyArticleActivity.newIntent(this@DetailArticleActivity, articleId))
-        }
-
-
         chatLayout.setOnClickListener {
             viewModel.makeNewChat(MakeChatDTO(
                 articleId = articleId.toInt(),
@@ -205,6 +191,11 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         if(myArticle) {
             Log.e("myArticle","myArticle")
             chatLayout.isGone = true
+            unFilledHeartButton.isGone = true
+            modifyButton.isVisible = true
+            modifyButton.setOnClickListener{
+                startActivity(ModifyArticleActivity.newIntent(this@DetailArticleActivity, articleId))
+            }
         } else {
             Log.e("myArtic222le","my222Article")
             chatLayout.isVisible = true

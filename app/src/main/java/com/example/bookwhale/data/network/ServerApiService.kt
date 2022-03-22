@@ -3,6 +3,7 @@ package com.example.bookwhale.data.network
 import com.example.bookwhale.data.response.article.ArticleDTO
 import com.example.bookwhale.data.response.article.GetDetailArticleResponse
 import com.example.bookwhale.data.response.article.GetNaverBookApiResponse
+import com.example.bookwhale.data.response.article.ModifyArticleDTO
 import com.example.bookwhale.data.response.chat.GetChatListResponse
 import com.example.bookwhale.data.response.chat.GetChatMessageResponse
 import com.example.bookwhale.data.response.chat.MakeChatDTO
@@ -57,8 +58,9 @@ interface ServerApiService {
     suspend fun postArticle(@Part images: List<MultipartBody.Part>, @Part("articleRequest")articleRequest: ArticleDTO): Response<Unit>
 
     // 게시물 수정
-    @POST("api/article/1")
-    suspend fun modifyArticle(@Part images: List<MultipartBody.Part>, @Part("articleUpdaterequest")articleUpdaterequest: ArticleDTO): Response<Unit>
+    @Multipart
+    @PATCH("api/article/1")
+    suspend fun modifyArticle(@Part images: List<MultipartBody.Part>, @Part("articleUpdateRequest")articleUpdateRequest: ModifyArticleDTO): Response<Unit>
 
     // 내 게시물
     @GET("api/articles/me")

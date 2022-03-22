@@ -9,12 +9,12 @@ import kotlinx.parcelize.Parcelize
 data class NaverBookModel(
     var bookIsbn : String,
     var bookTitle : String,
-    val bookAuthor : String,
-    val bookPublisher : String,
-    val bookThumbnail: String,
-    val bookListPrice : String,
-    val bookPubDate : String?,
-    val bookSummary : String
+    var bookAuthor : String,
+    var bookPublisher : String,
+    var bookThumbnail: String,
+    var bookListPrice : String,
+    var bookPubDate : String?,
+    var bookSummary : String
 ): Parcelable {
     constructor(): this("","","","","","","","")
 }

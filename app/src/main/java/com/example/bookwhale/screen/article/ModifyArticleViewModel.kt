@@ -10,6 +10,7 @@ import com.example.bookwhale.data.repository.article.DetailRepository
 import com.example.bookwhale.data.repository.article.ModifyArticleRepository
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.article.ArticleDTO
+import com.example.bookwhale.data.response.article.ModifyArticleDTO
 import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.model.article.NaverBookModel
 import com.example.bookwhale.model.main.home.ArticleModel
@@ -45,10 +46,11 @@ class ModifyArticleViewModel (
             }
         }//이걸보고 detail 쓰는것을 참고하자 정보가져오기
 
-        fun uploadArticle(files: List<MultipartBody.Part>, articleDTO: ArticleDTO) = viewModelScope.launch {
+        fun uploadArticle(files: List<MultipartBody.Part>, articleDTO: ModifyArticleDTO) = viewModelScope.launch {
 
             modifyArticleStateLiveData.value = ModifyArticleState.Loading
             val response = ModifyArticleRepository.modifyArticle(files, articleDTO)
+            Log.e("modifyArticle",articleDTO.toString()+files.toString())
 
             if(response.status == NetworkResult.Status.SUCCESS) {
                 modifyArticleStateLiveData.value = ModifyArticleState.ModifySuccess

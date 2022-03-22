@@ -1,11 +1,13 @@
 package com.example.bookwhale.data.repository.article
 
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.article.ArticleDTO
+import com.example.bookwhale.data.response.article.ModifyArticleDTO
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType
@@ -24,8 +26,8 @@ class DefaultModifyArticleRepository (
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher,
 ): ModifyArticleRepository {
-        override suspend fun modifyArticle(images: List<MultipartBody.Part>, articleUpdaterequest: ArticleDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
-
+        override suspend fun modifyArticle(images: List<MultipartBody.Part>, articleUpdaterequest: ModifyArticleDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
+            Log.e("image",images.toString())
             val response = serverApiService.modifyArticle(images, articleUpdaterequest)
 
             if(response.isSuccessful) {

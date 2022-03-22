@@ -2,28 +2,23 @@ package com.example.bookwhale.screen.article
 
 import com.example.bookwhale.databinding.ActivityModifyArticleBinding
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import br.com.onimur.handlepathoz.HandlePathOz
-import br.com.onimur.handlepathoz.HandlePathOzListener
-import br.com.onimur.handlepathoz.model.PathOz
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.MyApp
 import com.example.bookwhale.R
-import com.example.bookwhale.data.response.article.ArticleDTO
-import com.example.bookwhale.databinding.ActivityPostArticleBinding
+import com.example.bookwhale.data.response.article.ModifyArticleDTO
 import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.article.DetailImageModel
 import com.example.bookwhale.model.article.NaverBookModel
@@ -31,10 +26,10 @@ import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
-import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.listener.main.article.PostImageListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import gun0912.tedimagepicker.builder.TedImagePicker
+import gun0912.tedimagepicker.builder.type.MediaType
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -45,7 +40,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
 
-class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModifyArticleBinding>(), HandlePathOzListener.MultipleUri {
+class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModifyArticleBinding>() {
 
     override val viewModel by viewModel<ModifyArticleViewModel>()
 
@@ -71,14 +66,13 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
                 }
             }
         }*/
-
-    private lateinit var handlePathOz: HandlePathOz
-    private lateinit var postInfo: ArticleDTO
+    private lateinit var postInfo: ModifyArticleDTO
     private val files: ArrayList<MultipartBody.Part> = ArrayList()
     private var statusRadioText : String = DEFAULT_STATUS
     private var sellingLocation : String = DEFAULT_LOCATION
     private var imageModelList: ArrayList<DetailImageModel> = ArrayList()
-    private var imageUriList: ArrayList<Uri> = ArrayList()
+    private var imageUriList: ArrayList<String> = ArrayList()
+    private var deleteImageList: ArrayList<String> = ArrayList()
 
     private val adapter by lazy {
         ModelRecyclerAdapter<DetailImageModel, ModifyArticleViewModel>(
@@ -112,6 +106,10 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         imageModelList.forEachIndexed { index, data ->
             if (data == model) removeIndex = index
         }
+        if(imageModelList.elementAt(removeIndex).articleImage?.contains("https")==true)
+        {
+            deleteImageList.add(imageModelList.elementAt(removeIndex).articleImage.toString())
+        }
         imageModelList.removeAt(removeIndex)
         imageUriList.removeAt(removeIndex)
         binding.uploadPhotoTextView.text = getString(R.string.currentImageNum, imageUriList.size)
@@ -125,7 +123,6 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         viewModel.loadArticle(articleId.toInt())
         Log.e("modid",articleId)
         initButton()
-        initHandlePathOz()
     }
 
     @FlowPreview
@@ -171,39 +168,75 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
     @FlowPreview
     private fun selectMultipleImage() {
-
         val currentSize = imageUriList.size
 
         TedImagePicker.with(this)
-            .max(MAX_IMAGE_NUM - currentSize, getString(R.string.maxImageNum))
-            .startMultiImage { uriList ->
-                imageUriList.addAll(uriList)
-                handlePathOz.getListRealPath(imageUriList)
+            .max(PostArticleActivity.MAX_IMAGE_NUM - currentSize, getString(R.string.maxImageNum))
+            .mediaType(MediaType.IMAGE)
+            .startMultiImage{ uriList ->
+                val filePathColumn =
+                    arrayOf(
+                        MediaStore.MediaColumns.DATA
+                    )
+
+                for (i in uriList.indices) {
+
+                    val cursor: Cursor? = this.contentResolver.query(
+                        uriList[i],
+                        filePathColumn,
+                        null,
+                        null,
+                        null)
+
+                    cursor?.let {
+                        if (cursor.moveToFirst()) {
+                            val columnIndex: Int = cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
+                            val absolutePathOfImage: String = cursor.getString(columnIndex)
+
+                            imageUriList.add(absolutePathOfImage)
+
+                            cursor.close()
+                        }
+                    }
+                    addRecyclerViewList(imageUriList)
+                }
+
             }
     }
 
-    private fun initHandlePathOz() {
-        handlePathOz = HandlePathOz(MyApp.appContext!!, this)
-    }
-
-    override fun onRequestHandlePathOz(listPathOz: List<PathOz>, tr: Throwable?): Unit = with(binding) {
-
+    /*private fun ModiAddRecyclerViewList(uriList : List<String>) = with(binding) {
         imageModelList.clear()
         imageModelList.addAll(
-            listPathOz.mapIndexed { index, data ->
+            uriList.mapIndexed
+                { index
+                  , data ->
                 DetailImageModel(
                     id = index.toLong(),
-                    type = com.example.bookwhale.model.CellType.TEMP_IMAGE_LIST,
-                    articleImage = data.path
+                    type = CellType.TEMP_IMAGE_LIST,
+                    articleImage = data
                 )
             }
         )
 
         adapter.submitList(imageModelList)
         adapter.notifyItemRangeChanged(0, imageModelList.size)
-
-        uploadPhotoTextView.text = getString(com.example.bookwhale.R.string.currentImageNum, imageModelList.size)
-
+        uploadPhotoTextView.text = getString(R.string.currentImageNum, imageModelList.size)
+    }*/
+    private fun addRecyclerViewList(uriList : List<String>) = with(binding) {
+        imageModelList.clear()
+        imageModelList.addAll(
+            uriList.mapIndexed { index, data ->
+                DetailImageModel(
+                    id = index.toLong(),
+                    type = CellType.TEMP_IMAGE_LIST,
+                    articleImage = data
+                )
+            }
+        )
+        Log.e("imageModelList",imageModelList.toString())
+        adapter.submitList(imageModelList)
+        adapter.notifyItemRangeChanged(0, imageModelList.size)
+        uploadPhotoTextView.text = getString(R.string.currentImageNum, imageModelList.size)
     }
 
     private fun locationClicked() {
@@ -273,6 +306,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         if (checkInputInfo()) {
 
             uploadPhoto()
+
             uploadDesc()
 
             lifecycleScope.launch {
@@ -282,7 +316,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
     }
 
     private fun checkInputInfo(): Boolean = with(binding) {
-        if(naverBookInfo.bookTitle.isNotEmpty()) {
+        //if(naverBookInfo.bookTitle.isNotEmpty()) {
             when {
                 imageModelList.isEmpty() -> {
                     android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_image), android.widget.Toast.LENGTH_SHORT).show()
@@ -310,25 +344,37 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
                 }
                 else -> return true
             }
-        } else {
+        /*} else {
 
 
             android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.searchBookName), android.widget.Toast.LENGTH_SHORT).show()
             return false
-        }
+        }*/
     }
 
     private fun uploadPhoto() {
         for (element in imageModelList) {
-            val file = File(element.articleImage!!)
-            val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-            val body : MultipartBody.Part = MultipartBody.Part.createFormData("images",file.name,requestBody)
-            files.add(body)
+            if(element.articleImage?.contains("https")==true)
+            {
+                val file=File.createTempFile(element.articleImage.toString().substring(element.articleImage.toString().lastIndexOf("/")+1),".jpg",cacheDir)
+                Log.e("createTempFile",file.toString())
+                val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+                val body : MultipartBody.Part = MultipartBody.Part.createFormData("images",file.name,requestBody)
+                files.add(body)
+            }
+            else {
+                val file = File(element.articleImage!!)
+                val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+                val body: MultipartBody.Part =
+                    MultipartBody.Part.createFormData("images", file.name, requestBody)
+                files.add(body)
+            }
+            //files.add(body)
         }
     }
     private fun uploadDesc() = with(binding) {
-        postInfo = ArticleDTO(
-            bookRequest = com.example.bookwhale.data.response.article.ArticleDTO.BookRequest(
+        postInfo = ModifyArticleDTO(
+            bookRequest = com.example.bookwhale.data.response.article.ModifyArticleDTO.BookRequest(
                 bookIsbn = naverBookInfo.bookIsbn.replace("<b>","").replace("</b>",""),
                 bookTitle = naverBookInfo.bookTitle.replace("<b>","").replace("</b>",""),
                 bookAuthor = naverBookInfo.bookAuthor.replace("<b>","").replace("</b>",""),
@@ -343,7 +389,9 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
             description = descriptionTextView.text.toString(),
             bookStatus = statusRadioText,
             sellingLocation = sellingLocation,
+            deleteImgUrls = deleteImageList
         )
+        Log.e("postInfo",postInfo.toString())
     }
 
     override fun observeData() {
@@ -371,8 +419,6 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
     private fun handleLoadSuccess(state: ModifyArticleState.LoadSuccess) =with(binding){
         binding.progressBar.isGone = true
 
-
-
         articleNameTextView.setText(state.article.title)
         //articleTitle.visibility = View.GONE
         articlePriceTextView.setText("${state.article.price}")
@@ -395,21 +441,34 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         officialPublisherTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity, R.color.black))
         officialPriceTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity, R.color.black))
 
-        adapter.submitList(state.article.images)
+
+        //adapter.submitList(state.article.images)//  고쳐야함
+
+        for(i in 0 until state.article.images.size)
+        {
+            //imageModelList.add(state.article.images[i])
+            //state.article.images[i].articleImage?.let { imageUriList.add(it) }
+            imageUriList.add(state.article.images[i].articleImage.toString())
+            //Log.e("imageerror",state.article.images[i].toString())//해야할일 수정되는지 확인(사진관련된거 찾아야함)자신의 글일 때 판단하기(왜 이미지뷰가 안보이는가)
+        }
+        Log.e("imageUriList",imageUriList.toString())
+        //ModiAddRecyclerViewList(imageUrlList)
+        addRecyclerViewList(imageUriList)
+
+
         //if(state.article.images.isEmpty()) adapter.submitList(listOf(DetailImageModel(id = 0, arti)))
         //상태 관련된거랑
 
-
         naverBookInfo.bookIsbn = state.article.bookResponse.bookIsbn
         naverBookInfo.bookTitle = state.article.bookResponse.bookTitle
-//        naverBookInfo.bookAuthor = state.article.bookResponse.bookAuthor
-//        naverBookInfo.bookPublisher = state.article.bookResponse.bookPublisher
-//        naverBookInfo.bookThumbnail = state.article.bookResponse.bookThumbnail
-//        naverBookInfo.bookListPrice = state.article.bookResponse.bookListPrice
-//        naverBookInfo.bookPubDate = state.article.bookResponse.bookPubDate
-//        naverBookInfo.bookSummary = state.article.bookResponse.bookSummary
+        naverBookInfo.bookAuthor = state.article.bookResponse.bookAuthor
+        naverBookInfo.bookPublisher = state.article.bookResponse.bookPublisher
+        naverBookInfo.bookThumbnail = state.article.bookResponse.bookThumbnail
+        naverBookInfo.bookListPrice = state.article.bookResponse.bookListPrice
+        naverBookInfo.bookPubDate = state.article.bookResponse.bookPubDate
+        naverBookInfo.bookSummary = state.article.bookResponse.bookSummary
         //더 덜 노가다인 방법을 찾아보자
-        Log.e("naverbook",naverBookInfo.toString())//해야할일 네이버 api 정보확인하고 수정되는지 확인(사진관련된거 찾아야함)자신의 글일 때 판단하기
+
     }
 
     private fun handleError(state: ModifyArticleState.Error) = with(binding) {
