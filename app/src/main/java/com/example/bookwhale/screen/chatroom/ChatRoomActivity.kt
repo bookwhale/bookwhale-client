@@ -19,6 +19,7 @@ import com.example.bookwhale.util.load
 import com.example.bookwhale.widget.adapter.ChatPagingAdapter
 import gun0912.tedimagepicker.util.ToastUtil.context
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -57,8 +58,19 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
                 getMessages()
                 initButtons()
+
+                adapter.addLoadStateListener { loadState ->
+                    if (loadState.source.refresh is LoadState.Loading) {
+                        binding.progressBar.isVisible = true
+                    } else {
+                        binding.progressBar.isGone = true
+                        binding.recyclerView.scrollToPosition(0)
+                    }
+                }
             }
         }
+
+
 
     }
 
@@ -81,6 +93,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 viewModel.getPreviousMessages(it.toInt()).collectLatest {
                     adapter.submitData(it)
                 }
+                Log.e("getMessage2", adapter.itemCount.toString())
             }
         }
     }
