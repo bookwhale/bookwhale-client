@@ -26,5 +26,4 @@ class ResourcesProviderImpl(
 
     override fun getStringArray(resId: Int): Array<out String> = context.resources.getStringArray(resId)
 
-
 }

@@ -53,4 +53,8 @@ class SplashViewModel(
         myPreferenceManager.putAccessToken(accessToken)
         myPreferenceManager.putRefreshToken(refreshToken)
     }
+
+    fun saveDeviceToken(deviceToken: String) {
+        myPreferenceManager.putDeviceToken(deviceToken)
+    }
 }
