@@ -3,6 +3,7 @@ package com.example.bookwhale.screen.article
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isGone
@@ -22,6 +23,7 @@ import com.example.bookwhale.widget.listener.AdapterListener
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetailArticleBinding>() {
 
@@ -80,6 +82,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
                 startActivity(ChatRoomActivity.newIntent(this@DetailArticleActivity,
                     viewModel.roomId.value.toString()))
             }
+
         }
 
     }
@@ -190,6 +193,12 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
         if (myArticle) {
             chatLayout.isGone = true
+            unFilledHeartButton.isGone = true
+            modifyButton.isVisible = true
+            modifyButton.setOnClickListener{
+                startActivity(ModifyArticleActivity.newIntent(this@DetailArticleActivity, articleId))
+                finish()
+            }
         } else {
             chatLayout.isVisible = true
         }
