@@ -1,5 +1,6 @@
 package com.example.bookwhale.screen.splash
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -12,6 +13,8 @@ import com.example.bookwhale.databinding.ActivitySplashBinding
 import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.screen.login.LoginActivity
 import com.example.bookwhale.screen.main.MainActivity
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -22,7 +25,26 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     override fun getViewBinding(): ActivitySplashBinding = ActivitySplashBinding.inflate(layoutInflater)
 
     override fun initViews(): Unit = with(binding) {
+        getCurrentDeviceToken()
+    }
 
+    private fun getCurrentDeviceToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.e(ContentValues.TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            // task.result = deviceToken
+            Log.e("task.result", task.result.toString())
+            viewModel.saveDeviceToken(task.result)
+
+            // Log and toast
+            // val msg = "token test $deviceToken"
+//            Log.e(ContentValues.TAG, msg)
+//            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun observeData() {

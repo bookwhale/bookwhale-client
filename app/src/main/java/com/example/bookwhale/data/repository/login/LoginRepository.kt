@@ -6,9 +6,9 @@ import com.example.bookwhale.data.response.login.TokenRequestDTO
 
 interface LoginRepository {
 
-    suspend fun getNaverLoginInfo(code: String) : LoginModel
+    suspend fun getNaverLoginInfo(code: String, deviceToken: String) : LoginModel
 
-    suspend fun getKaKaoLoginInfo(code: String) : LoginModel
+    suspend fun getKaKaoLoginInfo(code: String, deviceToken: String) : LoginModel
 
     suspend fun getNewTokens(tokenRequestDTO: TokenRequestDTO) : NetworkResult<LoginModel>
 

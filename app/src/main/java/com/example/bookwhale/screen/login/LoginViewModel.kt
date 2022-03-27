@@ -16,7 +16,7 @@ class LoginViewModel(
     val loginStateLiveData = MutableLiveData<LoginState>(LoginState.Uninitialized)
 
     fun naverLogin(code: String) = viewModelScope.launch {
-        val response = loginRepository.getNaverLoginInfo(code)
+        val response = loginRepository.getNaverLoginInfo(code ,myPreferenceManager.getDeviceToken()!!)
 
         response.apiToken?.let{
             loginStateLiveData.value = LoginState.Success(LoginModel(
@@ -31,7 +31,7 @@ class LoginViewModel(
     }
 
     fun kakaoLogin(code: String) = viewModelScope.launch {
-        val response = loginRepository.getKaKaoLoginInfo(code)
+        val response = loginRepository.getKaKaoLoginInfo(code ,myPreferenceManager.getDeviceToken()!!)
 
         response.apiToken?.let{
             loginStateLiveData.value = LoginState.Success(LoginModel(

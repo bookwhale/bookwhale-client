@@ -23,10 +23,10 @@ interface ServerApiService {
 
     // 계정
     @GET("api/oauth/naver/login")
-    suspend fun getNaverLoginInfo(@Query("code")code: String) : Response<LoginResponse>
+    suspend fun getNaverLoginInfo(@Query("code")code: String, @Query("device")device: String) : Response<LoginResponse>
 
     @GET("api/oauth/kakao/login")
-    suspend fun getKaKaoLoginInfo(@Query("code")code: String) : Response<LoginResponse>
+    suspend fun getKaKaoLoginInfo(@Query("code")code: String, @Query("device")device: String) : Response<LoginResponse>
 
     @POST("api/oauth/refresh")
     suspend fun getNewTokens(@Body tokenRequestDTO: TokenRequestDTO) : Response<LoginResponse>

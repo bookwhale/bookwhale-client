@@ -20,6 +20,7 @@ class MyPreferenceManager(
         const val KEY_ID_TOKEN = "ID_TOKEN"
         const val KEY_ACCESS_TOKEN = "ACCESS_TOKEN"
         const val KEY_REFRESH_TOKEN = "REFRESH_TOKEN"
+        const val KEY_DEVICE_TOKEN = "DEVICE_TOKEN"
     }
 
     private fun getPreferences(context: Context): SharedPreferences {
@@ -208,6 +209,20 @@ class MyPreferenceManager(
 
     fun removeRefreshToken() {
         editor.putString(KEY_REFRESH_TOKEN, null)
+        editor.apply()
+    }
+
+    fun putDeviceToken(idToken: String) {
+        editor.putString(KEY_DEVICE_TOKEN, idToken)
+        editor.apply()
+    }
+
+    fun getDeviceToken(): String? {
+        return prefs.getString(KEY_DEVICE_TOKEN, null)
+    }
+
+    fun removeDeviceToken() {
+        editor.putString(KEY_DEVICE_TOKEN, null)
         editor.apply()
     }
 
