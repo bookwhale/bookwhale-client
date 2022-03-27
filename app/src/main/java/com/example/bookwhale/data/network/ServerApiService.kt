@@ -24,43 +24,64 @@ interface ServerApiService {
 
     // 계정
     @GET("api/oauth/naver/login")
-    suspend fun getNaverLoginInfo(@Query("code")code: String, @Query("device")device: String) : Response<LoginResponse>
+    suspend fun getNaverLoginInfo(
+        @Query("code") code: String,
+        @Query("device") device: String,
+    ): Response<LoginResponse>
 
     @GET("api/oauth/kakao/login")
-    suspend fun getKaKaoLoginInfo(@Query("code")code: String, @Query("device")device: String) : Response<LoginResponse>
+    suspend fun getKaKaoLoginInfo(
+        @Query("code") code: String,
+        @Query("device") device: String,
+    ): Response<LoginResponse>
 
     @POST("api/oauth/refresh")
-    suspend fun getNewTokens(@Body tokenRequestDTO: TokenRequestDTO) : Response<LoginResponse>
+    suspend fun getNewTokens(@Body tokenRequestDTO: TokenRequestDTO): Response<LoginResponse>
 
     // 게시물
     @GET("api/articles")
-    suspend fun getAllArticles(@Query("search")search: String?=null, @Query("page")page: Int, @Query("size")size: Int) : Response<List<GetAllArticlesResponse>>
+    suspend fun getAllArticles(
+        @Query("search") search: String? = null,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): Response<List<GetAllArticlesResponse>>
 
     @GET("api/user/me/favorites")
-    suspend fun getFavorites() : Response<List<GetFavoritesResponse>>
+    suspend fun getFavorites(): Response<List<GetFavoritesResponse>>
 
     @POST("api/user/me/favorite")
-    suspend fun addFavorites(@Body addFavoriteDTO: AddFavoriteDTO) : Response<AddFavoriteResponse>
+    suspend fun addFavorites(@Body addFavoriteDTO: AddFavoriteDTO): Response<AddFavoriteResponse>
 
     @DELETE("api/user/me/favorite/{favoriteId}")
-    suspend fun deleteFavorites(@Path("favoriteId")favoriteId : Int) : Response<Unit>
+    suspend fun deleteFavorites(@Path("favoriteId") favoriteId: Int): Response<Unit>
 
     // 게시물 상세정보
     @GET("api/article/{articleId}")
-    suspend fun getDetailArticle(@Path("articleId")articleId : Int) : Response<GetDetailArticleResponse>
+    suspend fun getDetailArticle(@Path("articleId") articleId: Int): Response<GetDetailArticleResponse>
 
     // 게시물 등록
     @GET("api/article/naver-book")
-    suspend fun getNaverBookApi(@Query("title")title: String, @Query("display")display: Int, @Query("start")start: Int) : Response<List<GetNaverBookApiResponse>>
+    suspend fun getNaverBookApi(
+        @Query("title") title: String,
+        @Query("display") display: Int,
+        @Query("start") start: Int,
+    ): Response<List<GetNaverBookApiResponse>>
 
     @Multipart
     @POST("api/article")
-    suspend fun postArticle(@Part images: List<MultipartBody.Part>, @Part("articleRequest")articleRequest: ArticleDTO): Response<Unit>
+    suspend fun postArticle(
+        @Part images: List<MultipartBody.Part>,
+        @Part("articleRequest") articleRequest: ArticleDTO,
+    ): Response<Unit>
 
     // 게시물 수정
     @Multipart
     @PATCH("api/article/{articleId}")
-    suspend fun modifyArticle(@Path("articleId")articleId : Int,@Part images: List<MultipartBody.Part>, @Part("articleUpdateRequest")articleUpdateRequest: ModifyArticleDTO): Response<Unit>
+    suspend fun modifyArticle(
+        @Path("articleId") articleId: Int,
+        @Part images: List<MultipartBody.Part>,
+        @Part("articleUpdateRequest") articleUpdateRequest: ModifyArticleDTO,
+    ): Response<Unit>
 
     // 내 게시물
     @GET("api/articles/me")
@@ -68,20 +89,24 @@ interface ServerApiService {
 
     // 채팅방
     @GET("api/room")
-    suspend fun getChatList() : Response<List<GetChatListResponse>>
+    suspend fun getChatList(): Response<List<GetChatListResponse>>
 
     @POST("api/room")
-    suspend fun makeNewChat(@Body makeChatDTO: MakeChatDTO) : Response<Unit>
+    suspend fun makeNewChat(@Body makeChatDTO: MakeChatDTO): Response<Unit>
 
     @GET("api/message/{roomId}")
-    suspend fun getChatMessages(@Path("roomId")roomId: Int, @Query("page")page: Int, @Query("size")size: Int) : Response<List<GetChatMessageResponse>>
+    suspend fun getChatMessages(
+        @Path("roomId") roomId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): Response<List<GetChatMessageResponse>>
 
     // 내 정보
     @GET("api/user/me")
-    suspend fun getMyInfo() : Response<MyInfoResponse>
+    suspend fun getMyInfo(): Response<MyInfoResponse>
 
     @PATCH("api/user/me")
-    suspend fun updateMyNickName(@Body nickNameRequestDTO: NickNameRequestDTO) : Response<Unit>
+    suspend fun updateMyNickName(@Body nickNameRequestDTO: NickNameRequestDTO): Response<Unit>
 
     @Multipart
     @PATCH("api/user/profile")

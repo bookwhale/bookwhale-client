@@ -30,7 +30,6 @@ class ModifyArticleViewModel (
 
         val modifyArticleStateLiveData = MutableLiveData<ModifyArticleState>(ModifyArticleState.Uninitialized)
 
-
         fun loadArticle(articleId: Int) = viewModelScope.launch {
 
             modifyArticleStateLiveData.value = ModifyArticleState.Loading

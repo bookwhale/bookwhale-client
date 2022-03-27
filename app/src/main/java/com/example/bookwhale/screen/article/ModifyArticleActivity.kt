@@ -1,12 +1,10 @@
 package com.example.bookwhale.screen.article
 
 import com.example.bookwhale.databinding.ActivityModifyArticleBinding
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
@@ -15,12 +13,10 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.example.bookwhale.MyApp
 import com.example.bookwhale.R
 import com.example.bookwhale.data.response.article.ModifyArticleDTO
 import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.article.DetailImageModel
-import com.example.bookwhale.model.article.NaverBookModel
 import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
@@ -29,7 +25,6 @@ import com.example.bookwhale.widget.listener.main.article.PostImageListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import gun0912.tedimagepicker.builder.TedImagePicker
 import gun0912.tedimagepicker.builder.type.MediaType
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -43,9 +38,8 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
     override val viewModel by viewModel<ModifyArticleViewModel>()
 
-    override fun getViewBinding(): ActivityModifyArticleBinding = ActivityModifyArticleBinding.inflate(layoutInflater)
-
-    private var naverBookInfo = NaverBookModel()
+    override fun getViewBinding(): ActivityModifyArticleBinding =
+        ActivityModifyArticleBinding.inflate(layoutInflater)
 
     private val resourcesProvider by inject<ResourcesProvider>()
 
@@ -53,8 +47,8 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
     private lateinit var postInfo: ModifyArticleDTO
     private val files: ArrayList<MultipartBody.Part> = ArrayList()
-    private var statusRadioText : String = DEFAULT_STATUS
-    private var sellingLocation : String = DEFAULT_LOCATION
+    private var statusRadioText: String = DEFAULT_STATUS
+    private var sellingLocation: String = DEFAULT_LOCATION
     private var imageModelList: ArrayList<DetailImageModel> = ArrayList()
     private var imageUriList: ArrayList<String> = ArrayList()
     private var deleteImageList: ArrayList<String> = ArrayList()
@@ -81,8 +75,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         imageModelList.forEachIndexed { index, data ->
             if (data == model) removeIndex = index
         }
-        if(imageModelList.elementAt(removeIndex).articleImage?.contains("https")==true)
-        {
+        if (imageModelList.elementAt(removeIndex).articleImage?.contains("https") == true) {
             deleteImageList.add(imageModelList.elementAt(removeIndex).articleImage.toString())
         }
         imageModelList.removeAt(removeIndex)
@@ -99,14 +92,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         initButton()
     }
 
-    @FlowPreview
     private fun initButton() = with(binding) {
-        /*officialBookNameTextView.setOnClickListener {//naver 책 고치는 부분
-            getContent.launch(com.example.bookwhale.screen.article.SearchActivity.newIntent(this@ModifyArticleActivity))
-        }
-        officialBookImageLayout.setOnClickListener {
-            getContent.launch(com.example.bookwhale.screen.article.SearchActivity.newIntent(this@ModifyArticleActivity))
-        }*/
         uploadPhotoLayout.setOnClickListener {
             selectMultipleImage()
         }
@@ -124,14 +110,13 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         }
     }
 
-    @FlowPreview
     private fun selectMultipleImage() {
         val currentSize = imageUriList.size
 
         TedImagePicker.with(this)
             .max(PostArticleActivity.MAX_IMAGE_NUM - currentSize, getString(R.string.maxImageNum))
             .mediaType(MediaType.IMAGE)
-            .startMultiImage{ uriList ->
+            .startMultiImage { uriList ->
                 val filePathColumn =
                     arrayOf(
                         MediaStore.MediaColumns.DATA
@@ -148,7 +133,8 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
                     cursor?.let {
                         if (cursor.moveToFirst()) {
-                            val columnIndex: Int = cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
+                            val columnIndex: Int =
+                                cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
                             val absolutePathOfImage: String = cursor.getString(columnIndex)
 
                             imageUriList.add(absolutePathOfImage)
@@ -162,7 +148,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
             }
     }
 
-    private fun addRecyclerViewList(uriList : List<String>) = with(binding) {
+    private fun addRecyclerViewList(uriList: List<String>) = with(binding) {
         imageModelList.clear()
         imageModelList.addAll(
             uriList.mapIndexed { index, data ->
@@ -181,19 +167,35 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
     private fun locationClicked() {
 
-        val items = arrayOf("서울","부산","대구","인천","광주","대전","울산","세종","경기","강원","충북","충남","전북","전남","경북","경남","제주")
+        val items = arrayOf("서울",
+            "부산",
+            "대구",
+            "인천",
+            "광주",
+            "대전",
+            "울산",
+            "세종",
+            "경기",
+            "강원",
+            "충북",
+            "충남",
+            "전북",
+            "전남",
+            "경북",
+            "경남",
+            "제주")
 
         MaterialAlertDialogBuilder(this)
             .setTitle(resources.getString(R.string.location))
-            .setItems(items) { dialog, which ->
+            .setItems(items) { _, which ->
                 binding.locationTextView.text = items[which]
                 sellingLocation = mappingLocation(items[which])
             }
             .show()
     }
 
-    private fun mappingLocation(korean: String):String {
-        when(korean) {
+    private fun mappingLocation(korean: String): String {
+        when (korean) {
             "서울" -> return "SEOUL"
             "부산" -> return "BUSAN"
             "대구" -> return "DAEGU"
@@ -241,16 +243,14 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         }
     }
 
-    private fun postArticle() = with(binding) {
-
+    private fun postArticle()  {
         if (checkInputInfo()) {
 
             uploadPhoto()
-
             uploadDesc()
 
             lifecycleScope.launch {
-                viewModel.uploadArticle(articleId.toInt(),files, postInfo).join()
+                viewModel.uploadArticle(articleId.toInt(), files, postInfo).join()
             }
         }
     }
@@ -258,37 +258,48 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
     private fun checkInputInfo(): Boolean = with(binding) {
         when {
             imageModelList.isEmpty() -> {
-                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_image), android.widget.Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ModifyArticleActivity,
+                    getString(R.string.inputError_image),
+                    Toast.LENGTH_SHORT).show()
                 return false
             }
             articleNameTextView.text.isEmpty() -> {
-                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_title), android.widget.Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ModifyArticleActivity,
+                    getString(R.string.inputError_title),
+                    Toast.LENGTH_SHORT).show()
                 return false
             }
             articlePriceTextView.text.isEmpty() -> {
-                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_price), android.widget.Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ModifyArticleActivity,
+                    getString(R.string.inputError_price),
+                    Toast.LENGTH_SHORT).show()
                 return false
             }
             locationTextView.text.isEmpty() -> {
-                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_location), android.widget.Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ModifyArticleActivity,
+                    getString(R.string.inputError_location),
+                    Toast.LENGTH_SHORT).show()
                 return false
             }
             statusRadioText.isEmpty() -> {
-                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_status), android.widget.Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ModifyArticleActivity,
+                    getString(R.string.inputError_status),
+                    Toast.LENGTH_SHORT).show()
                 return false
             }
             descriptionTextView.text.isEmpty() -> {
-                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_description), android.widget.Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ModifyArticleActivity,
+                    getString(R.string.inputError_description),
+                    Toast.LENGTH_SHORT).show()
                 return false
             }
             else -> return true
         }
     }
 
-    private fun uploadPhoto() {//delte가 없으면 돌아가면 안되나?
+    private fun uploadPhoto() {
         for (element in imageModelList) {
-            if(element.articleImage?.contains("https")==false)
-            {
+            if (element.articleImage?.contains("https") == false) {
                 val file = File(element.articleImage!!)
                 val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
                 val body: MultipartBody.Part =
@@ -297,6 +308,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
             }
         }
     }
+
     private fun uploadDesc() = with(binding) {
         postInfo = ModifyArticleDTO(
             title = articleNameTextView.text.toString(),
@@ -310,11 +322,11 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
     override fun observeData() {
         viewModel.modifyArticleStateLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is ModifyArticleState.Uninitialized -> Unit
                 is ModifyArticleState.Loading -> handleLoading()
-                is ModifyArticleState.LoadSuccess-> handleLoadSuccess(it)
-                is ModifyArticleState.ModifySuccess-> handleSuccess()
+                is ModifyArticleState.LoadSuccess -> handleLoadSuccess(it)
+                is ModifyArticleState.ModifySuccess -> handleSuccess()
                 is ModifyArticleState.Error -> handleError(it)
             }
         }
@@ -329,28 +341,34 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         finish()
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun handleLoadSuccess(state: ModifyArticleState.LoadSuccess) =with(binding){
+    private fun handleLoadSuccess(state: ModifyArticleState.LoadSuccess) = with(binding) {
         binding.progressBar.isGone = true
 
         articleNameTextView.setText(state.article.title)
-        articlePriceTextView.setText("${state.article.price}")
+        articlePriceTextView.setText(state.article.price)
         radioGroup.check(changeStatus(state.article.bookStatus))
         locationTextView.text = state.article.sellingLocation
-        sellingLocation=mappingLocation(state.article.sellingLocation)
+        sellingLocation = mappingLocation(state.article.sellingLocation)
         descriptionTextView.setText(state.article.description)
         officialBookNameTextView.text = state.article.bookResponse.bookTitle
         officialBookImageView.isVisible = true
-        officialBookImageView.load(state.article.bookResponse.bookThumbnail,4f,CenterCrop())
-        officialPriceTextView.text = "${state.article.bookResponse.bookListPrice}원"
-        officialWriterTextView.text = "글 ${state.article.bookResponse.bookAuthor}"
-        officialPublisherTextView.text = "출판 ${state.article.bookResponse.bookPublisher}"
-        officialBookNameTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity, R.color.black))
-        officialWriterTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity, R.color.black))
-        officialPublisherTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity, R.color.black))
-        officialPriceTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity, R.color.black))
+        officialBookImageView.load(state.article.bookResponse.bookThumbnail, 4f, CenterCrop())
+        officialWriterTextView.text = getString(R.string.writer,
+            state.article.bookResponse.bookAuthor.replace("<b>", "").replace("</b>", ""))
+        officialPublisherTextView.text = getString(R.string.publisher,
+            state.article.bookResponse.bookPublisher.replace("<b>", "").replace("</b>", ""))
+        officialPriceTextView.text = getString(R.string.price,
+            state.article.bookResponse.bookListPrice.replace("<b>", "").replace("</b>", ""))
+        officialBookNameTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity,
+            R.color.black))
+        officialWriterTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity,
+            R.color.black))
+        officialPublisherTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity,
+            R.color.black))
+        officialPriceTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity,
+            R.color.black))
 
-        for(i in 0 until state.article.images.size)
+        for (i in 0 until state.article.images.size)
             imageUriList.add(state.article.images[i].articleImage.toString())
 
         addRecyclerViewList(imageUriList)
@@ -359,7 +377,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
     private fun handleError(state: ModifyArticleState.Error) = with(binding) {
         progressBar.isGone = true
-        when(state.code!!) {
+        when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
             else -> handleUnexpected(state.code)
         }
@@ -372,14 +390,14 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
     private fun handleT004() {
         lifecycleScope.launch {
             viewModel.getNewTokens().join()
-            viewModel.uploadArticle(articleId.toInt(),files,postInfo)
+            viewModel.uploadArticle(articleId.toInt(), files, postInfo)
         }
     }
 
-    private fun changeStatus(now : String) : Int {
+    private fun changeStatus(now: String): Int {
         when (now) {
             "최상" -> {
-                statusRadioText="BEST"
+                statusRadioText = "BEST"
                 return R.id.radio_best
             }
             "상" -> {
@@ -400,17 +418,15 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
     companion object {
 
-        fun newIntent(context: Context, articleId: String) = Intent(context, ModifyArticleActivity::class.java).apply {
-            putExtra(ARTICLE_ID, articleId)
-        }
+        fun newIntent(context: Context, articleId: String) =
+            Intent(context, ModifyArticleActivity::class.java).apply {
+                putExtra(ARTICLE_ID, articleId)
+            }
+
         const val ARTICLE_ID = "0"
-        const val NAVER_BOOK_INFO = "NaverBookInfo"
-        const val MAX_IMAGE_NUM = 5
 
         const val DEFAULT_STATUS = "UPPER"
         const val DEFAULT_LOCATION = "SEOUL"
-
-        const val NAVER_BOOK_REQUEST_CODE = 1001
     }
 
 }

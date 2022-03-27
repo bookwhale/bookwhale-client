@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
-
 class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetailArticleBinding>() {
 
     override val viewModel by viewModel<DetailArticleViewModel>()
@@ -169,6 +168,9 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
     private fun handleSuccess(state: DetailArticleState.Success) = with(binding) {
         binding.progressBar.isGone = true
 
+        Log.e("myArticle is what?",myArticle.toString())
+
+
         articleTitle.text = state.article.title
         articleTitle.visibility = View.GONE
         articlePriceTextView.text = getString(R.string.price, state.article.price)
@@ -191,7 +193,11 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             unFilledHeartButton.setImageResource(R.drawable.ic_heart_filled)
         } else unFilledHeartButton.setImageResource(R.drawable.ic_heart)
 
+        Log.e("myArticle is what?",myArticle.toString())
+
+
         if (myArticle) {
+            Log.e("myArticle1234","myArticle")
             chatLayout.isGone = true
             unFilledHeartButton.isGone = true
             modifyButton.isVisible = true
@@ -204,13 +210,14 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         }
 
         adapter.submitList(state.article.images)
-        //if(state.article.images.isEmpty()) adapter.submitList(listOf(DetailImageModel(id = 0, arti)))
 
         handleHeartButton()
     }
 
     private fun handleError(state: DetailArticleState.Error) = with(binding) {
         binding.progressBar.isGone = true
+
+        Log.e("handleError",state.code.toString())
 
         when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
