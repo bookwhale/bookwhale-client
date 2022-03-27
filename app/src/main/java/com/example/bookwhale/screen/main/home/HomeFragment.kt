@@ -53,7 +53,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
             }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             getArticles(null)
         }
 
@@ -65,7 +65,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     }
 
      suspend fun getArticles(search: String?) {
-        lifecycleScope.launch {
+         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getArticlesPaging(search).collectLatest {
                 adapter.submitData(it)
             }
@@ -113,7 +113,7 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     }
 
     private fun handleT004() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getNewTokens().join()
             viewModel.getArticlesPaging(null).collectLatest {
                 adapter.submitData(it)

@@ -79,7 +79,7 @@ class ChatFragment: BaseFragment<MainViewModel, FragmentChatBinding>() {
     }
 
     private fun handleT004() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getNewTokens().join()
             viewModel.fetchData()
         }

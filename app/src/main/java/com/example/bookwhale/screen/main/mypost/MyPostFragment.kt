@@ -70,7 +70,7 @@ class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
     }
 
     private fun handleT004() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getNewTokens().join()
             viewModel.getFavorites().join()
         }

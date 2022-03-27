@@ -69,7 +69,7 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
     }
 
     private fun handleT004() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getNewTokens().join()
             viewModel.getFavorites().join()
         }
