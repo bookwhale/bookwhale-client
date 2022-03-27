@@ -93,7 +93,6 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 viewModel.getPreviousMessages(it.toInt()).collectLatest {
                     adapter.submitData(it)
                 }
-                Log.e("getMessage2", adapter.itemCount.toString())
             }
         }
     }
