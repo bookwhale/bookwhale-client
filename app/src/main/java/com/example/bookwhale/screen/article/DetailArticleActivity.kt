@@ -197,6 +197,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             modifyButton.isVisible = true
             modifyButton.setOnClickListener{
                 startActivity(ModifyArticleActivity.newIntent(this@DetailArticleActivity, articleId))
+                finish()
             }
         } else {
             chatLayout.isVisible = true

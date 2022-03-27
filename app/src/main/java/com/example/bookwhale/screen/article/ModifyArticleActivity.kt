@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
-import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -307,7 +306,6 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
             sellingLocation = sellingLocation,
             deleteImgUrls = deleteImageList
         )
-        Log.e("postInfo",postInfo.toString())
     }
 
     override fun observeData() {
@@ -393,8 +391,8 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
                 return R.id.radio_mid
             }
             "하" -> {
-                return R.id.radio_low
                 statusRadioText = "LOWER"
+                return R.id.radio_low
             }
         }
         return R.id.radio_high
