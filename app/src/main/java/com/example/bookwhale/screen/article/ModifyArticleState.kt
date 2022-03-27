@@ -9,7 +9,7 @@ sealed class ModifyArticleState {
 
     data class LoadSuccess(
         val article : DetailArticleModel
-    ) : ModifyArticleState()//
+    ) : ModifyArticleState()
 
     object ModifySuccess : ModifyArticleState()
 

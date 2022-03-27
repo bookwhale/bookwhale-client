@@ -47,7 +47,7 @@ val appModule = module {
     single<ChatRepository> { ChatRepositoryImpl(get(), get(), get(), get()) }
     single<DetailRepository> { DetailRepositoryImpl(get(), get()) }
     single<PostArticleRepository> { PostArticleRepositoryImpl(get(), get()) }
-    single<ModifyArticleRepository> { DefaultModifyArticleRepository(get(), get()) }
+    single<ModifyArticleRepository> { ModifyArticleRepositoryImpl(get(), get()) }
 
     single { Dispatchers.IO }
     single { Dispatchers.Main }
