@@ -7,6 +7,6 @@ import okhttp3.MultipartBody
 
 interface ModifyArticleRepository {
 
-    suspend fun modifyArticle(images: List<MultipartBody.Part>, articleUpdaterequest: ModifyArticleDTO) : NetworkResult<Boolean>
+    suspend fun modifyArticle(articleId : Int, images: List<MultipartBody.Part>, articleUpdaterequest: ModifyArticleDTO) : NetworkResult<Boolean>
 
 }

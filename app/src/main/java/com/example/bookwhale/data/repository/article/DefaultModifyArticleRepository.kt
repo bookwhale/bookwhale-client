@@ -26,9 +26,8 @@ class DefaultModifyArticleRepository (
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher,
 ): ModifyArticleRepository {
-        override suspend fun modifyArticle(images: List<MultipartBody.Part>, articleUpdaterequest: ModifyArticleDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
-            Log.e("image",images.toString())
-            val response = serverApiService.modifyArticle(images, articleUpdaterequest)
+        override suspend fun modifyArticle(articleId : Int ,images: List<MultipartBody.Part>, articleUpdaterequest: ModifyArticleDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
+            val response = serverApiService.modifyArticle(articleId, images, articleUpdaterequest)
 
             if(response.isSuccessful) {
                 NetworkResult.success(

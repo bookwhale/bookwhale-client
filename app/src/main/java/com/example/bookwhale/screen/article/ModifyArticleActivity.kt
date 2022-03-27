@@ -52,20 +52,6 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
     private val articleId by lazy { intent.getStringExtra(ARTICLE_ID)!! }
 
-    /*private val getContent =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if(result.resultCode == Activity.RESULT_OK) {
-                result.data?.let {
-                    val model = it.getParcelableExtra<NaverBookModel>("naverBookModel")
-                    model?.let { data ->
-                        naverBookInfo = data
-                        handleNaverBookApi()
-                    }
-                } ?: kotlin.run {
-                    Toast.makeText(this, getString(R.string.loadError_searchBook), Toast.LENGTH_SHORT).show()
-                }
-            }
-        }*/
     private lateinit var postInfo: ModifyArticleDTO
     private val files: ArrayList<MultipartBody.Part> = ArrayList()
     private var statusRadioText : String = DEFAULT_STATUS
@@ -91,16 +77,6 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         )
     }
 
-    /*private val adapter by lazy {
-        ModelRecyclerAdapter<DetailImageModel, ModifyArticleViewModel>(
-            listOf(),
-            viewModel,
-            resourcesProvider,
-            adapterListener = object : AdapterListener {
-            }
-        )
-    }*/
-
     private fun removeModel(model: DetailImageModel) {
         var removeIndex = 0
         imageModelList.forEachIndexed { index, data ->
@@ -121,7 +97,6 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
         binding.recyclerView.adapter = adapter
         viewModel.loadArticle(articleId.toInt())
-        Log.e("modid",articleId)
         initButton()
     }
 
@@ -149,22 +124,6 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
             finish()
         }
     }
-
-    /*@SuppressLint("SetTextI18n")
-    private fun handleNaverBookApi() = with(binding) {
-        naverBookInfo?.let {
-            officialBookImageView.isVisible = true
-            officialBookImageView.load(it.bookThumbnail,4f, CenterCrop())
-            officialBookNameTextView.text = it.bookTitle.replace("<b>","").replace("</b>","")
-            officialWriterTextView.text = "글 ${it.bookAuthor.replace("<b>","").replace("</b>","")}"
-            officialPublisherTextView.text = "출판 ${it.bookPublisher.replace("<b>","").replace("</b>","")}"
-            officialPriceTextView.text = "${it.bookListPrice.replace("<b>","").replace("</b>","")}원"
-            officialBookNameTextView.setTextColor(androidx.core.content.ContextCompat.getColor(this@ModifyArticleActivity, com.example.bookwhale.R.color.black))
-            officialWriterTextView.setTextColor(androidx.core.content.ContextCompat.getColor(this@ModifyArticleActivity, com.example.bookwhale.R.color.black))
-            officialPublisherTextView.setTextColor(androidx.core.content.ContextCompat.getColor(this@ModifyArticleActivity, com.example.bookwhale.R.color.black))
-            officialPriceTextView.setTextColor(androidx.core.content.ContextCompat.getColor(this@ModifyArticleActivity, com.example.bookwhale.R.color.black))
-        }
-    }*/
 
     @FlowPreview
     private fun selectMultipleImage() {
@@ -204,24 +163,6 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
             }
     }
 
-    /*private fun ModiAddRecyclerViewList(uriList : List<String>) = with(binding) {
-        imageModelList.clear()
-        imageModelList.addAll(
-            uriList.mapIndexed
-                { index
-                  , data ->
-                DetailImageModel(
-                    id = index.toLong(),
-                    type = CellType.TEMP_IMAGE_LIST,
-                    articleImage = data
-                )
-            }
-        )
-
-        adapter.submitList(imageModelList)
-        adapter.notifyItemRangeChanged(0, imageModelList.size)
-        uploadPhotoTextView.text = getString(R.string.currentImageNum, imageModelList.size)
-    }*/
     private fun addRecyclerViewList(uriList : List<String>) = with(binding) {
         imageModelList.clear()
         imageModelList.addAll(
@@ -233,7 +174,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
                 )
             }
         )
-        Log.e("imageModelList",imageModelList.toString())
+
         adapter.submitList(imageModelList)
         adapter.notifyItemRangeChanged(0, imageModelList.size)
         uploadPhotoTextView.text = getString(R.string.currentImageNum, imageModelList.size)
@@ -310,80 +251,55 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
             uploadDesc()
 
             lifecycleScope.launch {
-                viewModel.uploadArticle(files, postInfo).join()
+                viewModel.uploadArticle(articleId.toInt(),files, postInfo).join()
             }
         }
     }
 
     private fun checkInputInfo(): Boolean = with(binding) {
-        //if(naverBookInfo.bookTitle.isNotEmpty()) {
-            when {
-                imageModelList.isEmpty() -> {
-                    android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_image), android.widget.Toast.LENGTH_SHORT).show()
-                    return false
-                }
-                articleNameTextView.text.isEmpty() -> {
-                    android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_title), android.widget.Toast.LENGTH_SHORT).show()
-                    return false
-                }
-                articlePriceTextView.text.isEmpty() -> {
-                    android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_price), android.widget.Toast.LENGTH_SHORT).show()
-                    return false
-                }
-                locationTextView.text.isEmpty() -> {
-                    android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_location), android.widget.Toast.LENGTH_SHORT).show()
-                    return false
-                }
-                statusRadioText.isEmpty() -> {
-                    android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_status), android.widget.Toast.LENGTH_SHORT).show()
-                    return false
-                }
-                descriptionTextView.text.isEmpty() -> {
-                    android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_description), android.widget.Toast.LENGTH_SHORT).show()
-                    return false
-                }
-                else -> return true
+        when {
+            imageModelList.isEmpty() -> {
+                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_image), android.widget.Toast.LENGTH_SHORT).show()
+                return false
             }
-        /*} else {
-
-
-            android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.searchBookName), android.widget.Toast.LENGTH_SHORT).show()
-            return false
-        }*/
+            articleNameTextView.text.isEmpty() -> {
+                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_title), android.widget.Toast.LENGTH_SHORT).show()
+                return false
+            }
+            articlePriceTextView.text.isEmpty() -> {
+                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_price), android.widget.Toast.LENGTH_SHORT).show()
+                return false
+            }
+            locationTextView.text.isEmpty() -> {
+                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_location), android.widget.Toast.LENGTH_SHORT).show()
+                return false
+            }
+            statusRadioText.isEmpty() -> {
+                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_status), android.widget.Toast.LENGTH_SHORT).show()
+                return false
+            }
+            descriptionTextView.text.isEmpty() -> {
+                android.widget.Toast.makeText(this@ModifyArticleActivity, getString(com.example.bookwhale.R.string.inputError_description), android.widget.Toast.LENGTH_SHORT).show()
+                return false
+            }
+            else -> return true
+        }
     }
 
-    private fun uploadPhoto() {
+    private fun uploadPhoto() {//delte가 없으면 돌아가면 안되나?
         for (element in imageModelList) {
-            if(element.articleImage?.contains("https")==true)
+            if(element.articleImage?.contains("https")==false)
             {
-                val file=File.createTempFile(element.articleImage.toString().substring(element.articleImage.toString().lastIndexOf("/")+1),".jpg",cacheDir)
-                Log.e("createTempFile",file.toString())
-                val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-                val body : MultipartBody.Part = MultipartBody.Part.createFormData("images",file.name,requestBody)
-                files.add(body)
-            }
-            else {
                 val file = File(element.articleImage!!)
                 val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
                 val body: MultipartBody.Part =
                     MultipartBody.Part.createFormData("images", file.name, requestBody)
                 files.add(body)
             }
-            //files.add(body)
         }
     }
     private fun uploadDesc() = with(binding) {
         postInfo = ModifyArticleDTO(
-            bookRequest = com.example.bookwhale.data.response.article.ModifyArticleDTO.BookRequest(
-                bookIsbn = naverBookInfo.bookIsbn.replace("<b>","").replace("</b>",""),
-                bookTitle = naverBookInfo.bookTitle.replace("<b>","").replace("</b>",""),
-                bookAuthor = naverBookInfo.bookAuthor.replace("<b>","").replace("</b>",""),
-                bookPublisher = naverBookInfo.bookPublisher.replace("<b>","").replace("</b>",""),
-                bookThumbnail = naverBookInfo.bookThumbnail,
-                bookListPrice = naverBookInfo.bookListPrice.replace("<b>","").replace("</b>",""),
-                bookPubDate = naverBookInfo.bookPubDate ?: kotlin.run { "null" },
-                bookSummary = naverBookInfo.bookSummary.replace("<b>","").replace("</b>","")
-            ),
             title = articleNameTextView.text.toString(),
             price = articlePriceTextView.text.toString(),
             description = descriptionTextView.text.toString(),
@@ -420,16 +336,11 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         binding.progressBar.isGone = true
 
         articleNameTextView.setText(state.article.title)
-        //articleTitle.visibility = View.GONE
         articlePriceTextView.setText("${state.article.price}")
-        //qualityTextView.text = state.article.bookStatus //상태
-        //statusRadioText= changeStatus(state.article.bookStatus)
         radioGroup.check(changeStatus(state.article.bookStatus))
-        Log.e("modstatus",state.article.bookStatus)
-        Log.e("modstatus",statusRadioText)
         locationTextView.text = state.article.sellingLocation
+        sellingLocation=mappingLocation(state.article.sellingLocation)
         descriptionTextView.setText(state.article.description)
-        //viewTextView.text = state.article.viewCount.toString()
         officialBookNameTextView.text = state.article.bookResponse.bookTitle
         officialBookImageView.isVisible = true
         officialBookImageView.load(state.article.bookResponse.bookThumbnail,4f,CenterCrop())
@@ -441,33 +352,10 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         officialPublisherTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity, R.color.black))
         officialPriceTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity, R.color.black))
 
-
-        //adapter.submitList(state.article.images)//  고쳐야함
-
         for(i in 0 until state.article.images.size)
-        {
-            //imageModelList.add(state.article.images[i])
-            //state.article.images[i].articleImage?.let { imageUriList.add(it) }
             imageUriList.add(state.article.images[i].articleImage.toString())
-            //Log.e("imageerror",state.article.images[i].toString())//해야할일 수정되는지 확인(사진관련된거 찾아야함)자신의 글일 때 판단하기(왜 이미지뷰가 안보이는가)
-        }
-        Log.e("imageUriList",imageUriList.toString())
-        //ModiAddRecyclerViewList(imageUrlList)
+
         addRecyclerViewList(imageUriList)
-
-
-        //if(state.article.images.isEmpty()) adapter.submitList(listOf(DetailImageModel(id = 0, arti)))
-        //상태 관련된거랑
-
-        naverBookInfo.bookIsbn = state.article.bookResponse.bookIsbn
-        naverBookInfo.bookTitle = state.article.bookResponse.bookTitle
-        naverBookInfo.bookAuthor = state.article.bookResponse.bookAuthor
-        naverBookInfo.bookPublisher = state.article.bookResponse.bookPublisher
-        naverBookInfo.bookThumbnail = state.article.bookResponse.bookThumbnail
-        naverBookInfo.bookListPrice = state.article.bookResponse.bookListPrice
-        naverBookInfo.bookPubDate = state.article.bookResponse.bookPubDate
-        naverBookInfo.bookSummary = state.article.bookResponse.bookSummary
-        //더 덜 노가다인 방법을 찾아보자
 
     }
 
@@ -486,28 +374,34 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
     private fun handleT004() {
         lifecycleScope.launch {
             viewModel.getNewTokens().join()
-            viewModel.uploadArticle(files,postInfo)
+            viewModel.uploadArticle(articleId.toInt(),files,postInfo)
         }
     }
 
     private fun changeStatus(now : String) : Int {
         when (now) {
-            "최상" -> return R.id.radio_best
-            "상" -> return R.id.radio_high
-            "중" -> return R.id.radio_mid
-            "하" -> return R.id.radio_low
+            "최상" -> {
+                statusRadioText="BEST"
+                return R.id.radio_best
+            }
+            "상" -> {
+                statusRadioText = "UPPER"
+                return R.id.radio_high
+            }
+            "중" -> {
+                statusRadioText = "MIDDLE"
+                return R.id.radio_mid
+            }
+            "하" -> {
+                return R.id.radio_low
+                statusRadioText = "LOWER"
+            }
         }
         return R.id.radio_high
     }
 
     companion object {
 
-        /*fun newIntent(context: Context, bookInfo: NaverBookModel?) = Intent(context, ModifyArticleActivity::class.java).apply {
-            putExtra(NAVER_BOOK_INFO, bookInfo)
-        }*/
-        /*fun newIntent(context: Context, articleId: String) = Intent(context, ModifyArticleActivity::class.java).apply {
-            putExtra(ARTICLE_ID, articleId)
-        }*/
         fun newIntent(context: Context, articleId: String) = Intent(context, ModifyArticleActivity::class.java).apply {
             putExtra(ARTICLE_ID, articleId)
         }

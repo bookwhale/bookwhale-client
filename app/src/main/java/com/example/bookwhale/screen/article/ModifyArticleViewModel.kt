@@ -44,13 +44,12 @@ class ModifyArticleViewModel (
             } else {
                 modifyArticleStateLiveData.value = ModifyArticleState.Error(articleResponse.code)
             }
-        }//이걸보고 detail 쓰는것을 참고하자 정보가져오기
+        }
 
-        fun uploadArticle(files: List<MultipartBody.Part>, articleDTO: ModifyArticleDTO) = viewModelScope.launch {
+        fun uploadArticle(articleId : Int, files: List<MultipartBody.Part>, articleDTO: ModifyArticleDTO) = viewModelScope.launch {
 
             modifyArticleStateLiveData.value = ModifyArticleState.Loading
-            val response = ModifyArticleRepository.modifyArticle(files, articleDTO)
-            Log.e("modifyArticle",articleDTO.toString()+files.toString())
+            val response = ModifyArticleRepository.modifyArticle(articleId,files, articleDTO)
 
             if(response.status == NetworkResult.Status.SUCCESS) {
                 modifyArticleStateLiveData.value = ModifyArticleState.ModifySuccess

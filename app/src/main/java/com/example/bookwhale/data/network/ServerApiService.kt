@@ -59,8 +59,8 @@ interface ServerApiService {
 
     // 게시물 수정
     @Multipart
-    @PATCH("api/article/1")
-    suspend fun modifyArticle(@Part images: List<MultipartBody.Part>, @Part("articleUpdateRequest")articleUpdateRequest: ModifyArticleDTO): Response<Unit>
+    @PATCH("api/article/{articleId}")
+    suspend fun modifyArticle(@Path("articleId")articleId : Int,@Part images: List<MultipartBody.Part>, @Part("articleUpdateRequest")articleUpdateRequest: ModifyArticleDTO): Response<Unit>
 
     // 내 게시물
     @GET("api/articles/me")
