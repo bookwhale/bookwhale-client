@@ -18,6 +18,8 @@ import com.example.bookwhale.data.response.article.ModifyArticleDTO
 import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.article.DetailImageModel
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.util.EventBus
+import com.example.bookwhale.util.Events
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
@@ -42,6 +44,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         ActivityModifyArticleBinding.inflate(layoutInflater)
 
     private val resourcesProvider by inject<ResourcesProvider>()
+    private val eventBus by inject<EventBus>()
 
     private val articleId by lazy { intent.getStringExtra(ARTICLE_ID)!! }
 
@@ -338,6 +341,9 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
     private fun handleSuccess() = with(binding) {
         progressBar.isGone = true
+        lifecycleScope.launch {
+            eventBus.produceEvent(Events.UploadPostEvent)
+        }
         finish()
     }
 

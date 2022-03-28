@@ -168,9 +168,6 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
     private fun handleSuccess(state: DetailArticleState.Success) = with(binding) {
         binding.progressBar.isGone = true
 
-        Log.e("myArticle is what?",myArticle.toString())
-
-
         articleTitle.text = state.article.title
         articleTitle.visibility = View.GONE
         articlePriceTextView.text = getString(R.string.price, state.article.price)
@@ -193,17 +190,12 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             unFilledHeartButton.setImageResource(R.drawable.ic_heart_filled)
         } else unFilledHeartButton.setImageResource(R.drawable.ic_heart)
 
-        Log.e("myArticle is what?",myArticle.toString())
-
-
         if (myArticle) {
-            Log.e("myArticle1234","myArticle")
             chatLayout.isGone = true
             unFilledHeartButton.isGone = true
             modifyButton.isVisible = true
             modifyButton.setOnClickListener{
                 startActivity(ModifyArticleActivity.newIntent(this@DetailArticleActivity, articleId))
-                finish()
             }
         } else {
             chatLayout.isVisible = true
