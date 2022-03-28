@@ -10,6 +10,8 @@ import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseViewModel
+import com.example.bookwhale.util.EventBus
+import com.example.bookwhale.util.Events
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -17,17 +19,25 @@ import kotlinx.coroutines.launch
 class DetailArticleViewModel(
     private val detailRepository: DetailRepository,
     private val articleRepository: ArticleRepository,
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
+    private val eventBus: EventBus
 ): BaseViewModel() {
 
     val detailArticleStateLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     val detailLoadFavoriteLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     val loadChatListLiveData = MutableLiveData<Boolean>(false) // true = 이미 존재하는 채팅방
     val roomId = MutableLiveData<Int>(0)
+    private var _articleId : Int = 0
+
+    init {
+        subscribeEvent()
+    }
 
     fun loadArticle(articleId: Int) = viewModelScope.launch {
 
         detailArticleStateLiveData.value = DetailArticleState.Loading
+
+        _articleId = articleId
 
         val articleResponse = detailRepository.getDetailArticle(articleId)
 
@@ -119,5 +129,13 @@ class DetailArticleViewModel(
 
         return@async false
     }.await()
+
+    private fun subscribeEvent() {
+        viewModelScope.launch {
+            eventBus.subscribeEvent(Events.UploadPostEvent) {
+                loadArticle(_articleId)
+            }
+        }
+    }
 
 }
