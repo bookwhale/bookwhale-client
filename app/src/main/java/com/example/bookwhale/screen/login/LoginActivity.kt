@@ -45,24 +45,6 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
 
         setSignInNaver()
         setSignInKaKao()
-        tempGetHashCode()
-    }
-
-    /**
-     * 키해쉬 클립보드 복사 -> 추후 삭제할 코드입니다.
-     */
-
-    private fun tempGetHashCode() = with(binding) {
-        getKeyHashButton.setOnClickListener {
-            var keyHash = Utility.getKeyHash(this@LoginActivity)
-            Log.e("keyhash", " : $keyHash")
-
-            val clipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("label", "$keyHash")
-            clipboard.setPrimaryClip(clip)
-
-            Toast.makeText(this@LoginActivity, "클립보드에 복사하였습니다.", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun setSignInKaKao() = with(binding) {
@@ -70,7 +52,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
         kakaoLoginButton.setOnClickListener {
 
             var keyHash = Utility.getKeyHash(this@LoginActivity)
-            Log.e("keyhash", " : $keyHash")
+            Log.d("keyhash", " : $keyHash")
 
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity)) {
                 UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity, callback = callback)
@@ -89,7 +71,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
                 viewModel.kakaoLogin(token.accessToken)
                 //viewModel?.addKakaoUser(token.accessToken, kakaoId)
             }
-            Log.d("로그인성공 - 토큰", "${token.accessToken}")
+            Log.d("로그인성공 - 토큰", token.accessToken)
         }
     }
 

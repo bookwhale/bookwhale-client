@@ -40,7 +40,6 @@ class ChatRoomViewModel(
         return response.data!!.cachedIn(viewModelScope)
     }
 
-
     suspend fun loadChatModel(roomId: Int) : ChatModel {
 
         chatRoomState.value = ChatRoomState.Loading

@@ -20,6 +20,7 @@ import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.AdapterListener
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -55,12 +56,15 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
         recyclerView.adapter = adapter
 
-        viewModel.loadArticle(articleId.toInt())
-        viewModel.loadFavorites()
+        lifecycleScope.launch {
+            val loadArticle = viewModel.loadArticle(articleId.toInt())
+            val loadFavorite = viewModel.loadFavorites()
 
-        initButton()
-        observeChatData()
+            joinAll(loadArticle, loadFavorite)
 
+            initButton()
+            observeChatData()
+        }
     }
 
     private fun initButton() = with(binding) {

@@ -24,7 +24,7 @@ class DetailArticleViewModel(
 ): BaseViewModel() {
 
     val detailArticleStateLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
-    val detailLoadFavoriteLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
+    private val detailLoadFavoriteLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     val loadChatListLiveData = MutableLiveData<Boolean>(false) // true = 이미 존재하는 채팅방
     val roomId = MutableLiveData<Int>(0)
     private var _articleId : Int = 0
