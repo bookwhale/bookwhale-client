@@ -28,9 +28,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "onMessageReceived")
         Log.d(TAG, "From: ${remoteMessage.from}")
 
+        Log.d(TAG, "From: ${remoteMessage.data.toString()}")
+
 
         // 작업표시줄에 noti를 띄운다.
-        //sendNotification(remoteMessage.data)
+        sendNotification(remoteMessage.data)
 
 //        Log.e("remoteMessageData", remoteMessage.data.toString())
         //App.prefs.notificationCount++
@@ -104,6 +106,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 //            this, 0 /* Request code */, intent,
 //            PendingIntent.FLAG_ONE_SHOT
 //        )
+
+        Log.d("MessageBody",messageBody.toString())
+        Log.d("MessageBody2",messageBody["title"].toString())
+        Log.d("MessageBody3",messageBody["body"].toString())
 
         val channelId = "fcm_default_channel"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
