@@ -18,6 +18,10 @@ class SplashViewModel(
 
     val splashState = MutableLiveData<SplashState>(SplashState.Uninitialized)
 
+    init {
+        myPreferenceManager.getAccessToken()
+    }
+
     override fun fetchData(): Job = viewModelScope.launch {
 
         splashState.value = SplashState.Loading

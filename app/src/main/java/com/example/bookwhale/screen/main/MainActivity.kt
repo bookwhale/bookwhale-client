@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
@@ -15,11 +17,14 @@ import com.example.bookwhale.screen.main.home.HomeFragment
 import com.example.bookwhale.screen.main.favorite.FavoriteFragment
 import com.example.bookwhale.screen.main.my.MyFragment
 import com.example.bookwhale.screen.main.mypost.MyPostFragment
+import com.example.bookwhale.util.EventBus
+import com.example.bookwhale.util.Events
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
@@ -30,7 +35,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
     private var onSearch = false
-
+    private val eventBus by inject<EventBus>()
     private val disposable = CompositeDisposable() // Disposable 관리
     private val backBtnSubject = PublishSubject.create<Boolean>() // backBtn 이벤트를 발생시킬 수 있는 Subject
 
@@ -74,26 +79,30 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
             when (item.itemId) {
                 R.id.menu_home -> {
                     showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
-                    //viewModel.getArticles(null,0,10) // 임시 호출, 후에 바꿔야함
+                    binding.searchButton.isVisible = true
                     true
                 }
                 R.id.menu_heart -> {
                     showFragment(FavoriteFragment.newInstance(), FavoriteFragment.TAG)
                     viewModel.getFavorites()
+                    binding.searchButton.isGone = true
                     true
                 }
                 R.id.menu_myPost -> {
                     showFragment(MyPostFragment.newInstance(), MyPostFragment.TAG)
                     viewModel.getMyArticles()
+                    binding.searchButton.isGone = true
                     true
                 }
                 R.id.menu_chat -> {
                     showFragment(ChatFragment.newInstance(), ChatFragment.TAG)
                     viewModel.loadChatList()
+                    binding.searchButton.isGone = true
                     true
                 }
                 R.id.menu_my -> {
                     showFragment(MyFragment.newInstance(), MyFragment.TAG)
+                    binding.searchButton.isGone = true
                     true
                 }
                 else -> false
