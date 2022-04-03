@@ -35,15 +35,9 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
                 return@OnCompleteListener
             }
 
-            // Get new FCM registration token
-            // task.result = deviceToken
-            Log.e("task.result", task.result.toString())
+            Log.d("deviceToken", task.result.toString())
             viewModel.saveDeviceToken(task.result)
 
-            // Log and toast
-            // val msg = "token test $deviceToken"
-//            Log.e(ContentValues.TAG, msg)
-//            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
     }
 

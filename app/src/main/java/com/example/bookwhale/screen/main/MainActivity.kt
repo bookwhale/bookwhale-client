@@ -129,21 +129,11 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     private suspend fun doSearch() = with(binding) {
-//        lifecycleScope.launch {
-//            viewModel.getArticlesPaging(searchEditText.text.toString()).collectLatest {
-//                (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).adapter.submitData(it)
-//            }
-//        }
-
         (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).getArticles(searchEditText.text.toString())
 
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         searchEditText.text.clear()
     }
-
-//    private fun getSearchArticles(searchText: String) {
-//        //viewModel.getArticles(searchText,PAGE, SIZE)
-//    }
 
     override fun onBackPressed() {
         disposable.add(backBtnSubject
