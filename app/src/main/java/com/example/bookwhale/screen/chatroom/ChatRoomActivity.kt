@@ -2,13 +2,14 @@ package com.example.bookwhale.screen.chatroom
 
 import android.content.Context
 import android.content.Intent
+import android.os.Parcelable
 import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.R
@@ -17,12 +18,11 @@ import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.util.load
 import com.example.bookwhale.widget.adapter.ChatPagingAdapter
-import gun0912.tedimagepicker.util.ToastUtil.context
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding>() {
 
@@ -49,6 +49,8 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
                 binding.recyclerView.adapter = adapter
 
+                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
+
                 chatModel.let { data ->
                     binding.articleTitleTextView.text = data.articleTitle
                     data.articleImage?.let {
@@ -64,13 +66,23 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                         binding.progressBar.isVisible = true
                     } else {
                         binding.progressBar.isGone = true
-                        binding.recyclerView.scrollToPosition(0)
+
+                        val currentScrollPosition =
+                            (binding.recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstCompletelyVisibleItemPosition()
+
+                        if( currentScrollPosition <=3 ) {
+                            binding.recyclerView.scrollToPosition(0)
+                        }
                     }
                 }
             }
         }
 
-
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+            }
+        })
 
     }
 
