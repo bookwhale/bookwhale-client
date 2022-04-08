@@ -17,7 +17,7 @@ class ChatPagingSource(
     ): LoadResult<Int, ChatMessageModel> {
         return try {
             val next = params.key ?: 0
-            val response = chatApiService.getChatMessages(roomId, next, 10).body()!!.map {
+            val response = chatApiService.getChatMessages(roomId, next, 30).body()!!.map {
                 if (it.senderId == userId) {
                     ChatMessageModel(
                         senderId = it.senderId,

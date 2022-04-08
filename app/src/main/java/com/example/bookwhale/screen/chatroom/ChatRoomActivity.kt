@@ -2,13 +2,14 @@ package com.example.bookwhale.screen.chatroom
 
 import android.content.Context
 import android.content.Intent
+import android.os.Parcelable
 import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.R
@@ -17,12 +18,11 @@ import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.util.load
 import com.example.bookwhale.widget.adapter.ChatPagingAdapter
-import gun0912.tedimagepicker.util.ToastUtil.context
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding>() {
 
@@ -42,42 +42,27 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         roomId?.let {
             lifecycleScope.launch {
                 val result = async { viewModel.loadChatModel(it.toInt()) }
-
                 chatModel = result.await()
-
-                viewModel.runStomp(it.toInt(), getMessageText())
 
                 binding.recyclerView.adapter = adapter
 
-                chatModel.let { data ->
-                    binding.articleTitleTextView.text = data.articleTitle
-                    data.articleImage?.let {
-                        binding.articleImageView.load(it, 4f, CenterCrop())
-                    }
-                }
+                viewModel.runStomp(it.toInt(), getMessageText())
 
+                showChatRoomInfo()
                 getMessages()
                 initButtons()
-
-                adapter.addLoadStateListener { loadState ->
-                    if (loadState.source.refresh is LoadState.Loading) {
-                        binding.progressBar.isVisible = true
-                    } else {
-                        binding.progressBar.isGone = true
-                        binding.recyclerView.scrollToPosition(0)
-                    }
-                }
+                setAdapterListener()
             }
         }
-
-
-
     }
 
     private fun initButtons() = with(binding) {
         sendButton.setOnClickListener {
             roomId?.let {
-                viewModel.sendMessage(it.toInt(), getMessageText())
+                lifecycleScope.launch {
+                    viewModel.sendMessage(it.toInt(), getMessageText()).join()
+                    recyclerView.scrollToPosition(0)
+                }
             }
         }
 
@@ -86,6 +71,14 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         }
     }
 
+    private fun showChatRoomInfo() = with(binding) {
+        chatModel.let { data ->
+            binding.articleTitleTextView.text = data.articleTitle
+            data.articleImage?.let {
+                binding.articleImageView.load(it, 4f, CenterCrop())
+            }
+        }
+    }
 
     private fun getMessages() = with(binding) {
         roomId?.let {
@@ -101,13 +94,21 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         return editText.text.toString()
     }
 
-    companion object {
+    private fun setAdapterListener() = with(binding) {
+        adapter.addLoadStateListener { loadState ->
+            if (loadState.source.refresh is LoadState.Loading) {
+                binding.progressBar.isVisible = true
+            } else {
+                binding.progressBar.isGone = true
 
-        fun newIntent(context: Context, roomId: String) = Intent(context, ChatRoomActivity::class.java).apply {
-            putExtra(CHATROOM_ID, roomId)
+                val currentScrollPosition =
+                    (binding.recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstCompletelyVisibleItemPosition()
+
+                if( currentScrollPosition <= NEW_MESSAGE_SCROLL_INDEX ) {
+                    binding.recyclerView.scrollToPosition(0)
+                }
+            }
         }
-
-        const val CHATROOM_ID = "roomId"
     }
 
     override fun observeData() {
@@ -160,5 +161,16 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
             initViews()
         }
     }
+
+    companion object {
+
+        fun newIntent(context: Context, roomId: String) = Intent(context, ChatRoomActivity::class.java).apply {
+            putExtra(CHATROOM_ID, roomId)
+        }
+
+        const val CHATROOM_ID = "roomId"
+        const val NEW_MESSAGE_SCROLL_INDEX = 5
+    }
+
 
 }
