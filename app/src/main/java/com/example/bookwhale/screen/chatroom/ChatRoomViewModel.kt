@@ -110,7 +110,7 @@ class ChatRoomViewModel(
         }
     }
 
-    fun sendMessage(roomId: Int, message: String) {
+    fun sendMessage(roomId: Int, message: String) = viewModelScope.launch {
         val data = JSONObject()
         data.put("roomId", roomId.toString())
         data.put("senderId", myPreferenceManager.getId().toString())

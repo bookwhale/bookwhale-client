@@ -42,54 +42,27 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         roomId?.let {
             lifecycleScope.launch {
                 val result = async { viewModel.loadChatModel(it.toInt()) }
-
                 chatModel = result.await()
-
-                viewModel.runStomp(it.toInt(), getMessageText())
 
                 binding.recyclerView.adapter = adapter
 
-                adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
+                viewModel.runStomp(it.toInt(), getMessageText())
 
-                chatModel.let { data ->
-                    binding.articleTitleTextView.text = data.articleTitle
-                    data.articleImage?.let {
-                        binding.articleImageView.load(it, 4f, CenterCrop())
-                    }
-                }
-
+                showChatRoomInfo()
                 getMessages()
                 initButtons()
-
-                adapter.addLoadStateListener { loadState ->
-                    if (loadState.source.refresh is LoadState.Loading) {
-                        binding.progressBar.isVisible = true
-                    } else {
-                        binding.progressBar.isGone = true
-
-                        val currentScrollPosition =
-                            (binding.recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstCompletelyVisibleItemPosition()
-
-                        if( currentScrollPosition <=3 ) {
-                            binding.recyclerView.scrollToPosition(0)
-                        }
-                    }
-                }
+                setAdapterListener()
             }
         }
-
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-            }
-        })
-
     }
 
     private fun initButtons() = with(binding) {
         sendButton.setOnClickListener {
             roomId?.let {
-                viewModel.sendMessage(it.toInt(), getMessageText())
+                lifecycleScope.launch {
+                    viewModel.sendMessage(it.toInt(), getMessageText()).join()
+                    recyclerView.scrollToPosition(0)
+                }
             }
         }
 
@@ -98,6 +71,14 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         }
     }
 
+    private fun showChatRoomInfo() = with(binding) {
+        chatModel.let { data ->
+            binding.articleTitleTextView.text = data.articleTitle
+            data.articleImage?.let {
+                binding.articleImageView.load(it, 4f, CenterCrop())
+            }
+        }
+    }
 
     private fun getMessages() = with(binding) {
         roomId?.let {
@@ -113,13 +94,21 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         return editText.text.toString()
     }
 
-    companion object {
+    private fun setAdapterListener() = with(binding) {
+        adapter.addLoadStateListener { loadState ->
+            if (loadState.source.refresh is LoadState.Loading) {
+                binding.progressBar.isVisible = true
+            } else {
+                binding.progressBar.isGone = true
 
-        fun newIntent(context: Context, roomId: String) = Intent(context, ChatRoomActivity::class.java).apply {
-            putExtra(CHATROOM_ID, roomId)
+                val currentScrollPosition =
+                    (binding.recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstCompletelyVisibleItemPosition()
+
+                if( currentScrollPosition <= NEW_MESSAGE_SCROLL_INDEX ) {
+                    binding.recyclerView.scrollToPosition(0)
+                }
+            }
         }
-
-        const val CHATROOM_ID = "roomId"
     }
 
     override fun observeData() {
@@ -172,5 +161,16 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
             initViews()
         }
     }
+
+    companion object {
+
+        fun newIntent(context: Context, roomId: String) = Intent(context, ChatRoomActivity::class.java).apply {
+            putExtra(CHATROOM_ID, roomId)
+        }
+
+        const val CHATROOM_ID = "roomId"
+        const val NEW_MESSAGE_SCROLL_INDEX = 5
+    }
+
 
 }

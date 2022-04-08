@@ -93,7 +93,7 @@ class ChatRepositoryImpl(
 
     override suspend fun getPreviousMessages(roomId: Int): NetworkResult<Flow<PagingData<ChatMessageModel>>> = withContext(ioDispatcher) {
         val response = Pager(
-            PagingConfig(pageSize = 10)
+            PagingConfig(pageSize = 30)
         ) {
             ChatPagingSource(chatApiService, roomId, myPreferenceManager.getId())
         }.flow
