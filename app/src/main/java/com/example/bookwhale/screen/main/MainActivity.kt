@@ -3,6 +3,7 @@ package com.example.bookwhale.screen.main
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.KeyEvent
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -47,12 +48,23 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     private fun initButton() = with(binding) {
+        searchEditText.setOnKeyListener { _, keyCode, event ->
+            if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                lifecycleScope.launch {
+                    doSearch()
+                }
+                true
+            } else {
+                false
+            }
+        }
         searchButton.setOnClickListener {
             when(onSearch) {
                 true -> {
                     onSearch = false
                     toolBarLayout.transitionToStart()
                     lifecycleScope.launch {
+
                         doSearch()
                     }
                 }

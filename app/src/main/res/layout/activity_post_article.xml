@@ -195,55 +195,55 @@
         app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"
         app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"/>
 
-<!--    <ImageView-->
-<!--        android:id="@+id/firstImageView"-->
-<!--        android:layout_width="64dp"-->
-<!--        android:layout_height="64dp"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
-<!--        app:layout_constraintStart_toEndOf="@id/uploadPhotoLayout"-->
-<!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
-<!--        tools:src="@drawable/image_book" />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/firstImageView"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
+    <!--        tools:src="@drawable/image_book" />-->
 
-<!--    <ImageView-->
-<!--        android:id="@+id/secondImageVIew"-->
-<!--        android:layout_width="64dp"-->
-<!--        android:layout_height="64dp"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
-<!--        app:layout_constraintStart_toEndOf="@id/firstImageView"-->
-<!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
-<!--        tools:src="@drawable/image_book" />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/secondImageVIew"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/firstImageView"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
+    <!--        tools:src="@drawable/image_book" />-->
 
-<!--    <ImageView-->
-<!--        android:id="@+id/thirdImageView"-->
-<!--        android:layout_width="64dp"-->
-<!--        android:layout_height="64dp"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
-<!--        app:layout_constraintStart_toEndOf="@id/secondImageVIew"-->
-<!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
-<!--        tools:src="@drawable/image_book" />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/thirdImageView"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/secondImageVIew"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
+    <!--        tools:src="@drawable/image_book" />-->
 
-<!--    <ImageView-->
-<!--        android:id="@+id/forthImageView"-->
-<!--        android:layout_width="64dp"-->
-<!--        android:layout_height="64dp"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
-<!--        app:layout_constraintStart_toEndOf="@id/thirdImageView"-->
-<!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
-<!--        tools:src="@drawable/image_book" />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/forthImageView"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/thirdImageView"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
+    <!--        tools:src="@drawable/image_book" />-->
 
-<!--    <ImageView-->
-<!--        android:id="@+id/fifthImageView"-->
-<!--        android:layout_width="64dp"-->
-<!--        android:layout_height="64dp"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
-<!--        app:layout_constraintStart_toEndOf="@id/forthImageView"-->
-<!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
-<!--        tools:src="@drawable/image_book" />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/fifthImageView"-->
+    <!--        android:layout_width="64dp"-->
+    <!--        android:layout_height="64dp"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/uploadPhotoLayout"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/forthImageView"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/uploadPhotoLayout"-->
+    <!--        tools:src="@drawable/image_book" />-->
 
     <EditText
         android:id="@+id/articleNameTextView"
@@ -261,6 +261,7 @@
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/uploadPhotoLayout" />

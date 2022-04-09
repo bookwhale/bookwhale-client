@@ -2,6 +2,7 @@ package com.example.bookwhale.screen.article
 
 import android.content.Context
 import android.content.Intent
+import android.view.KeyEvent
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -42,6 +43,15 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
 
     override fun initViews() = with(binding) {
         recyclerView.adapter = adapter
+        searchEditText.setOnKeyListener { _, keyCode, event ->
+            if ((event.action== KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                search(searchEditText.text.toString())
+                true
+            }
+            else {
+                false
+            }
+        }
 
         initButton()
     }

@@ -16,6 +16,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".screen.article.ModifyArticleActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".screen.chatroom.ChatRoomActivity"
@@ -25,6 +26,7 @@
             android:exported="false" />
         <activity
             android:name=".screen.article.PostArticleActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".screen.article.DetailArticleActivity"
