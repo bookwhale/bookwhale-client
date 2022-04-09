@@ -25,6 +25,7 @@ import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
 import com.example.bookwhale.widget.listener.AdapterListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -64,12 +65,16 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
         recyclerView.adapter = adapter
 
-        viewModel.loadArticle(articleId.toInt())
-        viewModel.loadFavorites()
+        lifecycleScope.launch {
+            val loadArticle = viewModel.loadArticle(articleId.toInt())
+            val loadFavorite = viewModel.loadFavorites()
 
-        initButton()
-        subscribeEvent()
-        observeChatData()
+            joinAll(loadArticle, loadFavorite)
+
+            initButton()
+            subscribeEvent()
+            observeChatData()
+        }
 
     }
 
