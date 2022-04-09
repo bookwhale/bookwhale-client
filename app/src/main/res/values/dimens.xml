@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="soldOut">65dp</dimen>
+    <dimen name="reserved">130dp</dimen>
+    <dimen name="delete">195dp</dimen>
+    <dimen name="modify">260dp</dimen>
+</resources>

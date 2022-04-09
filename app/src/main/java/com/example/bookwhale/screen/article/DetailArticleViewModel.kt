@@ -1,11 +1,15 @@
 package com.example.bookwhale.screen.article
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.repository.article.DetailRepository
+import com.example.bookwhale.data.repository.article.ModifyArticleRepository
 import com.example.bookwhale.data.repository.chat.ChatRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.data.response.article.ArticleStatusCategory
+import com.example.bookwhale.data.response.article.ArticleStatusDTO
 import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
 import com.example.bookwhale.model.main.favorite.FavoriteModel
@@ -20,6 +24,7 @@ class DetailArticleViewModel(
     private val detailRepository: DetailRepository,
     private val articleRepository: ArticleRepository,
     private val chatRepository: ChatRepository,
+    private val modifyArticleRepository: ModifyArticleRepository,
     private val eventBus: EventBus
 ): BaseViewModel() {
 
@@ -109,6 +114,36 @@ class DetailArticleViewModel(
         }
         else {
             loadChatListLiveData.value = true
+        }
+    }
+
+    fun deleteArticle(articleId: Int) = viewModelScope.launch {
+        val response = modifyArticleRepository.deleteArticle(articleId)
+
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            eventBus.produceEvent(Events.Deleted)
+        } else {
+            eventBus.produceEvent(Events.DeleteFail)
+        }
+    }
+
+    fun updateStatus(articleId: Int, category: ArticleStatusCategory) = viewModelScope.launch {
+        val response = modifyArticleRepository.updateStatus(articleId, ArticleStatusDTO(category.status))
+
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            when (category) {
+                ArticleStatusCategory.RESERVED -> {
+                    eventBus.produceEvent(Events.Reserved)
+                }
+                ArticleStatusCategory.SOLD_OUT -> {
+                    eventBus.produceEvent(Events.Sold)
+                }
+                ArticleStatusCategory.SALE -> {
+                    eventBus.produceEvent(Events.Sale)
+                }
+            }
+        } else {
+            eventBus.produceEvent(Events.DeleteFail)
         }
     }
 

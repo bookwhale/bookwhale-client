@@ -54,6 +54,10 @@
     <!-- chat -->
     <string name="noChat">개설된 채팅방이 없습니다.</string>
     <string name="doChat">채팅하기</string>
+    <string name="update">수정</string>
+    <string name="delete">삭제</string>
+    <string name="reserved">예약됨</string>
+    <string name="soldOut">판매완료</string>
 
     <!-- detail -->
     <string name="noInputImage">등록된 이미지가 없습니다.</string>
@@ -96,5 +100,14 @@
     <!-- chat -->
     <string name="noChatMessage">대화 내역이 없습니다.</string>
     <string name="alreadyExistRoom">이미 존재하는 채팅방 입니다.</string>
+
+    <!-- update -->
+    <string name="delete_question">삭제하시겠습니까? \n삭제는 판매중의 글만 가능합니다.</string>
+    <string name="reserved_question">예약 상태로 변경합니다.</string>
+    <string name="reserved_undo">판매중 상태로 변경합니다.</string>
+    <string name="soldOut_question">판매 완료 상태로 변경하시겠습니까? 되돌릴 수 없습니다.</string>
+    <string name="soldOut_undo">판매 완료 상태는 변경할 수 없습니다.</string>
+    <string name="deleted">성공적으로 삭제하였습니다.</string>
+    <string name="deleted_fail">판매중의 글만 삭제할 수 있습니다.</string>
 
 </resources>

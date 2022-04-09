@@ -37,19 +37,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="SpeakableTextPresentCheck" />
 
-            <ImageButton
-                android:id="@+id/modifyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
-                android:visibility="gone"
-                android:background="@android:color/transparent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/ic_post" />
+            <!--            <ImageButton-->
+            <!--                android:id="@+id/modifyButton"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginEnd="8dp"-->
+            <!--                android:minWidth="48dp"-->
+            <!--                android:minHeight="48dp"-->
+            <!--                android:visibility="gone"-->
+            <!--                android:background="@android:color/transparent"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                android:src="@drawable/ic_post" />-->
 
             <ImageButton
                 android:id="@+id/backButton"
@@ -188,9 +188,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_marginBottom="64dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="64dp">
 
                 <TextView
                     android:id="@+id/noImageTextView"
@@ -198,26 +198,26 @@
                     android:layout_height="wrap_content"
                     android:text="@string/noInputImage"
                     android:textColor="@color/primary_gray"
-                    app:layout_constraintTop_toTopOf="@id/recyclerView"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/recyclerView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/recyclerView" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/recyclerView" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="0dp"
                     android:layout_height="250dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="horizontal"
-                    android:elevation="2dp"
-                    android:outlineProvider="none"
-                    android:layout_marginHorizontal="16dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_gravity="center"
+                    android:layout_marginHorizontal="16dp"
+                    android:elevation="2dp"
+                    android:orientation="horizontal"
+                    android:outlineProvider="none"
                     android:textColor="@color/fix_white"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/articleTitle"
@@ -229,9 +229,9 @@
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/recyclerView"
                     app:layout_constraintStart_toStartOf="@id/recyclerView"
                     app:layout_constraintTop_toBottomOf="@id/recyclerView"
-                    app:layout_constraintEnd_toEndOf="@id/recyclerView"
                     tools:text="게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목게시물 제목" />
 
                 <TextView
@@ -248,8 +248,8 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/locationLayout"
-                    android:layout_width="60dp"
-                    android:layout_height="24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     app:cardBackgroundColor="@color/loacation_view"
                     app:cardCornerRadius="4dp"
@@ -262,6 +262,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_margin="4dp"
                         android:textColor="@color/white"
                         android:textSize="13sp" />
 
@@ -270,9 +271,8 @@
                 <androidx.cardview.widget.CardView
 
                     android:id="@+id/qualityLayout"
-                    android:layout_width="28dp"
-                    android:layout_height="24dp"
-                    android:padding="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     app:cardBackgroundColor="@color/quality_view"
@@ -286,6 +286,31 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_margin="4dp"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+
+                    android:id="@+id/articleStatusLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/reserved_view"
+                    app:cardCornerRadius="4dp"
+                    app:layout_constraintCircleRadius="12dp"
+                    app:layout_constraintStart_toEndOf="@id/qualityLayout"
+                    app:layout_constraintTop_toBottomOf="@id/articlePriceTextView">
+
+                    <TextView
+                        android:id="@+id/articleStatusTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="4dp"
                         android:textColor="@color/white"
                         android:textSize="13sp" />
 
@@ -309,14 +334,14 @@
                     android:id="@+id/viewImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="16dp"
                     android:src="@drawable/ic_view"
-                    app:layout_constraintEnd_toStartOf="@id/viewTextView"
-                    app:layout_constraintTop_toTopOf="@id/viewTextView"
-                    android:layout_gravity="center"
                     android:textColor="@color/fix_white"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toStartOf="@id/viewTextView"
+                    app:layout_constraintTop_toTopOf="@id/viewTextView" />
 
                 <TextView
                     android:id="@+id/descriptionTextView"
@@ -324,50 +349,119 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/tooLongText"
-                    android:textSize="16sp"
                     android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/locationLayout"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@id/recyclerView"
                     app:layout_constraintStart_toStartOf="@id/recyclerView"
-                    app:layout_constraintEnd_toEndOf="@id/recyclerView" />
+                    app:layout_constraintTop_toBottomOf="@id/locationLayout" />
 
                 <ProgressBar
                     android:id="@+id/progressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/chatLayout"
-            android:layout_width="160dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            app:cardBackgroundColor="@color/primary_blue"
-            app:cardCornerRadius="4dp"
-            android:elevation="8dp"
-            android:outlineProvider="none"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/chatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/primary_blue"
+            android:elevation="12dp"
+            android:src="@drawable/ic_chat"
+            app:borderWidth="0dp"
+            android:visibility="gone"
+            android:contentDescription="@string/doChat"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintCircleRadius="12dp"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <TextView
-                android:id="@+id/doChatTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/doChat"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/buttonGroup"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:constraint_referenced_ids="deleteButton, reservedButton, soldOutButton, modifyButton,dialButton" />
 
-        </androidx.cardview.widget.CardView>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/modifyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/primary_blue"
+            android:elevation="6dp"
+            android:contentDescription="@string/update"
+            android:src="@drawable/ic_post"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:pressedTranslationZ="12dp" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/reservedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/primary_blue"
+            android:elevation="6dp"
+            android:src="@drawable/ic_reserved"
+            android:contentDescription="@string/reserved"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:pressedTranslationZ="12dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/soldOutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/primary_blue"
+            android:elevation="6dp"
+            android:src="@drawable/ic_sold"
+            android:contentDescription="@string/soldOut"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:pressedTranslationZ="12dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/primary_blue"
+            android:elevation="6dp"
+            android:src="@drawable/ic_delete"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:pressedTranslationZ="12dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/dialButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/primary_blue"
+            android:elevation="16dp"
+            android:src="@drawable/ic_plus"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:pressedTranslationZ="12dp" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
