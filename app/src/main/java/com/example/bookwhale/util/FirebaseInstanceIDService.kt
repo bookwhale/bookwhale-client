@@ -10,6 +10,8 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.example.bookwhale.R
+import com.example.bookwhale.data.preference.MyPreferenceManager
+import org.koin.android.ext.android.inject
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -18,6 +20,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
      */
+
+    private val myPreferenceManager by inject<MyPreferenceManager>()
+
     // [START receive_message]
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         // [START_EXCLUDE]
@@ -46,8 +51,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val title = remoteMessage.data["articleTitle"]
         val description = remoteMessage.data["description"]
+        val roomId = remoteMessage.data["roomId"]
 
-        sendNotification(title, description)
+        // 해당 채팅방에 접속중이라면 push 알림을 받지 않는다
+        if(myPreferenceManager.getSocketStatus() && myPreferenceManager.getRoomId() == roomId!!.toInt()) {
+            Log.i(TAG,"Socket Connected")
+        } else {
+            Log.i(TAG,"Socket Disconnected")
+            sendNotification(title, description)
+        }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.

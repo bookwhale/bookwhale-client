@@ -21,6 +21,8 @@ class MyPreferenceManager(
         const val KEY_ACCESS_TOKEN = "ACCESS_TOKEN"
         const val KEY_REFRESH_TOKEN = "REFRESH_TOKEN"
         const val KEY_DEVICE_TOKEN = "DEVICE_TOKEN"
+        const val IS_SOCKET_OPENED = "SOCKET_STATUS"
+        const val ROOM_ID = "ROOM_ID"
     }
 
     private fun getPreferences(context: Context): SharedPreferences {
@@ -253,5 +255,34 @@ class MyPreferenceManager(
         editor.putString(NAME, null)
         editor.apply()
     }
+
+    fun setSocketStatus(value: Boolean) {
+        editor.putBoolean(IS_SOCKET_OPENED, value)
+        editor.apply()
+    }
+
+    fun getSocketStatus(): Boolean {
+        return prefs.getBoolean(IS_SOCKET_OPENED, DEFAULT_VALUE_BOOLEAN)
+    }
+
+    fun removeSocketStatus() {
+        editor.remove(IS_SOCKET_OPENED)
+        editor.apply()
+    }
+
+    fun putRoomId(roomId: Int) {
+        editor.putInt(ROOM_ID, roomId)
+        editor.apply()
+    }
+
+    fun getRoomId(): Int {
+        return prefs.getInt(ROOM_ID, -1)
+    }
+
+    fun removeRoomId() {
+        editor.putInt(ROOM_ID, -1)
+        editor.apply()
+    }
+
 
 }

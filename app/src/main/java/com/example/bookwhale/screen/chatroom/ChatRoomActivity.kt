@@ -53,8 +53,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
                 binding.recyclerView.adapter = adapter
 
-                viewModel.runStomp(it.toInt(), getMessageText())
-
+                viewModel.runStomp(it.toInt())
                 showChatRoomInfo()
                 getMessages()
                 initButtons()
