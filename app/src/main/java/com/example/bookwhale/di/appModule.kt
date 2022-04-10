@@ -40,7 +40,7 @@ val appModule = module {
     viewModel { PostArticleViewModel(get()) }
     viewModel { ModifyArticleViewModel(get(), get()) }
     viewModel { SearchViewModel(get()) }
-    viewModel { ChatRoomViewModel(get()) }
+    viewModel { ChatRoomViewModel(get(), get()) }
 
     single<MyRepository> { MyRepositoryImpl(get(), get()) }
     single<LoginRepository> { LoginRepositoryImpl(get(), get()) }
