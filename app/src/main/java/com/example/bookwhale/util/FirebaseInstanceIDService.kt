@@ -36,15 +36,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Check if message contains a data payload.
         if (remoteMessage.data.isNotEmpty()) {
-            Log.d(TAG, "Message data payload: ${remoteMessage.data["message"]}")
-
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-                scheduleJob()
-            } else {
-                // Handle message within 10 seconds
-                handleNow()
-            }
+            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
         }
 
         // Check if message contains a notification payload.
@@ -52,14 +44,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Log.d(TAG, "Message Notification Body: ${it.body}")
         }
 
-        val message = remoteMessage.data["message"]
-
         val title = remoteMessage.data["articleTitle"]
+        val description = remoteMessage.data["description"]
 
-        Log.d("meeesage is what?", title.toString())
-        Log.d("meeesage is what?", message.toString())
-
-        sendNotification(title, message)
+        sendNotification(title, description)
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
@@ -74,43 +62,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      */
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
-
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // FCM registration token to your app server.
-        sendRegistrationToServer(token)
     }
     // [END on_new_token]
-
-    /**
-     * Schedule async work using WorkManager.
-     */
-    private fun scheduleJob() {
-        // [START dispatch_job]
-//        val work = OneTimeWorkRequest.Builder(MyWorker::class.java).build()
-//        WorkManager.getInstance(this).beginWith(work).enqueue()
-        // [END dispatch_job]
-    }
-
-    /**
-     * Handle time allotted to BroadcastReceivers.
-     */
-    private fun handleNow() {
-        Log.d(TAG, "Short lived task is done.")
-    }
-
-    /**
-     * Persist token to third-party servers.
-     *
-     * Modify this method to associate the user's FCM registration token with any server-side account
-     * maintained by your application.
-     *
-     * @param token The new token.
-     */
-    private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
-        Log.d(TAG, "sendRegistrationTokenToServer($token)")
-    }
 
     /**
      * Create and show a simple notification containing the received FCM message.
@@ -123,7 +76,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 //        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
 //            PendingIntent.FLAG_ONE_SHOT)
 
-        val channelId = "defaultChannelId"
+        val channelId = DEFAULT_CHANNEL
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_logo)
@@ -149,5 +102,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     companion object {
 
         private const val TAG = "MyFirebaseMsgService"
+
+        private const val DEFAULT_CHANNEL = "DefaultChannelId"
     }
 }
