@@ -78,7 +78,7 @@ class ChatRoomViewModel(
     }
 
     @SuppressLint("CheckResult")
-    fun runStomp(roomId: Int, message: String){
+    fun runStomp(roomId: Int){
 
         stompClient.topic("/sub/chat/room/${roomId}").subscribe { topicMessage ->
             Log.i("message Recieve", topicMessage.payload)
@@ -89,13 +89,15 @@ class ChatRoomViewModel(
         headerList.add(StompHeader("roomId",roomId.toString()))
         headerList.add(StompHeader("senderId", myPreferenceManager.getId().toString()))
         headerList.add(StompHeader("senderIdentity", myPreferenceManager.getName()))
-        headerList.add(StompHeader("content", message))
+        headerList.add(StompHeader("content", "message"))
         stompClient.connect(headerList)
 
         stompClient.lifecycle().subscribe { lifecycleEvent ->
             when (lifecycleEvent.type) {
                 LifecycleEvent.Type.OPENED -> {
                     Log.i("OPEND", "!!")
+                    myPreferenceManager.setSocketStatus(true)
+                    myPreferenceManager.putRoomId(roomId)
                 }
                 LifecycleEvent.Type.CLOSED -> {
                     Log.i("CLOSED", "!!")
@@ -135,5 +137,13 @@ class ChatRoomViewModel(
         } else {
             chatRoomState.value = ChatRoomState.Error(response.code)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        stompClient.disconnect()
+        myPreferenceManager.setSocketStatus(false)
+        myPreferenceManager.removeRoomId()
     }
 }
