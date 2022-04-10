@@ -103,5 +103,16 @@ class ChatRepositoryImpl(
         )
     }
 
+    override suspend fun deleteChatRoom(roomId: Int): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.deleteChatRoom(roomId)
 
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                true
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
 }

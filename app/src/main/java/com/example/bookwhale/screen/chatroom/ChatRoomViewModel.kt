@@ -14,6 +14,8 @@ import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.MessageType
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseViewModel
+import com.example.bookwhale.util.EventBus
+import com.example.bookwhale.util.Events
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +26,8 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent
 import ua.naiksoftware.stomp.dto.StompHeader
 
 class ChatRoomViewModel(
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
+    private val eventBus: EventBus
 ): BaseViewModel() {
 
     val chatRoomState = MutableLiveData<ChatRoomState>(ChatRoomState.Uninitialized)
@@ -96,6 +99,9 @@ class ChatRoomViewModel(
                 }
                 LifecycleEvent.Type.CLOSED -> {
                     Log.i("CLOSED", "!!")
+                    viewModelScope.launch {
+                        eventBus.produceEvent(Events.ExitChatRoom)
+                    }
                 }
                 LifecycleEvent.Type.ERROR -> {
                     Log.i("ERROR", "!!")
@@ -103,7 +109,7 @@ class ChatRoomViewModel(
                     socketState.value = SocketState.Error(lifecycleEvent.exception.toString())
                 }
                 else ->{
-                    Log.i("ELSE", lifecycleEvent.message)
+                    Log.i("ELSE!", lifecycleEvent.message)
                 }
             }
         }
@@ -119,5 +125,15 @@ class ChatRoomViewModel(
         stompClient.send("/pub/chat/message", data.toString()).subscribe()
 
         socketState.value = SocketState.MsgSend
+    }
+
+    fun exitChatRoom(roomId: Int) = viewModelScope.launch {
+        val response = chatRepository.deleteChatRoom(roomId)
+
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            stompClient.disconnect()
+        } else {
+            chatRoomState.value = ChatRoomState.Error(response.code)
+        }
     }
 }

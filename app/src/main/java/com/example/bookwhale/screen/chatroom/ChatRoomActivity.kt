@@ -13,14 +13,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.R
+import com.example.bookwhale.data.response.article.ArticleStatusCategory
 import com.example.bookwhale.databinding.ActivityChatRoomBinding
 import com.example.bookwhale.model.main.chat.ChatModel
+import com.example.bookwhale.screen.article.DialogCategory
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.util.EventBus
+import com.example.bookwhale.util.Events
 import com.example.bookwhale.util.load
 import com.example.bookwhale.widget.adapter.ChatPagingAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -32,6 +38,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
     private val roomId by lazy { intent.getStringExtra(CHATROOM_ID) }
     private lateinit var chatModel : ChatModel
+    private val eventBus by inject<EventBus>()
 
     private val adapter by lazy {
         ChatPagingAdapter(chatModel.opponentProfile)
@@ -52,6 +59,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 getMessages()
                 initButtons()
                 setAdapterListener()
+                subscribeEvent()
             }
         }
     }
@@ -68,6 +76,32 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
         backButton.setOnClickListener {
             finish()
+        }
+
+        exitButton.setOnClickListener {
+            showExitDialog()
+        }
+    }
+
+    private fun showExitDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setMessage(getString(R.string.exitChatRoom))
+            .setNegativeButton(resources.getString(R.string.cancel)) { _, _ ->
+                // Respond to negative button press
+            }
+            .setPositiveButton(resources.getString(R.string.confirm)) { _, _ ->
+                // Respond to positive button press
+                viewModel.exitChatRoom(roomId!!.toInt())
+            }
+            .show()
+    }
+
+    private fun subscribeEvent() {
+        lifecycleScope.launch {
+            eventBus.subscribeEvent(Events.ExitChatRoom) {
+                Toast.makeText(this@ChatRoomActivity, getString(R.string.destroyChatRoom), Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
     }
 

@@ -106,6 +106,9 @@ interface ServerApiService {
         @Query("size") size: Int,
     ): Response<List<GetChatMessageResponse>>
 
+    @DELETE("api/room/{roomId}")
+    suspend fun deleteChatRoom(@Path ("roomId") roomId: Int) : Response<Unit>
+
     // 내 정보
     @GET("api/user/me")
     suspend fun getMyInfo(): Response<MyInfoResponse>
