@@ -7,7 +7,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,14 +20,18 @@ import com.example.bookwhale.databinding.ActivityChatRoomBinding
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.article.DialogCategory
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.screen.main.MainActivity
 import com.example.bookwhale.util.EventBus
 import com.example.bookwhale.util.Events
+import com.example.bookwhale.util.MessageChannel
 import com.example.bookwhale.util.load
 import com.example.bookwhale.widget.adapter.ChatPagingAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -39,6 +45,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
     private val roomId by lazy { intent.getStringExtra(CHATROOM_ID) }
     private lateinit var chatModel : ChatModel
     private val eventBus by inject<EventBus>()
+    private val messageChannel by inject<MessageChannel>()
 
     private val adapter by lazy {
         ChatPagingAdapter(chatModel.opponentProfile)
@@ -59,6 +66,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 initButtons()
                 setAdapterListener()
                 subscribeEvent()
+                subscribeMessageChannel()
             }
         }
     }
@@ -100,6 +108,29 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
             eventBus.subscribeEvent(Events.ExitChatRoom) {
                 Toast.makeText(this@ChatRoomActivity, getString(R.string.destroyChatRoom), Toast.LENGTH_SHORT).show()
                 finish()
+            }
+        }
+    }
+
+    private fun subscribeMessageChannel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                messageChannel.mutex.withLock {
+                    for (i in messageChannel.channel) {
+                        Log.i("message Received: ", i)
+
+                        viewModel.loadPopupData()
+
+                        withContext(Dispatchers.Main) {
+                            binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
+                        }
+                        delay(3000L) // 3초간 나타난다
+                        withContext(Dispatchers.Main) {
+                            binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
+                        }
+                        delay(500L)
+                    }
+                }
             }
         }
     }
@@ -161,6 +192,12 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 is SocketState.MsgSend -> binding.editText.text.clear()
                 is SocketState.Error -> handleMsgError(it)
             }
+        }
+        viewModel.titleLiveData.observe(this@ChatRoomActivity) {
+            binding.popupArticleTitleTextview.text = it
+        }
+        viewModel.messageLiveData.observe(this@ChatRoomActivity) {
+            binding.popupMessageTextView.text = it
         }
     }
 

@@ -11,6 +11,9 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.example.bookwhale.R
 import com.example.bookwhale.data.preference.MyPreferenceManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -22,6 +25,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      */
 
     private val myPreferenceManager by inject<MyPreferenceManager>()
+    private val eventBus by inject<EventBus>()
+    private val messageChannel by inject<MessageChannel>()
 
     // [START receive_message]
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -54,13 +59,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val roomId = remoteMessage.data["roomId"]
 
         // 해당 채팅방에 접속중이라면 push 알림을 받지 않는다
-        if(myPreferenceManager.getSocketStatus() && myPreferenceManager.getRoomId() == roomId!!.toInt()) {
-            Log.i(TAG,"Socket Connected")
-        } else {
-            Log.i(TAG,"Socket Disconnected")
-            sendNotification(title, description)
-        }
 
+        if(myPreferenceManager.getSocketStatus() && myPreferenceManager.getRoomId() == roomId!!.toInt()) { // 해당 채팅방에 접속중이라면
+            Log.i(TAG,"Room Connected")
+        } else {
+            Log.i(TAG,"Room Unconnected")
+            //sendNotification(title, description)
+            title?.let { myPreferenceManager.putTitle(it) }
+            description?.let { myPreferenceManager.putMessage(it) }
+            messageToChannel(description)
+        }
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
@@ -76,6 +84,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Refreshed token: $token")
     }
     // [END on_new_token]
+
+    private fun provideEvent() {
+        Log.i(TAG,"PROVIDEVENT")
+        GlobalScope.launch {
+            eventBus.produceEvent(Events.ChatNoti)
+        }
+    }
+
+    private fun messageToChannel(message: String?) {
+        GlobalScope.launch {
+            messageChannel.sendToChannel(message)
+        }
+    }
 
     /**
      * Create and show a simple notification containing the received FCM message.
