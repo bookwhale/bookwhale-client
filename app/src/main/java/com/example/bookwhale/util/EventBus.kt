@@ -23,5 +23,6 @@ enum class Events {
     Deleted,
     Sale,
     DeleteFail,
-    ExitChatRoom
+    ExitChatRoom,
+    ChatNoti
 }

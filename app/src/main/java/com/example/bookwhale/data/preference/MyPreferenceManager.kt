@@ -23,6 +23,8 @@ class MyPreferenceManager(
         const val KEY_DEVICE_TOKEN = "DEVICE_TOKEN"
         const val IS_SOCKET_OPENED = "SOCKET_STATUS"
         const val ROOM_ID = "ROOM_ID"
+        const val ARTICLE_TITLE = "ARTICLE_TITLE"
+        const val ARTICLE_MESSAGE = "ARTICLE_MESSAGE"
     }
 
     private fun getPreferences(context: Context): SharedPreferences {
@@ -282,6 +284,24 @@ class MyPreferenceManager(
     fun removeRoomId() {
         editor.putInt(ROOM_ID, -1)
         editor.apply()
+    }
+
+    fun putTitle(id: String) {
+        editor.putString(ARTICLE_TITLE, id)
+        editor.apply()
+    }
+
+    fun getTitle(): String? {
+        return prefs.getString(ARTICLE_TITLE, null)
+    }
+
+    fun putMessage(id: String) {
+        editor.putString(ARTICLE_MESSAGE, id)
+        editor.apply()
+    }
+
+    fun getMessage(): String? {
+        return prefs.getString(ARTICLE_MESSAGE, null)
     }
 
 

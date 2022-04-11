@@ -64,6 +64,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
+    // lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
+
     // ViewModel - 라이프 사이클
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     // LiveData - 데이터의 변경 사항을 알 수 있음

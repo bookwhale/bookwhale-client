@@ -2,6 +2,7 @@ package com.example.bookwhale.screen.chatroom
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -29,6 +30,12 @@ class ChatRoomViewModel(
     private val chatRepository: ChatRepository,
     private val eventBus: EventBus
 ): BaseViewModel() {
+
+    private val _titleLiveData = MutableLiveData<String>()
+    val titleLiveData : LiveData<String> = _titleLiveData
+
+    private val _messageLiveData = MutableLiveData<String>()
+    val messageLiveData : LiveData<String> = _messageLiveData
 
     val chatRoomState = MutableLiveData<ChatRoomState>(ChatRoomState.Uninitialized)
     val socketState = MutableLiveData<SocketState>(SocketState.Uninitialized)
@@ -137,6 +144,11 @@ class ChatRoomViewModel(
         } else {
             chatRoomState.value = ChatRoomState.Error(response.code)
         }
+    }
+
+    fun loadPopupData() {
+        _titleLiveData.value = myPreferenceManager.getTitle()
+        _messageLiveData.value = myPreferenceManager.getMessage()
     }
 
     override fun onCleared() {
