@@ -37,6 +37,9 @@ class ChatRoomViewModel(
     private val _messageLiveData = MutableLiveData<String>()
     val messageLiveData : LiveData<String> = _messageLiveData
 
+    private val _roomIdLiveData = MutableLiveData<String>()
+    val roomIdLiveData : LiveData<String> = _roomIdLiveData
+
     val chatRoomState = MutableLiveData<ChatRoomState>(ChatRoomState.Uninitialized)
     val socketState = MutableLiveData<SocketState>(SocketState.Uninitialized)
     val articleTitle = MutableLiveData<String>()
@@ -104,13 +107,13 @@ class ChatRoomViewModel(
                 LifecycleEvent.Type.OPENED -> {
                     Log.i("OPEND", "!!")
                     myPreferenceManager.setSocketStatus(true)
-                    myPreferenceManager.putRoomId(roomId)
+                    myPreferenceManager.putRoomId(roomId.toString())
                 }
-                LifecycleEvent.Type.CLOSED -> {
+                LifecycleEvent.Type.CLOSED -> { // disconnect가 불리었을 때
                     Log.i("CLOSED", "!!")
-                    viewModelScope.launch {
-                        eventBus.produceEvent(Events.ExitChatRoom)
-                    }
+//                    viewModelScope.launch {
+//                        eventBus.produceEvent(Events.ExitChatRoom)
+//                    }
                 }
                 LifecycleEvent.Type.ERROR -> {
                     Log.i("ERROR", "!!")
@@ -149,13 +152,18 @@ class ChatRoomViewModel(
     fun loadPopupData() {
         _titleLiveData.value = myPreferenceManager.getTitle()
         _messageLiveData.value = myPreferenceManager.getMessage()
+        _roomIdLiveData.value = myPreferenceManager.getRoomId()
+    }
+
+    fun clearStomp() {
+        stompClient.disconnect()
+        myPreferenceManager.setSocketStatus(false)
+        myPreferenceManager.removeRoomId()
     }
 
     override fun onCleared() {
         super.onCleared()
 
-        stompClient.disconnect()
-        myPreferenceManager.setSocketStatus(false)
-        myPreferenceManager.removeRoomId()
+        clearStomp()
     }
 }

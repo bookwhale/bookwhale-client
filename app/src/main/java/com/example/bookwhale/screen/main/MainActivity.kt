@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityMainBinding
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.screen.main.chat.ChatFragment
 import com.example.bookwhale.screen.main.home.HomeFragment
 import com.example.bookwhale.screen.main.favorite.FavoriteFragment
@@ -151,6 +152,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
                         viewModel.loadPopupData()
 
+                        binding.moveChatRoomButton.setOnClickListener {
+                            viewModel.roomIdLiveData.value?.let {
+                                startActivity(ChatRoomActivity.newIntent(this@MainActivity, it))
+                            }
+                        }
+
                         withContext(Dispatchers.Main) {
                             binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
                         }
@@ -162,7 +169,13 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     }
                 }
             }
+
+
         }
+    }
+
+    private fun clearAnimation() {
+        binding.parentCardView.transitionToStart()
     }
 
     override fun observeData() {
@@ -179,7 +192,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         searchEditText.text.clear()
-        eventBus.produceEvent(Events.CancelSearch)
     }
 
     override fun onBackPressed() {
@@ -207,6 +219,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         super.onPause()
 
         disposable.clear()
+        clearAnimation()
     }
 
     companion object {

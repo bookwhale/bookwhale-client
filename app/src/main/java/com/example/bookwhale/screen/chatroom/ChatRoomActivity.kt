@@ -105,10 +105,10 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
     private fun subscribeEvent() {
         lifecycleScope.launch {
-            eventBus.subscribeEvent(Events.ExitChatRoom) {
-                Toast.makeText(this@ChatRoomActivity, getString(R.string.destroyChatRoom), Toast.LENGTH_SHORT).show()
-                finish()
-            }
+//            eventBus.subscribeEvent(Events.ExitChatRoom) {
+//                Toast.makeText(this@ChatRoomActivity, getString(R.string.destroyChatRoom), Toast.LENGTH_SHORT).show()
+//                finish()
+//            }
         }
     }
 
@@ -120,6 +120,14 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                         Log.i("message Received: ", i)
 
                         viewModel.loadPopupData()
+
+                        binding.moveChatRoomButton.setOnClickListener {
+                            viewModel.roomIdLiveData.value?.let {
+                                startActivity(newIntent(this@ChatRoomActivity, it))
+                                binding.parentCardView.transitionToStart()
+                                finish()
+                            }
+                        }
 
                         withContext(Dispatchers.Main) {
                             binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
@@ -133,6 +141,16 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 }
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        clearAnimation()
+    }
+
+    private fun clearAnimation() {
+        binding.parentCardView.transitionToStart()
     }
 
     private fun showChatRoomInfo() = with(binding) {

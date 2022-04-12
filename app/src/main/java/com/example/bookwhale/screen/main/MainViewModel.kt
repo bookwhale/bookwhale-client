@@ -36,6 +36,9 @@ class MainViewModel(
     private val _messageLiveData = MutableLiveData<String>()
     val messageLiveData : LiveData<String> = _messageLiveData
 
+    private val _roomIdLiveData = MutableLiveData<String>()
+    val roomIdLiveData : LiveData<String> = _roomIdLiveData
+
     val homeArticleStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
     val favoriteArticleStateLiveData = MutableLiveData<FavoriteState>(FavoriteState.Uninitialized)
     val myArticleStateLiveData = MutableLiveData<MyPostState>(MyPostState.Uninitialized)
@@ -126,6 +129,7 @@ class MainViewModel(
     fun loadPopupData() {
        _titleLiveData.value = myPreferenceManager.getTitle()
        _messageLiveData.value = myPreferenceManager.getMessage()
+        _roomIdLiveData.value = myPreferenceManager.getRoomId()
     }
 
 }
