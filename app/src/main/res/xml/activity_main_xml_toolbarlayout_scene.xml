@@ -15,8 +15,9 @@
     <ConstraintSet android:id="@+id/start">
         <Constraint
             android:id="@+id/backButton"
-            android:layout_width="0.1dp"
-            android:layout_height="0.1dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:visibility="gone"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />
@@ -47,6 +48,7 @@
         <Constraint
             android:id="@+id/searchButton"
             motion:layout_constraintEnd_toStartOf="@id/notiButton"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             motion:layout_constraintBottom_toBottomOf="parent"
@@ -54,6 +56,14 @@
 
         <ConstraintOverride
             android:id="@+id/searchButton"
+            motion:visibilityMode="ignore" />
+
+        <ConstraintOverride
+            android:id="@+id/backButton"
+            motion:visibilityMode="ignore" />
+
+        <ConstraintOverride
+            android:id="@+id/searchCancelButton"
             motion:visibilityMode="ignore" />
 
     </ConstraintSet>
@@ -71,6 +81,7 @@
             android:id="@+id/backButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:visibility="visible"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />

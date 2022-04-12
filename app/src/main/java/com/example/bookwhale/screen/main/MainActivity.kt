@@ -18,6 +18,8 @@ import com.example.bookwhale.screen.main.home.HomeFragment
 import com.example.bookwhale.screen.main.favorite.FavoriteFragment
 import com.example.bookwhale.screen.main.my.MyFragment
 import com.example.bookwhale.screen.main.mypost.MyPostFragment
+import com.example.bookwhale.util.EventBus
+import com.example.bookwhale.util.Events
 import com.example.bookwhale.util.MessageChannel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -34,7 +36,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
-    private var onSearch = false
+    private var searchStatus = SearchStatus.SEARCH_NOT
+    private val eventBus by inject<EventBus>()
     private val messageChannel by inject<MessageChannel>()
     private val disposable = CompositeDisposable() // Disposable 관리
     private val backBtnSubject = PublishSubject.create<Boolean>() // backBtn 이벤트를 발생시킬 수 있는 Subject
@@ -49,31 +52,44 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     private fun initButton() = with(binding) {
         searchButton.setOnClickListener {
-            when(onSearch) {
-                true -> {
-                    onSearch = false
+            when(searchStatus) {
+                SearchStatus.SEARCH_ING -> {
+                    searchStatus = SearchStatus.SEARCH_NOT
+                    backButton.isGone = true
                     toolBarLayout.transitionToStart()
                     lifecycleScope.launch {
-                        doSearch()
+                        val queryString = searchEditText.text.toString()
+                        doSearch(queryString)
+                        searchStatus = SearchStatus.SEARCH_DONE
+                        backButton.isVisible = true
                     }
                 }
-                false -> {
-                    onSearch = true
+                SearchStatus.SEARCH_NOT -> {
+                    searchStatus = SearchStatus.SEARCH_ING
+                    backButton.isVisible = true
+                    toolBarLayout.transitionToEnd()
+                }
+                SearchStatus.SEARCH_DONE -> {
+                    searchStatus = SearchStatus.SEARCH_ING
+                    backButton.isVisible = true
                     toolBarLayout.transitionToEnd()
                 }
             }
         }
 
         backButton.setOnClickListener {
-            if(onSearch) {
-                onSearch = false
+            if(searchStatus == SearchStatus.SEARCH_ING) {
+                searchStatus = SearchStatus.SEARCH_NOT
+                backButton.isGone = true
                 toolBarLayout.transitionToStart()
+            } else if (searchStatus == SearchStatus.SEARCH_DONE) {
+                lifecycleScope.launch {
+                    doSearch("")
+                }
+                backButton.isGone = true
             }
         }
-
-
     }
-
 
     private fun initBottomNav() = with(binding) {
         bottomNav.setOnItemSelectedListener { item ->
@@ -158,11 +174,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         }
     }
 
-    private suspend fun doSearch() = with(binding) {
-        (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).getArticles(searchEditText.text.toString())
+    private suspend fun doSearch(query: String) = with(binding) {
+        (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).getArticles(query)
 
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         searchEditText.text.clear()
+        eventBus.produceEvent(Events.CancelSearch)
     }
 
     override fun onBackPressed() {
@@ -198,5 +215,11 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         const val BACK_BTN_EXIT_TIMEOUT = 2000 // 연속된 Back 버튼의 시간 간격 (2초안에 백버튼 2번 클릭시 앱 종료)
 
         const val TAG = "MainActivity"
+
+        enum class SearchStatus {
+            SEARCH_NOT,
+            SEARCH_ING,
+            SEARCH_DONE
+        }
     }
 }
