@@ -6,6 +6,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
+import android.view.KeyEvent
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
@@ -101,9 +102,8 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
     }
 
     override fun initViews() {
-
         binding.recyclerView.adapter = adapter
-
+        enterKeyboard()
         initButton()
     }
 
@@ -200,6 +200,18 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         adapter.submitList(imageModelList)
         adapter.notifyItemRangeChanged(0, imageModelList.size)
         uploadPhotoTextView.text = getString(R.string.currentImageNum, imageModelList.size)
+    }
+
+    private fun enterKeyboard(){
+        binding.articlePriceTextView.setOnKeyListener { _, keyCode, event ->
+            if ((event.action== KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                locationClicked()
+                true
+            }
+            else {
+                false
+            }
+        }
     }
 
     private fun locationClicked() {

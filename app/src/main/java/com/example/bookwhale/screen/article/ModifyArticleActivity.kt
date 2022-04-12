@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.provider.MediaStore
+import android.view.KeyEvent
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
@@ -88,10 +89,12 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         adapter.notifyItemRangeChanged(removeIndex, imageUriList.size)
     }
 
-    override fun initViews() {
+    override fun initViews(){
 
         binding.recyclerView.adapter = adapter
+
         viewModel.loadArticle(articleId.toInt())
+        enterKeyboard()
         initButton()
     }
 
@@ -110,6 +113,18 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         }
         backButton.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun enterKeyboard()= with(binding){
+        binding.articlePriceTextView.setOnKeyListener { _, keyCode, event ->
+            if ((event.action== KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                locationClicked()
+                true
+            }
+            else {
+                false
+            }
         }
     }
 
@@ -421,6 +436,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         }
         return R.id.radio_high
     }
+
 
     companion object {
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -65,12 +66,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     onSearch = false
                     toolBarLayout.transitionToStart()
                     lifecycleScope.launch {
-
                         doSearch()
                     }
                 }
                 false -> {
                     onSearch = true
+                    keyboardHandle(handle = false)
                     toolBarLayout.transitionToEnd()
                 }
             }
@@ -80,6 +81,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
             if(onSearch) {
                 onSearch = false
                 toolBarLayout.transitionToStart()
+                keyboardHandle(handle = true)
             }
         }
 
@@ -161,6 +163,16 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         }
     }
 
+    private fun keyboardHandle(handle : Boolean){
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if(handle){//내리기
+            imm.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
+        }
+        else{//올리기
+            imm.showSoftInput(binding.searchEditText, 0)
+        }
+    }
+
     override fun observeData() {
         viewModel.titleLiveData.observe(this@MainActivity) {
             binding.popupArticleTitleTextview.text = it
@@ -175,6 +187,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         searchEditText.text.clear()
+        keyboardHandle(handle = true)
     }
 
     override fun onBackPressed() {
