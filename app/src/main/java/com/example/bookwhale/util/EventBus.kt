@@ -17,5 +17,12 @@ class EventBus {
 }
 
 enum class Events {
-    UploadPostEvent
+    UploadPostEvent,
+    Reserved,
+    Sold,
+    Deleted,
+    Sale,
+    DeleteFail,
+    ExitChatRoom,
+    ChatNoti
 }

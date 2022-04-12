@@ -1,5 +1,6 @@
 package com.example.bookwhale.screen.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -28,6 +29,12 @@ class MainViewModel(
     private val myRepository: MyRepository,
     private val chatRepository: ChatRepository
 ): BaseViewModel() {
+
+    private val _titleLiveData = MutableLiveData<String>()
+    val titleLiveData : LiveData<String> = _titleLiveData
+
+    private val _messageLiveData = MutableLiveData<String>()
+    val messageLiveData : LiveData<String> = _messageLiveData
 
     val homeArticleStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
     val favoriteArticleStateLiveData = MutableLiveData<FavoriteState>(FavoriteState.Uninitialized)
@@ -114,6 +121,11 @@ class MainViewModel(
                 response.code
             )
         }
+    }
+
+    fun loadPopupData() {
+       _titleLiveData.value = myPreferenceManager.getTitle()
+       _messageLiveData.value = myPreferenceManager.getMessage()
     }
 
 }

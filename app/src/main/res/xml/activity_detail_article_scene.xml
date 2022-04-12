@@ -24,17 +24,36 @@
             android:id="@+id/progressBar"
             motion:visibilityMode="ignore" />
 
-
         <ConstraintOverride
-            android:id="@+id/chatLayout"
+            android:id="@+id/chatButton"
             motion:visibilityMode="ignore" />
 
         <ConstraintOverride
-            android:id="@+id/unFilledHeartButton"
+            android:id="@+id/buttonGroup"
+            motion:visibilityMode="ignore" />
+
+        <ConstraintOverride
+            android:id="@+id/dialButton"
             motion:visibilityMode="ignore" />
 
         <ConstraintOverride
             android:id="@+id/modifyButton"
+            motion:visibilityMode="ignore" />
+
+        <ConstraintOverride
+            android:id="@+id/deleteButton"
+            motion:visibilityMode="ignore" />
+
+        <ConstraintOverride
+            android:id="@+id/reservedButton"
+            motion:visibilityMode="ignore" />
+
+        <ConstraintOverride
+            android:id="@+id/soldOutButton"
+            motion:visibilityMode="ignore" />
+
+        <ConstraintOverride
+            android:id="@+id/unFilledHeartButton"
             motion:visibilityMode="ignore" />
 
     </ConstraintSet>

@@ -1,9 +1,6 @@
 package com.example.bookwhale.data.network
 
-import com.example.bookwhale.data.response.article.ArticleDTO
-import com.example.bookwhale.data.response.article.GetDetailArticleResponse
-import com.example.bookwhale.data.response.article.GetNaverBookApiResponse
-import com.example.bookwhale.data.response.article.ModifyArticleDTO
+import com.example.bookwhale.data.response.article.*
 import com.example.bookwhale.data.response.chat.GetChatListResponse
 import com.example.bookwhale.data.response.chat.GetChatMessageResponse
 import com.example.bookwhale.data.response.chat.MakeChatDTO
@@ -83,6 +80,14 @@ interface ServerApiService {
         @Part("articleUpdateRequest") articleUpdateRequest: ModifyArticleDTO,
     ): Response<Unit>
 
+    // 게시물 삭제
+    @DELETE("api/article/{articleId}")
+    suspend fun deleteArticle(@Path ("articleId") articleId: Int) : Response<Unit>
+
+    // 게시물 상태 변경
+    @PATCH("api/article/{articleId}/status")
+    suspend fun updateArticleStatus(@Path ("articleId") articleId: Int, @Body articleStatusDTO: ArticleStatusDTO) : Response<Unit>
+
     // 내 게시물
     @GET("api/articles/me")
     suspend fun getMyArticles(): Response<List<GetAllArticlesResponse>>
@@ -100,6 +105,9 @@ interface ServerApiService {
         @Query("page") page: Int,
         @Query("size") size: Int,
     ): Response<List<GetChatMessageResponse>>
+
+    @DELETE("api/room/{roomId}")
+    suspend fun deleteChatRoom(@Path ("roomId") roomId: Int) : Response<Unit>
 
     // 내 정보
     @GET("api/user/me")

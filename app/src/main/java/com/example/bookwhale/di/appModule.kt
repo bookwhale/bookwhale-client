@@ -21,6 +21,7 @@ import com.example.bookwhale.screen.login.LoginViewModel
 import com.example.bookwhale.screen.main.MainViewModel
 import com.example.bookwhale.screen.splash.SplashViewModel
 import com.example.bookwhale.util.EventBus
+import com.example.bookwhale.util.MessageChannel
 import com.example.bookwhale.widget.adapter.MainPagingSource
 import com.example.bookwhale.util.provider.ResourcesProviderImpl
 import com.example.bookwhale.util.provider.ResourcesProvider
@@ -36,11 +37,11 @@ val appModule = module {
     viewModel { LoginViewModel(get(), get()) }
     viewModel { MyViewModel(get()) }
     viewModel { SplashViewModel(get()) }
-    viewModel { DetailArticleViewModel(get(), get(), get(), get()) }
+    viewModel { DetailArticleViewModel(get(), get(), get(), get(), get()) }
     viewModel { PostArticleViewModel(get()) }
     viewModel { ModifyArticleViewModel(get(), get()) }
     viewModel { SearchViewModel(get()) }
-    viewModel { ChatRoomViewModel(get()) }
+    viewModel { ChatRoomViewModel(get(), get()) }
 
     single<MyRepository> { MyRepositoryImpl(get(), get()) }
     single<LoginRepository> { LoginRepositoryImpl(get(), get()) }
@@ -58,6 +59,9 @@ val appModule = module {
 
     //EventBus
     single { EventBus() }
+
+    //MessageChannel
+    single { MessageChannel() }
 
     //SharedPreference
     single { MyPreferenceManager(androidApplication()) }

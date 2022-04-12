@@ -6,6 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.bookwhale.databinding.ViewholderClosedChatBinding
 import com.example.bookwhale.databinding.ViewholderMyChatBinding
 import com.example.bookwhale.databinding.ViewholderOpponentChatBinding
 import com.example.bookwhale.model.main.chat.ChatMessageModel
@@ -39,6 +40,12 @@ class ChatPagingAdapter(
                     holder.bind(model)
                 }
             }
+
+            is ClosedChatViewHolder -> {
+                if (model != null) {
+                    holder.bind(model)
+                }
+            }
         }
     }
 
@@ -46,6 +53,7 @@ class ChatPagingAdapter(
         return when (getItem(position)?.type) {
             MessageType.MY -> MY_MESSAGE
             MessageType.OPPONENT -> OPPONENT_MESSAGE
+            MessageType.CLOSE -> CLOSED_ROOM
             null -> throw UnsupportedOperationException("Unknown view")
         }
     }
@@ -64,6 +72,7 @@ class ChatPagingAdapter(
 
         const val MY_MESSAGE = 0
         const val OPPONENT_MESSAGE = 1
+        const val CLOSED_ROOM = 2
     }
 }
 
@@ -87,5 +96,12 @@ class OpponentChatPagingViewHolder(
             binding.opponentProfileImageView.load(it, 16f, CenterCrop())
         }
     }
+}
+
+class ClosedChatViewHolder(
+    private val binding: ViewholderClosedChatBinding
+): RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(model: ChatMessageModel) {}
 }
 

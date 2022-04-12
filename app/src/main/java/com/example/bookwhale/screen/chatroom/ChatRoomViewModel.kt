@@ -2,6 +2,7 @@ package com.example.bookwhale.screen.chatroom
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -14,6 +15,8 @@ import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.MessageType
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseViewModel
+import com.example.bookwhale.util.EventBus
+import com.example.bookwhale.util.Events
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -24,8 +27,15 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent
 import ua.naiksoftware.stomp.dto.StompHeader
 
 class ChatRoomViewModel(
-    private val chatRepository: ChatRepository
+    private val chatRepository: ChatRepository,
+    private val eventBus: EventBus
 ): BaseViewModel() {
+
+    private val _titleLiveData = MutableLiveData<String>()
+    val titleLiveData : LiveData<String> = _titleLiveData
+
+    private val _messageLiveData = MutableLiveData<String>()
+    val messageLiveData : LiveData<String> = _messageLiveData
 
     val chatRoomState = MutableLiveData<ChatRoomState>(ChatRoomState.Uninitialized)
     val socketState = MutableLiveData<SocketState>(SocketState.Uninitialized)
@@ -75,7 +85,7 @@ class ChatRoomViewModel(
     }
 
     @SuppressLint("CheckResult")
-    fun runStomp(roomId: Int, message: String){
+    fun runStomp(roomId: Int){
 
         stompClient.topic("/sub/chat/room/${roomId}").subscribe { topicMessage ->
             Log.i("message Recieve", topicMessage.payload)
@@ -86,16 +96,21 @@ class ChatRoomViewModel(
         headerList.add(StompHeader("roomId",roomId.toString()))
         headerList.add(StompHeader("senderId", myPreferenceManager.getId().toString()))
         headerList.add(StompHeader("senderIdentity", myPreferenceManager.getName()))
-        headerList.add(StompHeader("content", message))
+        headerList.add(StompHeader("content", "message"))
         stompClient.connect(headerList)
 
         stompClient.lifecycle().subscribe { lifecycleEvent ->
             when (lifecycleEvent.type) {
                 LifecycleEvent.Type.OPENED -> {
                     Log.i("OPEND", "!!")
+                    myPreferenceManager.setSocketStatus(true)
+                    myPreferenceManager.putRoomId(roomId)
                 }
                 LifecycleEvent.Type.CLOSED -> {
                     Log.i("CLOSED", "!!")
+                    viewModelScope.launch {
+                        eventBus.produceEvent(Events.ExitChatRoom)
+                    }
                 }
                 LifecycleEvent.Type.ERROR -> {
                     Log.i("ERROR", "!!")
@@ -103,7 +118,7 @@ class ChatRoomViewModel(
                     socketState.value = SocketState.Error(lifecycleEvent.exception.toString())
                 }
                 else ->{
-                    Log.i("ELSE", lifecycleEvent.message)
+                    Log.i("ELSE!", lifecycleEvent.message)
                 }
             }
         }
@@ -119,5 +134,28 @@ class ChatRoomViewModel(
         stompClient.send("/pub/chat/message", data.toString()).subscribe()
 
         socketState.value = SocketState.MsgSend
+    }
+
+    fun exitChatRoom(roomId: Int) = viewModelScope.launch {
+        val response = chatRepository.deleteChatRoom(roomId)
+
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            stompClient.disconnect()
+        } else {
+            chatRoomState.value = ChatRoomState.Error(response.code)
+        }
+    }
+
+    fun loadPopupData() {
+        _titleLiveData.value = myPreferenceManager.getTitle()
+        _messageLiveData.value = myPreferenceManager.getMessage()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        stompClient.disconnect()
+        myPreferenceManager.setSocketStatus(false)
+        myPreferenceManager.removeRoomId()
     }
 }

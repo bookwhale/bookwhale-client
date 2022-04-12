@@ -45,6 +45,20 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
 
         setSignInNaver()
         setSignInKaKao()
+        tempGetHashCode()
+    }
+
+    private fun tempGetHashCode() = with(binding) {
+        getKeyHashButton.setOnClickListener {
+            var keyHash = Utility.getKeyHash(this@LoginActivity)
+            Log.e("keyhash", " : $keyHash")
+
+            val clipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("label", "$keyHash")
+            clipboard.setPrimaryClip(clip)
+
+            Toast.makeText(this@LoginActivity, "클립보드에 복사하였습니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setSignInKaKao() = with(binding) {

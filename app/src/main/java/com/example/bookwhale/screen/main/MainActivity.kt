@@ -8,8 +8,9 @@ import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityMainBinding
 import com.example.bookwhale.screen.base.BaseActivity
@@ -18,13 +19,12 @@ import com.example.bookwhale.screen.main.home.HomeFragment
 import com.example.bookwhale.screen.main.favorite.FavoriteFragment
 import com.example.bookwhale.screen.main.my.MyFragment
 import com.example.bookwhale.screen.main.mypost.MyPostFragment
-import com.example.bookwhale.util.EventBus
-import com.example.bookwhale.util.Events
+import com.example.bookwhale.util.MessageChannel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.withLock
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
@@ -36,7 +36,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
     private var onSearch = false
-    private val eventBus by inject<EventBus>()
+    private val messageChannel by inject<MessageChannel>()
     private val disposable = CompositeDisposable() // Disposable 관리
     private val backBtnSubject = PublishSubject.create<Boolean>() // backBtn 이벤트를 발생시킬 수 있는 Subject
 
@@ -44,6 +44,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         initBottomNav()
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         initButton()
+        subscribeMessageChannel()
         viewModel.getMyInfo()
     }
 
@@ -136,8 +137,37 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                 .commitAllowingStateLoss()
         }
     }
-    override fun observeData()  {
 
+    private fun subscribeMessageChannel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                messageChannel.mutex.withLock {
+                    for (i in messageChannel.channel) {
+                        Log.i("message Received: ", i)
+
+                        viewModel.loadPopupData()
+
+                        withContext(Dispatchers.Main) {
+                            binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
+                        }
+                        delay(3000L) // 3초간 나타난다
+                        withContext(Dispatchers.Main) {
+                            binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
+                        }
+                        delay(500L)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun observeData() {
+        viewModel.titleLiveData.observe(this@MainActivity) {
+            binding.popupArticleTitleTextview.text = it
+        }
+        viewModel.messageLiveData.observe(this@MainActivity) {
+            binding.popupMessageTextView.text = it
+        }
     }
 
     private suspend fun doSearch() = with(binding) {
@@ -178,7 +208,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
 
         const val BACK_BTN_EXIT_TIMEOUT = 2000 // 연속된 Back 버튼의 시간 간격 (2초안에 백버튼 2번 클릭시 앱 종료)
+
+        const val TAG = "MainActivity"
     }
-
-
 }
