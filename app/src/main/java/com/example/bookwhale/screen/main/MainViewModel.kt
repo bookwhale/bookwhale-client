@@ -29,13 +29,6 @@ class MainViewModel(
     private val myRepository: MyRepository,
     private val chatRepository: ChatRepository
 ): BaseViewModel() {
-
-    private val _titleLiveData = MutableLiveData<String>()
-    val titleLiveData : LiveData<String> = _titleLiveData
-
-    private val _messageLiveData = MutableLiveData<String>()
-    val messageLiveData : LiveData<String> = _messageLiveData
-
     private val _roomIdLiveData = MutableLiveData<String>()
     val roomIdLiveData : LiveData<String> = _roomIdLiveData
 
@@ -127,8 +120,6 @@ class MainViewModel(
     }
 
     fun loadPopupData() {
-       _titleLiveData.value = myPreferenceManager.getTitle()
-       _messageLiveData.value = myPreferenceManager.getMessage()
         _roomIdLiveData.value = myPreferenceManager.getRoomId()
     }
 

@@ -115,11 +115,13 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
     private fun subscribeMessageChannel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                messageChannel.mutex.withLock {
-                    for (i in messageChannel.channel) {
-                        Log.i("message Received: ", i)
+                    for (data in messageChannel.channel) {
+                        Log.i("ChatRoomActivity", data.toString())
 
                         viewModel.loadPopupData()
+
+                        binding.popupArticleTitleTextview.text = data.title
+                        binding.popupMessageTextView.text = data.message
 
                         binding.moveChatRoomButton.setOnClickListener {
                             viewModel.roomIdLiveData.value?.let {
@@ -128,17 +130,12 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                                 finish()
                             }
                         }
-
-                        withContext(Dispatchers.Main) {
-                            binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
-                        }
+                        binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
                         delay(3000L) // 3초간 나타난다
-                        withContext(Dispatchers.Main) {
-                            binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
-                        }
+                        binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
                         delay(500L)
                     }
-                }
+
             }
         }
     }
@@ -147,6 +144,14 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         super.onPause()
 
         clearAnimation()
+        viewModel.clearStomp()
+    }
+
+    private suspend fun showPopupAnimation() = withContext(Dispatchers.Main) {
+        binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
+        delay(3000L) // 3초간 나타난다
+        binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
+        delay(500L)
     }
 
     private fun clearAnimation() {
@@ -210,12 +215,6 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 is SocketState.MsgSend -> binding.editText.text.clear()
                 is SocketState.Error -> handleMsgError(it)
             }
-        }
-        viewModel.titleLiveData.observe(this@ChatRoomActivity) {
-            binding.popupArticleTitleTextview.text = it
-        }
-        viewModel.messageLiveData.observe(this@ChatRoomActivity) {
-            binding.popupMessageTextView.text = it
         }
     }
 

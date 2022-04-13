@@ -30,13 +30,6 @@ class ChatRoomViewModel(
     private val chatRepository: ChatRepository,
     private val eventBus: EventBus
 ): BaseViewModel() {
-
-    private val _titleLiveData = MutableLiveData<String>()
-    val titleLiveData : LiveData<String> = _titleLiveData
-
-    private val _messageLiveData = MutableLiveData<String>()
-    val messageLiveData : LiveData<String> = _messageLiveData
-
     private val _roomIdLiveData = MutableLiveData<String>()
     val roomIdLiveData : LiveData<String> = _roomIdLiveData
 
@@ -150,8 +143,6 @@ class ChatRoomViewModel(
     }
 
     fun loadPopupData() {
-        _titleLiveData.value = myPreferenceManager.getTitle()
-        _messageLiveData.value = myPreferenceManager.getMessage()
         _roomIdLiveData.value = myPreferenceManager.getRoomId()
     }
 
