@@ -149,13 +149,11 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                 for (data in messageChannel.channel) {
                     Log.i("message Received: ", data.toString())
 
-                    viewModel.loadPopupData()
-
                     binding.popupArticleTitleTextview.text = data.title
                     binding.popupMessageTextView.text = data.message
 
                     binding.moveChatRoomButton.setOnClickListener {
-                        viewModel.roomIdLiveData.value?.let {
+                        data.roomId?.let {
                             startActivity(ChatRoomActivity.newIntent(this@MainActivity, it))
                         }
                     }

@@ -7,16 +7,8 @@ class MessageChannel {
 
     val channel = Channel<PopupMessage>(capacity = 1)
 
-    suspend fun sendToChannel(title: String?, message: String?) {
-       val data = PopupMessage(title = title, message = message)
-
-        data.title?.let {
-            channel.send(data)
-        }
-    }
-
-    suspend fun trySendToChannel(title: String?, message: String?) {
-        val data = PopupMessage(title = title, message = message)
+    suspend fun trySendToChannel(title: String?, message: String?, roomId: String?) {
+        val data = PopupMessage(title = title, message = message, roomId = roomId)
 
         data.title?.let {
             channel.trySend(data)
@@ -25,6 +17,7 @@ class MessageChannel {
 
     data class PopupMessage(
         val title : String?,
-        val message : String?
+        val message : String?,
+        val roomId : String?
     )
 }

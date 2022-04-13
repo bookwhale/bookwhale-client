@@ -29,9 +29,6 @@ class MainViewModel(
     private val myRepository: MyRepository,
     private val chatRepository: ChatRepository
 ): BaseViewModel() {
-    private val _roomIdLiveData = MutableLiveData<String>()
-    val roomIdLiveData : LiveData<String> = _roomIdLiveData
-
     val homeArticleStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
     val favoriteArticleStateLiveData = MutableLiveData<FavoriteState>(FavoriteState.Uninitialized)
     val myArticleStateLiveData = MutableLiveData<MyPostState>(MyPostState.Uninitialized)
@@ -39,6 +36,11 @@ class MainViewModel(
 
     var favoriteList : List<FavoriteModel>? = null
     var myArticleList : List<ArticleModel>? = null
+
+    init {
+        myPreferenceManager.removeSocketStatus()
+        myPreferenceManager.removeRoomId()
+    }
 
     suspend fun getArticlesPaging(search: String? = null) : Flow<PagingData<ArticleModel>> {
         homeArticleStateLiveData.value = HomeState.Loading
@@ -118,9 +120,4 @@ class MainViewModel(
             )
         }
     }
-
-    fun loadPopupData() {
-        _roomIdLiveData.value = myPreferenceManager.getRoomId()
-    }
-
 }

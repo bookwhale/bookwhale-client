@@ -55,12 +55,13 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
         roomId?.let {
             lifecycleScope.launch {
-                val result = async { viewModel.loadChatModel(it.toInt()) }
+                val result = async { viewModel.loadChatModel(it) }
                 chatModel = result.await()
 
                 binding.recyclerView.adapter = adapter
 
-                viewModel.runStomp(it.toInt())
+                viewModel.runStomp(it)
+                viewModel.storeRoomIdPref(it)
                 showChatRoomInfo()
                 getMessages()
                 initButtons()
@@ -118,13 +119,11 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                     for (data in messageChannel.channel) {
                         Log.i("ChatRoomActivity", data.toString())
 
-                        viewModel.loadPopupData()
-
                         binding.popupArticleTitleTextview.text = data.title
                         binding.popupMessageTextView.text = data.message
 
                         binding.moveChatRoomButton.setOnClickListener {
-                            viewModel.roomIdLiveData.value?.let {
+                            data.roomId?.let {
                                 startActivity(newIntent(this@ChatRoomActivity, it))
                                 binding.parentCardView.transitionToStart()
                                 finish()
