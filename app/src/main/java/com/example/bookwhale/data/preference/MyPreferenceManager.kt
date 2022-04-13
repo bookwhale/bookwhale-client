@@ -278,11 +278,11 @@ class MyPreferenceManager(
     }
 
     fun getRoomId(): String? {
-        return prefs.getString(ROOM_ID, null)
+        return prefs.getString(ROOM_ID, "-1")
     }
 
     fun removeRoomId() {
-        editor.putString(ROOM_ID, null)
+        editor.putString(ROOM_ID, "-1")
         editor.apply()
     }
 

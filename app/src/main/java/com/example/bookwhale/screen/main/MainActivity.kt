@@ -146,32 +146,28 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     private fun subscribeMessageChannel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                messageChannel.mutex.withLock {
-                    for (i in messageChannel.channel) {
-                        Log.i("message Received: ", i)
+                for (data in messageChannel.channel) {
+                    Log.i("message Received: ", data.toString())
 
-                        viewModel.loadPopupData()
+                    binding.popupArticleTitleTextview.text = data.title
+                    binding.popupMessageTextView.text = data.message
 
-                        binding.moveChatRoomButton.setOnClickListener {
-                            viewModel.roomIdLiveData.value?.let {
-                                startActivity(ChatRoomActivity.newIntent(this@MainActivity, it))
-                            }
+                    binding.moveChatRoomButton.setOnClickListener {
+                        data.roomId?.let {
+                            startActivity(ChatRoomActivity.newIntent(this@MainActivity, it))
                         }
-
-                        withContext(Dispatchers.Main) {
-                            binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
-                        }
-                        delay(3000L) // 3초간 나타난다
-                        withContext(Dispatchers.Main) {
-                            binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
-                        }
-                        delay(500L)
                     }
+                    showPopupAnimation()
                 }
             }
-
-
         }
+    }
+
+    private suspend fun showPopupAnimation() = withContext(Dispatchers.Main) {
+        binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
+        delay(3000L) // 3초간 나타난다
+        binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
+        delay(500L)
     }
 
     private fun clearAnimation() {
@@ -179,12 +175,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     override fun observeData() {
-        viewModel.titleLiveData.observe(this@MainActivity) {
-            binding.popupArticleTitleTextview.text = it
-        }
-        viewModel.messageLiveData.observe(this@MainActivity) {
-            binding.popupMessageTextView.text = it
-        }
     }
 
     private suspend fun doSearch(query: String) = with(binding) {
@@ -220,6 +210,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
         disposable.clear()
         clearAnimation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
     }
 
     companion object {

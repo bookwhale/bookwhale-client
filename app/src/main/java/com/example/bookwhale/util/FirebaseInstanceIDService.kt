@@ -65,10 +65,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         } else {
             Log.i(TAG,"Room Unconnected")
             //sendNotification(title, description)
-            title?.let { myPreferenceManager.putTitle(it) }
-            description?.let { myPreferenceManager.putMessage(it) }
-            roomId?.let { myPreferenceManager.putRoomId(it) }
-            messageToChannel(description)
+            //roomId?.let { myPreferenceManager.putRoomId(it) }
+            messageToChannel(title, description, roomId)
         }
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
@@ -93,9 +91,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun messageToChannel(message: String?) {
+    private fun messageToChannel(title: String?, message: String?, roomId: String?) {
         GlobalScope.launch {
-            messageChannel.sendToChannel(message)
+            messageChannel.trySendToChannel(title, message, roomId)
         }
     }
 
