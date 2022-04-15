@@ -64,10 +64,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Log.i(TAG,"Room Connected: RoomId = $roomId")
         } else {
             Log.i(TAG,"Room Unconnected")
-            //sendNotification(title, description)
-            //roomId?.let { myPreferenceManager.putRoomId(it) }
             messageToChannel(title, description, roomId)
         }
+
+        //sendNotification(title, description)
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
@@ -83,13 +83,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Refreshed token: $token")
     }
     // [END on_new_token]
-
-    private fun provideEvent() {
-        Log.i(TAG,"PROVIDEVENT")
-        GlobalScope.launch {
-            eventBus.produceEvent(Events.ChatNoti)
-        }
-    }
 
     private fun messageToChannel(title: String?, message: String?, roomId: String?) {
         GlobalScope.launch {

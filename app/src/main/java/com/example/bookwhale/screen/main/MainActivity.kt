@@ -37,8 +37,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
+    private val roomId by lazy { intent.getStringExtra(ROOM_ID) }
     private var searchStatus = SearchStatus.SEARCH_NOT
-    private val eventBus by inject<EventBus>()
     private val messageChannel by inject<MessageChannel>()
     private val disposable = CompositeDisposable() // Disposable 관리
     private val backBtnSubject = PublishSubject.create<Boolean>() // backBtn 이벤트를 발생시킬 수 있는 Subject
@@ -49,6 +49,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         initButton()
         subscribeMessageChannel()
         viewModel.getMyInfo()
+
+        roomId?.let { passToChatRoom() }
     }
 
     private fun initButton() = with(binding) {
@@ -205,6 +207,11 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         backBtnSubject.onNext(true)
     }
 
+    private fun passToChatRoom() {
+        val intent = ChatRoomActivity.newIntent(this@MainActivity, roomId as String)
+        startActivity(intent)
+    }
+
     override fun onPause() {
         super.onPause()
 
@@ -219,10 +226,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     companion object {
-        fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
+        fun newIntent(context: Context, roomId: String? = null) = Intent(context, MainActivity::class.java).apply {
+            putExtra(ROOM_ID, roomId)
+        }
 
+        const val ROOM_ID = "roomId"
         const val BACK_BTN_EXIT_TIMEOUT = 2000 // 연속된 Back 버튼의 시간 간격 (2초안에 백버튼 2번 클릭시 앱 종료)
-
         const val TAG = "MainActivity"
 
         enum class SearchStatus {
