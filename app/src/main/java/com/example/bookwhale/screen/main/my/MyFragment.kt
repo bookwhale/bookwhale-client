@@ -1,16 +1,21 @@
 package com.example.bookwhale.screen.main.my
 
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentMyBinding
 import com.example.bookwhale.screen.base.BaseFragment
+import com.example.bookwhale.screen.main.MainActivity
 import com.example.bookwhale.screen.splash.SplashActivity
 import com.example.bookwhale.util.load
 import gun0912.tedimagepicker.builder.TedImagePicker
@@ -18,6 +23,7 @@ import gun0912.tedimagepicker.builder.type.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
@@ -50,14 +56,15 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         }
 
         confirmButton.setOnClickListener {
-            val name = updateNameEditText.text
+            confirmName()
+        }
 
-            if(!name.isNullOrEmpty()) {
-                viewModel.updateNickName(name.toString())
-                updateNameEditText.text.clear()
-                updateNameGroup.isGone = true
+        updateNameEditText.setOnKeyListener { _, keyCode, event ->
+            if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                confirmName()
+                true
             } else {
-                errorTextView.text = getString(R.string.error_noNickName)
+                false
             }
         }
 
@@ -79,6 +86,27 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         }
     }
 
+    private fun confirmName() = with(binding){
+        val name = updateNameEditText.text
+
+        if(!name.isNullOrEmpty()) {
+            viewModel.updateNickName(name.toString())
+            updateNameEditText.text.clear()
+            updateNameGroup.isGone = true
+            keyboardHandle(true)
+        } else {
+            errorTextView.text = getString(R.string.error_noNickName)
+        }
+    }
+
+    private fun keyboardHandle(handle: Boolean) {
+        val imm =MainActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (handle) {//내리기
+            imm.hideSoftInputFromWindow(binding.updateNameEditText.windowToken, 0)
+        } else {//올리기
+            imm.showSoftInput(binding.updateNameEditText, 0)
+        }
+    }
 
     private fun selectSingleImage() {
         TedImagePicker.with(requireContext())
@@ -114,6 +142,8 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         var body : MultipartBody.Part = MultipartBody.Part.createFormData("profileImage",file.name,requestBody)
         viewModel.updateProfileImage(body)
     }
+
+
 
     private fun handleLoading() {
         binding.progressBar.isVisible = true
