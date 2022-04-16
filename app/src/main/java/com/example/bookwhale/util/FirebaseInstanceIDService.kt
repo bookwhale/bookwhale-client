@@ -60,15 +60,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 해당 채팅방에 접속중이라면 push 알림을 받지 않는다
 
-        if(myPreferenceManager.getSocketStatus() && myPreferenceManager.getRoomId() == roomId!!.toInt()) { // 해당 채팅방에 접속중이라면
-            Log.i(TAG,"Room Connected")
+        if(myPreferenceManager.getSocketStatus() && myPreferenceManager.getRoomId() == roomId) { // 해당 채팅방에 접속중이라면
+            Log.i(TAG,"Room Connected: RoomId = $roomId")
         } else {
             Log.i(TAG,"Room Unconnected")
-            //sendNotification(title, description)
-            title?.let { myPreferenceManager.putTitle(it) }
-            description?.let { myPreferenceManager.putMessage(it) }
-            messageToChannel(description)
+            messageToChannel(title, description, roomId)
         }
+
+        //sendNotification(title, description)
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
@@ -85,16 +84,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
     // [END on_new_token]
 
-    private fun provideEvent() {
-        Log.i(TAG,"PROVIDEVENT")
+    private fun messageToChannel(title: String?, message: String?, roomId: String?) {
         GlobalScope.launch {
-            eventBus.produceEvent(Events.ChatNoti)
-        }
-    }
-
-    private fun messageToChannel(message: String?) {
-        GlobalScope.launch {
-            messageChannel.sendToChannel(message)
+            messageChannel.trySendToChannel(title, message, roomId)
         }
     }
 

@@ -15,11 +15,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityMainBinding
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.screen.main.chat.ChatFragment
 import com.example.bookwhale.screen.main.home.HomeFragment
 import com.example.bookwhale.screen.main.favorite.FavoriteFragment
 import com.example.bookwhale.screen.main.my.MyFragment
 import com.example.bookwhale.screen.main.mypost.MyPostFragment
+import com.example.bookwhale.util.EventBus
+import com.example.bookwhale.util.Events
 import com.example.bookwhale.util.MessageChannel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -36,7 +39,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
-    private var onSearch = false
+    private val roomId by lazy { intent.getStringExtra(ROOM_ID) }
+    private var searchStatus = SearchStatus.SEARCH_NOT
     private val messageChannel by inject<MessageChannel>()
     private val disposable = CompositeDisposable() // Disposable 관리
     private val backBtnSubject = PublishSubject.create<Boolean>() // backBtn 이벤트를 발생시킬 수 있는 Subject
@@ -47,6 +51,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         initButton()
         subscribeMessageChannel()
         viewModel.getMyInfo()
+
+        roomId?.let { passToChatRoom() }
     }
 
     private fun initButton() = with(binding) {
@@ -61,33 +67,50 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
             }
         }
         searchButton.setOnClickListener {
-            when(onSearch) {
-                true -> {
-                    onSearch = false
+            when(searchStatus) {
+                SearchStatus.SEARCH_ING -> {
+                    searchStatus = SearchStatus.SEARCH_NOT
+                    backButton.isGone = true
                     toolBarLayout.transitionToStart()
                     lifecycleScope.launch {
-                        doSearch()
+                        val queryString = searchEditText.text.toString()
+                        doSearch(queryString)
+                        searchStatus = SearchStatus.SEARCH_DONE
+                        backButton.isVisible = true
                     }
                 }
+
                 false -> {
                     onSearch = true
                     keyboardHandle(handle = false)
+
+                SearchStatus.SEARCH_NOT -> {
+                    searchStatus = SearchStatus.SEARCH_ING
+                    backButton.isVisible = true
+                    toolBarLayout.transitionToEnd()
+                }
+                SearchStatus.SEARCH_DONE -> {
+                    searchStatus = SearchStatus.SEARCH_ING
+                    backButton.isVisible = true
                     toolBarLayout.transitionToEnd()
                 }
             }
         }
 
         backButton.setOnClickListener {
-            if(onSearch) {
-                onSearch = false
+            if(searchStatus == SearchStatus.SEARCH_ING) {
+                searchStatus = SearchStatus.SEARCH_NOT
+                backButton.isGone = true
                 toolBarLayout.transitionToStart()
                 keyboardHandle(handle = true)
+            } else if (searchStatus == SearchStatus.SEARCH_DONE) {
+                lifecycleScope.launch {
+                    doSearch("")
+                }
+                backButton.isGone = true
             }
         }
-
-
     }
-
 
     private fun initBottomNav() = with(binding) {
         bottomNav.setOnItemSelectedListener { item ->
@@ -143,21 +166,18 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     private fun subscribeMessageChannel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                messageChannel.mutex.withLock {
-                    for (i in messageChannel.channel) {
-                        Log.i("message Received: ", i)
+                for (data in messageChannel.channel) {
+                    Log.i("message Received: ", data.toString())
 
-                        viewModel.loadPopupData()
+                    binding.popupArticleTitleTextview.text = data.title
+                    binding.popupMessageTextView.text = data.message
 
-                        withContext(Dispatchers.Main) {
-                            binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
+                    binding.moveChatRoomButton.setOnClickListener {
+                        data.roomId?.let {
+                            startActivity(ChatRoomActivity.newIntent(this@MainActivity, it))
                         }
-                        delay(3000L) // 3초간 나타난다
-                        withContext(Dispatchers.Main) {
-                            binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
-                        }
-                        delay(500L)
                     }
+                    showPopupAnimation()
                 }
             }
         }
@@ -171,19 +191,23 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         else{//올리기
             imm.showSoftInput(binding.searchEditText, 0)
         }
+
+    private suspend fun showPopupAnimation() = withContext(Dispatchers.Main) {
+        binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
+        delay(3000L) // 3초간 나타난다
+        binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
+        delay(500L)
+    }
+
+    private fun clearAnimation() {
+        binding.parentCardView.transitionToStart()
     }
 
     override fun observeData() {
-        viewModel.titleLiveData.observe(this@MainActivity) {
-            binding.popupArticleTitleTextview.text = it
-        }
-        viewModel.messageLiveData.observe(this@MainActivity) {
-            binding.popupMessageTextView.text = it
-        }
     }
 
-    private suspend fun doSearch() = with(binding) {
-        (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).getArticles(searchEditText.text.toString())
+    private suspend fun doSearch(query: String) = with(binding) {
+        (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).getArticles(query)
 
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         searchEditText.text.clear()
@@ -211,17 +235,37 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         backBtnSubject.onNext(true)
     }
 
+    private fun passToChatRoom() {
+        val intent = ChatRoomActivity.newIntent(this@MainActivity, roomId as String)
+        startActivity(intent)
+    }
+
     override fun onPause() {
         super.onPause()
 
         disposable.clear()
+        clearAnimation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
     }
 
     companion object {
-        fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
+        fun newIntent(context: Context, roomId: String? = null) = Intent(context, MainActivity::class.java).apply {
+            putExtra(ROOM_ID, roomId)
+        }
 
+        const val ROOM_ID = "roomId"
         const val BACK_BTN_EXIT_TIMEOUT = 2000 // 연속된 Back 버튼의 시간 간격 (2초안에 백버튼 2번 클릭시 앱 종료)
-
         const val TAG = "MainActivity"
+
+        enum class SearchStatus {
+            SEARCH_NOT,
+            SEARCH_ING,
+            SEARCH_DONE
+        }
     }
 }

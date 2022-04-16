@@ -272,17 +272,17 @@ class MyPreferenceManager(
         editor.apply()
     }
 
-    fun putRoomId(roomId: Int) {
-        editor.putInt(ROOM_ID, roomId)
+    fun putRoomId(roomId: String) {
+        editor.putString(ROOM_ID, roomId)
         editor.apply()
     }
 
-    fun getRoomId(): Int {
-        return prefs.getInt(ROOM_ID, -1)
+    fun getRoomId(): String? {
+        return prefs.getString(ROOM_ID, "-1")
     }
 
     fun removeRoomId() {
-        editor.putInt(ROOM_ID, -1)
+        editor.putString(ROOM_ID, "-1")
         editor.apply()
     }
 

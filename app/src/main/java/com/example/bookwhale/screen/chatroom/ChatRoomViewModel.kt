@@ -30,13 +30,6 @@ class ChatRoomViewModel(
     private val chatRepository: ChatRepository,
     private val eventBus: EventBus
 ): BaseViewModel() {
-
-    private val _titleLiveData = MutableLiveData<String>()
-    val titleLiveData : LiveData<String> = _titleLiveData
-
-    private val _messageLiveData = MutableLiveData<String>()
-    val messageLiveData : LiveData<String> = _messageLiveData
-
     val chatRoomState = MutableLiveData<ChatRoomState>(ChatRoomState.Uninitialized)
     val socketState = MutableLiveData<SocketState>(SocketState.Uninitialized)
     val articleTitle = MutableLiveData<String>()
@@ -50,7 +43,7 @@ class ChatRoomViewModel(
         return response.data!!.cachedIn(viewModelScope)
     }
 
-    suspend fun loadChatModel(roomId: Int) : ChatModel {
+    suspend fun loadChatModel(roomId: String) : ChatModel {
 
         chatRoomState.value = ChatRoomState.Loading
 
@@ -62,7 +55,7 @@ class ChatRoomViewModel(
             if(response.status == NetworkResult.Status.SUCCESS) {
                 chatRoomState.value = ChatRoomState.Success
                 response.data!!.forEach {
-                    if (it.roomId == roomId) {
+                    if (it.roomId == roomId.toInt()) {
                         chatModel = ChatModel(
                             id = it.hashCode().toLong(),
                             roomId = it.roomId,
@@ -85,7 +78,7 @@ class ChatRoomViewModel(
     }
 
     @SuppressLint("CheckResult")
-    fun runStomp(roomId: Int){
+    fun runStomp(roomId: String){
 
         stompClient.topic("/sub/chat/room/${roomId}").subscribe { topicMessage ->
             Log.i("message Recieve", topicMessage.payload)
@@ -93,7 +86,7 @@ class ChatRoomViewModel(
         }
 
         val headerList = arrayListOf<StompHeader>()
-        headerList.add(StompHeader("roomId",roomId.toString()))
+        headerList.add(StompHeader("roomId",roomId))
         headerList.add(StompHeader("senderId", myPreferenceManager.getId().toString()))
         headerList.add(StompHeader("senderIdentity", myPreferenceManager.getName()))
         headerList.add(StompHeader("content", "message"))
@@ -106,11 +99,11 @@ class ChatRoomViewModel(
                     myPreferenceManager.setSocketStatus(true)
                     myPreferenceManager.putRoomId(roomId)
                 }
-                LifecycleEvent.Type.CLOSED -> {
+                LifecycleEvent.Type.CLOSED -> { // disconnect가 불리었을 때
                     Log.i("CLOSED", "!!")
-                    viewModelScope.launch {
-                        eventBus.produceEvent(Events.ExitChatRoom)
-                    }
+//                    viewModelScope.launch {
+//                        eventBus.produceEvent(Events.ExitChatRoom)
+//                    }
                 }
                 LifecycleEvent.Type.ERROR -> {
                     Log.i("ERROR", "!!")
@@ -146,16 +139,19 @@ class ChatRoomViewModel(
         }
     }
 
-    fun loadPopupData() {
-        _titleLiveData.value = myPreferenceManager.getTitle()
-        _messageLiveData.value = myPreferenceManager.getMessage()
+    fun storeRoomIdPref(roomId: String) {
+        myPreferenceManager.putRoomId(roomId)
+    }
+
+    fun clearStomp() {
+        stompClient.disconnect()
+        myPreferenceManager.setSocketStatus(false)
+        myPreferenceManager.removeRoomId()
     }
 
     override fun onCleared() {
         super.onCleared()
 
-        stompClient.disconnect()
-        myPreferenceManager.setSocketStatus(false)
-        myPreferenceManager.removeRoomId()
+        clearStomp()
     }
 }

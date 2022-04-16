@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivitySplashBinding
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.screen.login.LoginActivity
 import com.example.bookwhale.screen.main.MainActivity
 import com.google.android.gms.tasks.OnCompleteListener
@@ -23,6 +24,8 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     override val viewModel by viewModel<SplashViewModel>()
 
     override fun getViewBinding(): ActivitySplashBinding = ActivitySplashBinding.inflate(layoutInflater)
+
+    private val roomId by lazy { intent.extras?.get(FCM_DATA_ROOM_ID) }
 
     override fun initViews(): Unit = with(binding) {
         getCurrentDeviceToken()
@@ -61,9 +64,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
             delay(1500L) // 추후 특정 시간 걸리는 작업을 염두하고 임의로 딜레이를 주었다.
             binding.progressBar.isGone = true
 
-            val intent = MainActivity.newIntent(this@SplashActivity)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
+            passToMain()
         }
     }
 
@@ -88,10 +89,20 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
             delay(1500L) // 추후 특정 시간 걸리는 작업을 염두하고 임의로 딜레이를 주었다.
             binding.progressBar.isGone = true
 
-            val intent = LoginActivity.newIntent(this@SplashActivity)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
+            passToLogin()
         }
+    }
+
+    private fun passToMain() {
+        val intent = MainActivity.newIntent(this@SplashActivity, roomId as String?)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+    }
+
+    private fun passToLogin() {
+        val intent = LoginActivity.newIntent(this@SplashActivity)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
     }
 
     private fun handleUnExcepted(code: String) {
@@ -101,6 +112,8 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
 
     companion object {
         fun newIntent(context: Context) = Intent(context, SplashActivity::class.java)
+
+        const val FCM_DATA_ROOM_ID = "roomId"
     }
 
 }

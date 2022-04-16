@@ -5,12 +5,19 @@ import kotlinx.coroutines.sync.Mutex
 
 class MessageChannel {
 
-    val channel = Channel<String>()
-    val mutex = Mutex()
+    val channel = Channel<PopupMessage>(capacity = 1)
 
-    suspend fun sendToChannel(message: String?) {
-        if (message != null) {
-            channel.send(message)
+    suspend fun trySendToChannel(title: String?, message: String?, roomId: String?) {
+        val data = PopupMessage(title = title, message = message, roomId = roomId)
+
+        data.title?.let {
+            channel.trySend(data)
         }
     }
+
+    data class PopupMessage(
+        val title : String?,
+        val message : String?,
+        val roomId : String?
+    )
 }

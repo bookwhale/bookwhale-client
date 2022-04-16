@@ -103,6 +103,7 @@
     <string name="exitChatRoom">채팅방을 나가시겠습니까?</string>
     <string name="destroyChatRoom">종료된 채팅방입니다.</string>
     <string name="exitChatRoomDescription">채팅방 나가기</string>
+    <string name="moveToChatRoom">이동</string>
 
     <!-- update -->
     <string name="delete_question">삭제하시겠습니까? \n삭제는 판매중의 글만 가능합니다.</string>
