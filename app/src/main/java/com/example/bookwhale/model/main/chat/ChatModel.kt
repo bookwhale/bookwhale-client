@@ -15,9 +15,11 @@ data class ChatModel(
     var articleImage : String?,
     val opponentIdentity : String,
     var opponentProfile : String?,
+    val roomCreateAt : String?,
     var lastContent : String?,
+    val lastContentCreateAt : String?,
     val opponentDelete: Boolean
 ) : Model(id, type), Parcelable {
-    constructor(): this(0,CellType.CHAT_LIST,0,0,"","","","","",false)
+    constructor(): this(0,CellType.CHAT_LIST,0,0,"","","","","","","",false)
 
 }
