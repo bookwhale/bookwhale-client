@@ -6,6 +6,7 @@ import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.my.LogOutDTO
 import com.example.bookwhale.data.response.my.NickNameRequestDTO
+import com.example.bookwhale.model.main.my.NotiModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
@@ -74,6 +75,35 @@ class MyRepositoryImpl(
 
     override suspend fun withDraw(logOutDTO: LogOutDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
         val response = serverApiService.withDraw(logOutDTO)
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                true
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
+    override suspend fun getNotiSetting(): NetworkResult<NotiModel> = withContext(ioDispatcher) {
+        val response = serverApiService.getNotiSetting()
+
+        if(response.isSuccessful) {
+            NetworkResult.success(
+                NotiModel(
+                    userId = response.body()!!.userId,
+                    pushActivate = response.body()!!.pushActivate
+                )
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
+    override suspend fun toggleNotiSetting(): NetworkResult<Boolean>  = withContext(ioDispatcher) {
+        val response = serverApiService.toggleNotiSetting()
 
         if(response.isSuccessful) {
             NetworkResult.success(
