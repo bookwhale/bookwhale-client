@@ -1,5 +1,6 @@
 package com.example.bookwhale.screen.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.example.bookwhale.data.repository.chat.ChatRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.screen.article.DetailArticleState
@@ -36,6 +38,7 @@ class MainViewModel(
 
     var favoriteList : List<FavoriteModel>? = null
     var myArticleList : List<ArticleModel>? = null
+    var chatList : List<ChatModel>? = null
 
     init {
         myPreferenceManager.removeSocketStatus()
@@ -111,13 +114,19 @@ class MainViewModel(
         val response = chatRepository.getChatList()
 
         if(response.status == NetworkResult.Status.SUCCESS) {
-            val chatList = response.data!!
+            chatList = response.data!!
 
-            chatStateLiveData.value = ChatState.Success(chatList)
+            Log.e("ChatList", chatList.toString())
+
+            chatStateLiveData.value = ChatState.Success(chatList!!)
         } else {
             chatStateLiveData.value = ChatState.Error(
                 response.code
             )
         }
+    }
+
+    private fun sortChatList(chatList : List<ChatModel>) {
+
     }
 }

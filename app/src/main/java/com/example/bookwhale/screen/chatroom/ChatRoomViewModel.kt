@@ -63,8 +63,10 @@ class ChatRoomViewModel(
                             articleTitle = it.articleTitle,
                             articleImage = it.articleImage,
                             opponentProfile = it.opponentProfile,
+                            roomCreateAt = it.roomCreateAt,
                             opponentIdentity = it.opponentIdentity,
                             opponentDelete = it.opponentDelete,
+                            lastContentCreateAt = it.lastContentCreateAt,
                             lastContent = it.lastContent
                         )
                     }

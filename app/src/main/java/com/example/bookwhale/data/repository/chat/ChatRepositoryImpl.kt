@@ -29,6 +29,9 @@ class ChatRepositoryImpl(
         if(response.isSuccessful) {
             NetworkResult.success(
                 response.body()!!.mapIndexed { index, it ->
+                    val dateFormat = Regex("[^0-9]")
+                    val roomCreateAt = it.roomCreateAt?.replace(dateFormat, "")
+                    val lastContentCreateAt = it.lastContentCreateAt?.replace(dateFormat, "")
                     ChatModel(
                         id = index.toLong(),
                         roomId = it.roomId,
@@ -37,9 +40,15 @@ class ChatRepositoryImpl(
                         articleImage = it.articleImage,
                         opponentIdentity = it.opponentIdentity,
                         opponentProfile = it.opponentProfile,
+                        roomCreateAt = roomCreateAt,
                         lastContent = it.lastContent,
+                        lastContentCreateAt = // 마지막 메세지가 없으면 방 생성 일시를 기준으로 한다.
+                            if (it.lastContent.isNullOrEmpty()) roomCreateAt
+                            else lastContentCreateAt,
                         opponentDelete = it.opponentDelete
                     )
+                }.sortedByDescending { // 채팅방 정렬
+                    it.lastContentCreateAt
                 }
             )
         } else {
