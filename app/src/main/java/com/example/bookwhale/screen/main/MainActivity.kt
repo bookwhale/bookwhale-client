@@ -57,9 +57,14 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     private fun initButton() = with(binding) {
         searchEditText.setOnKeyListener { _, keyCode, event ->
             if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                searchStatus = SearchStatus.SEARCH_NOT
+                backButton.isGone = true
+                toolBarLayout.transitionToStart()
                 lifecycleScope.launch {
                     val queryString = searchEditText.text.toString()
                     doSearch(queryString)
+                    searchStatus = SearchStatus.SEARCH_DONE
+                    backButton.isVisible = true
                 }
                 true
             } else {
@@ -81,15 +86,19 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     }
                 }
                 SearchStatus.SEARCH_NOT -> {
-                    keyboardHandle(handle = false)
+
                     searchStatus = SearchStatus.SEARCH_ING
                     backButton.isVisible = true
                     toolBarLayout.transitionToEnd()
+                    binding.searchEditText.requestFocus()
+                    keyboardHandle(handle = false)
                 }
                 SearchStatus.SEARCH_DONE -> {
                     searchStatus = SearchStatus.SEARCH_ING
                     backButton.isVisible = true
                     toolBarLayout.transitionToEnd()
+                    binding.searchEditText.requestFocus()
+                    keyboardHandle(handle = false)
                }
             }
         }
