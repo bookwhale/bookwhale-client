@@ -13,6 +13,7 @@ import com.example.bookwhale.data.response.login.TokenRequestDTO
 import com.example.bookwhale.data.response.my.LogOutDTO
 import com.example.bookwhale.data.response.my.MyInfoResponse
 import com.example.bookwhale.data.response.my.NickNameRequestDTO
+import com.example.bookwhale.data.response.my.NotiResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -125,6 +126,12 @@ interface ServerApiService {
 
     @POST("api/oauth/withdrawal")
     suspend fun withDraw(@Body logOutDTO: LogOutDTO): Response<Unit>
+
+    @GET("api/user/me/push-setting")
+    suspend fun getNotiSetting() : Response<NotiResponse>
+
+    @PATCH("api/user/me/push-setting")
+    suspend fun toggleNotiSetting() : Response<Unit>
 
 
 }

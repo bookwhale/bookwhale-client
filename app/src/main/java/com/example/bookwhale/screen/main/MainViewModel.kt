@@ -1,5 +1,6 @@
 package com.example.bookwhale.screen.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,8 +11,10 @@ import com.example.bookwhale.data.repository.chat.ChatRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.data.response.NetworkResult
+import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.model.main.my.NotiModel
 import com.example.bookwhale.screen.article.DetailArticleState
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.main.chat.ChatState
@@ -29,6 +32,10 @@ class MainViewModel(
     private val myRepository: MyRepository,
     private val chatRepository: ChatRepository
 ): BaseViewModel() {
+
+    private val _notiSettingLiveData = MutableLiveData<NotiModel>()
+    val notiSettingLiveData : LiveData<NotiModel> = _notiSettingLiveData
+
     val homeArticleStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
     val favoriteArticleStateLiveData = MutableLiveData<FavoriteState>(FavoriteState.Uninitialized)
     val myArticleStateLiveData = MutableLiveData<MyPostState>(MyPostState.Uninitialized)
@@ -40,6 +47,9 @@ class MainViewModel(
     init {
         myPreferenceManager.removeSocketStatus()
         myPreferenceManager.removeRoomId()
+
+        getMyInfo()
+        getNotiSetting()
     }
 
     suspend fun getArticlesPaging(search: String? = null) : Flow<PagingData<ArticleModel>> {
@@ -112,12 +122,31 @@ class MainViewModel(
 
         if(response.status == NetworkResult.Status.SUCCESS) {
             val chatList = response.data!!
-
             chatStateLiveData.value = ChatState.Success(chatList)
         } else {
             chatStateLiveData.value = ChatState.Error(
                 response.code
             )
+        }
+    }
+
+    fun getNotiSetting() = viewModelScope.launch {
+        val response = myRepository.getNotiSetting()
+
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            _notiSettingLiveData.value = response.data!!
+        } else {
+            Log.e("Get Noti Error", "${response.code}")
+        }
+    }
+
+    fun toggleNotiSetting() = viewModelScope.launch {
+        val response = myRepository.toggleNotiSetting()
+
+        if(response.status == NetworkResult.Status.SUCCESS) {
+            Log.i("Noti Toggle : ", "Success")
+        } else {
+            Log.e("Get Noti Error", "${response.code}")
         }
     }
 }

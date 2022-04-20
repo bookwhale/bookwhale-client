@@ -4,6 +4,7 @@ import com.example.bookwhale.model.main.my.MyInfoModel
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.my.LogOutDTO
 import com.example.bookwhale.data.response.my.NickNameRequestDTO
+import com.example.bookwhale.model.main.my.NotiModel
 import okhttp3.MultipartBody
 
 interface MyRepository {
@@ -17,4 +18,8 @@ interface MyRepository {
     suspend fun logOut(logOutDTO: LogOutDTO) : NetworkResult<Boolean>
 
     suspend fun withDraw(logOutDTO: LogOutDTO) : NetworkResult<Boolean>
+
+    suspend fun getNotiSetting() : NetworkResult<NotiModel>
+
+    suspend fun toggleNotiSetting() : NetworkResult<Boolean>
 }

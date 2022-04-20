@@ -50,7 +50,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         initButton()
         subscribeMessageChannel()
-        viewModel.getMyInfo()
 
         roomId?.let { passToChatRoom() }
     }
@@ -105,6 +104,13 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     doSearch("")
                 }
                 backButton.isGone = true
+            }
+        }
+
+        notiButton.setOnClickListener {
+            lifecycleScope.launch {
+                viewModel.toggleNotiSetting().join()
+                viewModel.getNotiSetting()
             }
         }
     }
@@ -202,6 +208,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     override fun observeData() {
+        viewModel.notiSettingLiveData.observe(this) {
+            when(it.pushActivate) {
+                NOTI_SUBSCRIBE -> binding.notiButton.setImageResource(R.drawable.ic_notification)
+                NOTI_UNSUBSCRIBE -> binding.notiButton.setImageResource(R.drawable.ic_notification_off)
+            }
+        }
     }
 
     private suspend fun doSearch(query: String) = with(binding) {
@@ -261,6 +273,9 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         const val ROOM_ID = "roomId"
         const val BACK_BTN_EXIT_TIMEOUT = 2000 // 연속된 Back 버튼의 시간 간격 (2초안에 백버튼 2번 클릭시 앱 종료)
         const val TAG = "MainActivity"
+
+        const val NOTI_SUBSCRIBE = "Y"
+        const val NOTI_UNSUBSCRIBE = "N"
 
         enum class SearchStatus {
             SEARCH_NOT,

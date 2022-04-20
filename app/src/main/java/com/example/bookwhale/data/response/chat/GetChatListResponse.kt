@@ -7,6 +7,8 @@ data class GetChatListResponse(
     var articleImage : String?,
     val opponentIdentity : String,
     val opponentProfile : String?,
+    val roomCreateAt : String?,
     val lastContent : String?,
+    val lastContentCreateAt : String?,
     val opponentDelete: Boolean
 )
