@@ -1,6 +1,7 @@
 package com.example.bookwhale.screen.main.my
 
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
@@ -8,7 +9,6 @@ import android.provider.MediaStore
 import android.view.KeyEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -23,7 +23,6 @@ import gun0912.tedimagepicker.builder.type.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import org.koin.android.ext.android.bind
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
@@ -92,8 +91,15 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         if(!name.isNullOrEmpty()) {
             viewModel.updateNickName(name.toString())
             updateNameEditText.text.clear()
+            val mInputMethodManager =
+                requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            mInputMethodManager.hideSoftInputFromWindow(
+                binding.updateNameEditText.windowToken,
+                0
+            )
+            //updateNameEditText.
+            //keyboardHandle(true)
             updateNameGroup.isGone = true
-            keyboardHandle(true)
         } else {
             errorTextView.text = getString(R.string.error_noNickName)
         }
