@@ -256,6 +256,7 @@
         app:layout_constraintWidth_percent="1"
         app:layout_constraintHorizontal_bias="0"
         android:hint="@string/articleTitle"
+        android:inputType="text"
         android:background="@android:color/transparent"
         android:textColor="@color/black"
         android:textSize="24sp"

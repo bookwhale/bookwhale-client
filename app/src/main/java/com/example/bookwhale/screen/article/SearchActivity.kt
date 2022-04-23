@@ -2,6 +2,8 @@ package com.example.bookwhale.screen.article
 
 import android.content.Context
 import android.content.Intent
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -22,7 +24,8 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
 
     override val viewModel by viewModel<SearchViewModel>()
 
-    override fun getViewBinding(): ActivitySearchBinding = ActivitySearchBinding.inflate(layoutInflater)
+    override fun getViewBinding(): ActivitySearchBinding =
+        ActivitySearchBinding.inflate(layoutInflater)
 
     private val resourcesProvider by inject<ResourcesProvider>()
 
@@ -42,8 +45,19 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
 
     override fun initViews() = with(binding) {
         recyclerView.adapter = adapter
-
+        enterKeyboard()
         initButton()
+    }
+
+    private fun enterKeyboard() {
+        binding.searchEditText.setOnKeyListener { _, keyCode, event ->
+            if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                search(binding.searchEditText.text.toString())
+                true
+            } else {
+                false
+            }
+        }
     }
 
     private fun initButton() = with(binding) {
@@ -56,9 +70,19 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
         }
     }
 
+    private fun keyboardHandle(handle : Boolean){
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if(handle){//내리기
+            imm.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
+        }
+        else{//올리기
+            imm.showSoftInput(binding.searchEditText, 0)
+        }
+    }
+
     override fun observeData() {
         viewModel.searchStateLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is SearchState.Uninitialized -> Unit
                 is SearchState.Loading -> handleLoading()
                 is SearchState.Success -> handleSuccess()
@@ -77,7 +101,7 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
 
     private fun handleError(state: SearchState.Error) {
         binding.progressBar.isGone = true
-        when(state.code!!) {
+        when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
             else -> handleUnexpected(state.code)
         }
@@ -100,6 +124,7 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
                 adapter.submitData(it)
             }
         }
+        keyboardHandle(true)
     }
 
     companion object {

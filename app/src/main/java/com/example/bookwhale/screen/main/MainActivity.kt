@@ -3,6 +3,8 @@ package com.example.bookwhale.screen.main
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -53,8 +55,25 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     private fun initButton() = with(binding) {
+        searchEditText.setOnKeyListener { _, keyCode, event ->
+            if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                searchStatus = SearchStatus.SEARCH_NOT
+                backButton.isGone = true
+                toolBarLayout.transitionToStart()
+                lifecycleScope.launch {
+                    val queryString = searchEditText.text.toString()
+                    doSearch(queryString)
+                    searchStatus = SearchStatus.SEARCH_DONE
+                    backButton.isVisible = true
+                }
+                true
+            } else {
+                false
+            }
+        }
         searchButton.setOnClickListener {
-            when(searchStatus) {
+            Log.e("searchStatus",searchStatus.toString())
+            when (searchStatus) {
                 SearchStatus.SEARCH_ING -> {
                     searchStatus = SearchStatus.SEARCH_NOT
                     backButton.isGone = true
@@ -67,23 +86,28 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     }
                 }
                 SearchStatus.SEARCH_NOT -> {
+
                     searchStatus = SearchStatus.SEARCH_ING
                     backButton.isVisible = true
                     toolBarLayout.transitionToEnd()
+                    binding.searchEditText.requestFocus()
+                    keyboardHandle(handle = false)
                 }
                 SearchStatus.SEARCH_DONE -> {
                     searchStatus = SearchStatus.SEARCH_ING
                     backButton.isVisible = true
                     toolBarLayout.transitionToEnd()
-                }
+                    binding.searchEditText.requestFocus()
+                    keyboardHandle(handle = false)
+               }
             }
         }
-
         backButton.setOnClickListener {
-            if(searchStatus == SearchStatus.SEARCH_ING) {
+            if (searchStatus == SearchStatus.SEARCH_ING) {
                 searchStatus = SearchStatus.SEARCH_NOT
                 backButton.isGone = true
                 toolBarLayout.transitionToStart()
+                keyboardHandle(handle = true)
             } else if (searchStatus == SearchStatus.SEARCH_DONE) {
                 lifecycleScope.launch {
                     doSearch("")
@@ -99,6 +123,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
             }
         }
     }
+
 
     private fun initBottomNav() = with(binding) {
         bottomNav.setOnItemSelectedListener { item ->
@@ -171,6 +196,15 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         }
     }
 
+    private fun keyboardHandle(handle: Boolean) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (handle) {//내리기
+            imm.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
+        } else {//올리기
+            imm.showSoftInput(binding.searchEditText, 0)
+        }
+    }
+
     private suspend fun showPopupAnimation() = withContext(Dispatchers.Main) {
         binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
         delay(3000L) // 3초간 나타난다
@@ -192,10 +226,12 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     private suspend fun doSearch(query: String) = with(binding) {
-        (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).getArticles(query)
-
+        (supportFragmentManager.findFragmentByTag(HomeFragment.TAG) as HomeFragment).getArticles(
+            query
+        )
         showFragment(HomeFragment.newInstance(), HomeFragment.TAG)
         searchEditText.text.clear()
+        keyboardHandle(handle = true)
     }
 
     override fun onBackPressed() {
@@ -238,9 +274,10 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     companion object {
-        fun newIntent(context: Context, roomId: String? = null) = Intent(context, MainActivity::class.java).apply {
-            putExtra(ROOM_ID, roomId)
-        }
+        fun newIntent(context: Context, roomId: String? = null) =
+            Intent(context, MainActivity::class.java).apply {
+                putExtra(ROOM_ID, roomId)
+            }
 
         const val ROOM_ID = "roomId"
         const val BACK_BTN_EXIT_TIMEOUT = 2000 // 연속된 Back 버튼의 시간 간격 (2초안에 백버튼 2번 클릭시 앱 종료)
