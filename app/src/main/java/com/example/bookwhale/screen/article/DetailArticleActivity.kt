@@ -73,7 +73,6 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
             initButton()
             subscribeEvent()
-            observeChatData()
         }
 
     }
@@ -344,17 +343,6 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         lifecycleScope.launch {
             viewModel.getNewTokens().join()
             viewModel.loadArticle(articleId.toInt())
-        }
-    }
-
-    private fun observeChatData() {
-        viewModel.loadChatListLiveData.observe(this) {
-            when (it) {
-                false -> Unit
-                true -> Toast.makeText(this@DetailArticleActivity,
-                    getString(R.string.alreadyExistRoom),
-                    Toast.LENGTH_SHORT).show()
-            }
         }
     }
 
