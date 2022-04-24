@@ -6,27 +6,40 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
-        android:id="@+id/profileImageView"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:id="@+id/articleImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginStart="16dp"
-        tools:src="@drawable/ic_default_profile"
+        tools:src="@drawable/ic_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/articleNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textSize="16sp"
+        android:layout_marginStart="8dp"
+        tools:text="게시물 제목"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@id/articleImageView"
+        app:layout_constraintStart_toEndOf="@id/articleImageView"/>
 
     <TextView
         android:id="@+id/profileTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         tools:text="닉네임"
-        android:textStyle="bold"
         android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="@id/profileImageView"
-        app:layout_constraintStart_toEndOf="@id/profileImageView"/>
+        app:layout_constraintTop_toBottomOf="@id/articleNameTextView"
+        app:layout_constraintStart_toEndOf="@id/articleImageView"/>
 
     <TextView
         android:id="@+id/lastChatTextView"
@@ -35,23 +48,16 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="@color/gray"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/articleImageView"
-        app:layout_constraintStart_toEndOf="@id/profileImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/articleImageView"
         app:layout_constraintTop_toBottomOf="@id/profileTextView"
         tools:text="마지막 채팅 내용마지막 채팅 내용마지막 채팅 내용마지막 채팅 내용" />
 
-    <ImageView
-        android:id="@+id/articleImageView"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginEnd="16dp"
-        tools:src="@drawable/ic_logo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

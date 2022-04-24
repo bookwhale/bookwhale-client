@@ -31,12 +31,8 @@ class ChatViewHolder(
     override fun bindData(model: ChatModel) {
         super.bindData(model)
         with(binding) {
-            model.opponentProfile?.let {
-                profileImageView.load(it, 4f, CenterCrop())
-            }?: kotlin.run {
-                profileImageView.setImageResource(R.drawable.ic_default_profile)
-            }
             profileTextView.text = model.opponentIdentity
+            articleNameTextView.text = model.articleTitle
             model.articleImage?.let{
                 articleImageView.load(it, 4f, CenterCrop())
             }?: run {
