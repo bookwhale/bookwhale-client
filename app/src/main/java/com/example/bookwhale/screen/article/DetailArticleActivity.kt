@@ -139,20 +139,10 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         }
 
         dialButton.setOnClickListener {
-            clicked = if(!clicked) {
-                dialButton.animate().rotation(45f)
-                modifyButton.animate().translationY(-resources.getDimension(R.dimen.modify))
-                deleteButton.animate().translationY(-resources.getDimension(R.dimen.delete))
-                reservedButton.animate().translationY(-resources.getDimension(R.dimen.reserved))
-                soldOutButton.animate().translationY(-resources.getDimension(R.dimen.soldOut))
-                true
+            if(!clicked) {
+                dialUp()
             } else {
-                dialButton.animate().rotation(0f)
-                modifyButton.animate().translationY(0f)
-                deleteButton.animate().translationY(0f)
-                reservedButton.animate().translationY(0f)
-                soldOutButton.animate().translationY(0f)
-                false
+                dialDown()
             }
         }
 
@@ -185,7 +175,33 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             .show()
     }
 
+    private fun dialUp() = with(binding) {
+        dialButton.animate().rotation(45f)
+        modifyButton.animate().translationY(-resources.getDimension(R.dimen.modify))
+        deleteButton.animate().translationY(-resources.getDimension(R.dimen.delete))
+        reservedButton.animate().translationY(-resources.getDimension(R.dimen.reserved))
+        soldOutButton.animate().translationY(-resources.getDimension(R.dimen.soldOut))
+        clicked = true
+    }
+
+    private fun dialDown() = with(binding) {
+        dialButton.animate().rotation(0f)
+        modifyButton.animate().translationY(0f)
+        deleteButton.animate().translationY(0f)
+        reservedButton.animate().translationY(0f)
+        soldOutButton.animate().translationY(0f)
+        clicked = false
+    }
+
+
     private fun subscribeEvent() {
+        lifecycleScope.launch {
+            eventBus.subscribeEvent(Events.UploadPostEvent) {
+                viewModel.loadArticle(articleId.toInt())
+                dialDown()
+            }
+        }
+
         lifecycleScope.launch {
             eventBus.subscribeEvent(Events.Reserved) {
                 viewModel.loadArticle(articleId.toInt())
