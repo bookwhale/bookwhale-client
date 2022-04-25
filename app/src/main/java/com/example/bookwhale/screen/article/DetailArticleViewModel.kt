@@ -34,10 +34,6 @@ class DetailArticleViewModel(
     val roomId = MutableLiveData<Int>(0)
     private var _articleId : Int = 0
 
-    init {
-        subscribeEvent()
-    }
-
     fun loadArticle(articleId: Int) = viewModelScope.launch {
 
         detailArticleStateLiveData.value = DetailArticleState.Loading
@@ -164,13 +160,5 @@ class DetailArticleViewModel(
 
         return@async false
     }.await()
-
-    private fun subscribeEvent() {
-        viewModelScope.launch {
-            eventBus.subscribeEvent(Events.UploadPostEvent) {
-                loadArticle(_articleId)
-            }
-        }
-    }
 
 }
