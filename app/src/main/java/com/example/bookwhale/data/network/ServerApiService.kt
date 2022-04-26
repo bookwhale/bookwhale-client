@@ -1,6 +1,10 @@
 package com.example.bookwhale.data.network
 
-import com.example.bookwhale.data.response.article.*
+import com.example.bookwhale.data.response.article.ArticleDTO
+import com.example.bookwhale.data.response.article.ArticleStatusDTO
+import com.example.bookwhale.data.response.article.GetDetailArticleResponse
+import com.example.bookwhale.data.response.article.GetNaverBookApiResponse
+import com.example.bookwhale.data.response.article.ModifyArticleDTO
 import com.example.bookwhale.data.response.chat.GetChatListResponse
 import com.example.bookwhale.data.response.chat.GetChatMessageResponse
 import com.example.bookwhale.data.response.chat.MakeChatDTO
@@ -16,7 +20,15 @@ import com.example.bookwhale.data.response.my.NickNameRequestDTO
 import com.example.bookwhale.data.response.my.NotiResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.Multipart
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ServerApiService {
 
