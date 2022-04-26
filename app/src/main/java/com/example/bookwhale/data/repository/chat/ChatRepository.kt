@@ -9,14 +9,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {
 
-    suspend fun getChatList() : NetworkResult<List<ChatModel>>
+    suspend fun getChatList(): NetworkResult<List<ChatModel>>
 
-    suspend fun makeNewChat(makeChatDTO: MakeChatDTO) : NetworkResult<Boolean>
+    suspend fun makeNewChat(makeChatDTO: MakeChatDTO): NetworkResult<Boolean>
 
-    suspend fun getChatRoomDetail(roomId: Int) : NetworkResult<List<ChatMessageModel>>
+    suspend fun getChatRoomDetail(roomId: Int): NetworkResult<List<ChatMessageModel>>
 
-    suspend fun getPreviousMessages(roomId: Int) : NetworkResult<Flow<PagingData<ChatMessageModel>>>
+    suspend fun getPreviousMessages(roomId: Int): NetworkResult<Flow<PagingData<ChatMessageModel>>>
 
-    suspend fun deleteChatRoom(roomId: Int) : NetworkResult<Boolean>
-
+    suspend fun deleteChatRoom(roomId: Int): NetworkResult<Boolean>
 }

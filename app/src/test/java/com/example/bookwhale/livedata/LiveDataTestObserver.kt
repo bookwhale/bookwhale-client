@@ -22,14 +22,13 @@ class LiveDataTestObserver<T> : Observer<T> {
             actualNext = actualIterator.hasNext()
             expectedNext = expectedIterator.hasNext()
 
-
             if (!actualNext || !expectedNext) break
 
             val actual: T = actualIterator.next()
             val expected: T = expectedIterator.next()
 
             if (actual != expected) {
-                throw AssertionError("actual: ${actual}, expected: ${expected}, index: $i")
+                throw AssertionError("actual: $actual, expected: $expected, index: $i")
             }
 
             i++

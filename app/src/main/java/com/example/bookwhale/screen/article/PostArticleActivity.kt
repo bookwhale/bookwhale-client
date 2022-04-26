@@ -52,7 +52,7 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
     private val getContent =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if(result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.let {
                     val model = it.getParcelableExtra<NaverBookModel>("naverBookModel")
                     model?.let { data ->
@@ -67,8 +67,8 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
     private lateinit var postInfo: ArticleDTO
     private val files: ArrayList<MultipartBody.Part> = ArrayList()
-    private var statusRadioText : String = DEFAULT_STATUS
-    private var sellingLocation : String = DEFAULT_LOCATION
+    private var statusRadioText: String = DEFAULT_STATUS
+    private var sellingLocation: String = DEFAULT_LOCATION
     private var imageModelList: ArrayList<DetailImageModel> = ArrayList()
     private var imageUriList: ArrayList<Uri> = ArrayList()
 
@@ -135,11 +135,11 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
     private fun handleNaverBookApi() = with(binding) {
         naverBookInfo?.let {
             officialBookImageView.isVisible = true
-            officialBookImageView.load(it.bookThumbnail,4f, CenterCrop())
-            officialBookNameTextView.text = it.bookTitle.replace("<b>","").replace("</b>","")
-            officialWriterTextView.text = getString(R.string.writer, it.bookAuthor.replace("<b>","").replace("</b>",""))
-            officialPublisherTextView.text = getString(R.string.publisher, it.bookPublisher.replace("<b>","").replace("</b>",""))
-            officialPriceTextView.text = getString(R.string.price, it.bookListPrice.replace("<b>","").replace("</b>",""))
+            officialBookImageView.load(it.bookThumbnail, 4f, CenterCrop())
+            officialBookNameTextView.text = it.bookTitle.replace("<b>", "").replace("</b>", "")
+            officialWriterTextView.text = getString(R.string.writer, it.bookAuthor.replace("<b>", "").replace("</b>", ""))
+            officialPublisherTextView.text = getString(R.string.publisher, it.bookPublisher.replace("<b>", "").replace("</b>", ""))
+            officialPriceTextView.text = getString(R.string.price, it.bookListPrice.replace("<b>", "").replace("</b>", ""))
             officialBookNameTextView.setTextColor(ContextCompat.getColor(this@PostArticleActivity, R.color.black))
             officialWriterTextView.setTextColor(ContextCompat.getColor(this@PostArticleActivity, R.color.black))
             officialPublisherTextView.setTextColor(ContextCompat.getColor(this@PostArticleActivity, R.color.black))
@@ -154,7 +154,7 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         TedImagePicker.with(this)
             .max(MAX_IMAGE_NUM - currentSize, getString(R.string.maxImageNum))
             .mediaType(MediaType.IMAGE)
-            .startMultiImage{ uriList ->
+            .startMultiImage { uriList ->
                 val filePathColumn =
                     arrayOf(
                         MediaStore.MediaColumns.DATA
@@ -167,7 +167,8 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
                         filePathColumn,
                         null,
                         null,
-                        null)
+                        null
+                    )
 
                     cursor?.let {
                         if (cursor.moveToFirst()) {
@@ -181,11 +182,10 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
                     }
                     addRecyclerViewList(imageUriList)
                 }
-
             }
     }
 
-    private fun addRecyclerViewList(uriList : List<Uri>) = with(binding) {
+    private fun addRecyclerViewList(uriList: List<Uri>) = with(binding) {
         imageModelList.clear()
         imageModelList.addAll(
             uriList.mapIndexed { index, data ->
@@ -202,13 +202,12 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         uploadPhotoTextView.text = getString(R.string.currentImageNum, imageModelList.size)
     }
 
-    private fun enterKeyboard(){
+    private fun enterKeyboard() {
         binding.articlePriceTextView.setOnKeyListener { _, keyCode, event ->
-            if ((event.action== KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 locationClicked()
                 true
-            }
-            else {
+            } else {
                 false
             }
         }
@@ -216,7 +215,7 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
     private fun locationClicked() {
 
-        val items = arrayOf("서울","부산","대구","인천","광주","대전","울산","세종","경기","강원","충북","충남","전북","전남","경북","경남","제주")
+        val items = arrayOf("서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주")
 
         MaterialAlertDialogBuilder(this)
             .setTitle(resources.getString(R.string.location))
@@ -227,8 +226,8 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
             .show()
     }
 
-    private fun mappingLocation(korean: String):String {
-        when(korean) {
+    private fun mappingLocation(korean: String): String {
+        when (korean) {
             "서울" -> return "SEOUL"
             "부산" -> return "BUSAN"
             "대구" -> return "DAEGU"
@@ -290,7 +289,7 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
     }
 
     private fun checkInputInfo(): Boolean = with(binding) {
-        if(naverBookInfo.bookTitle.isNotEmpty()) {
+        if (naverBookInfo.bookTitle.isNotEmpty()) {
             when {
                 imageModelList.isEmpty() -> {
                     Toast.makeText(this@PostArticleActivity, getString(R.string.inputError_image), Toast.LENGTH_SHORT).show()
@@ -328,21 +327,21 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         for (element in imageModelList) {
             val file = File(element.articleImage!!)
             val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-            val body : MultipartBody.Part = MultipartBody.Part.createFormData("images",file.name,requestBody)
+            val body: MultipartBody.Part = MultipartBody.Part.createFormData("images", file.name, requestBody)
             files.add(body)
         }
     }
     private fun uploadDesc() = with(binding) {
         postInfo = ArticleDTO(
             bookRequest = ArticleDTO.BookRequest(
-                bookIsbn = naverBookInfo.bookIsbn.replace("<b>","").replace("</b>",""),
-                bookTitle = naverBookInfo.bookTitle.replace("<b>","").replace("</b>",""),
-                bookAuthor = naverBookInfo.bookAuthor.replace("<b>","").replace("</b>",""),
-                bookPublisher = naverBookInfo.bookPublisher.replace("<b>","").replace("</b>",""),
+                bookIsbn = naverBookInfo.bookIsbn.replace("<b>", "").replace("</b>", ""),
+                bookTitle = naverBookInfo.bookTitle.replace("<b>", "").replace("</b>", ""),
+                bookAuthor = naverBookInfo.bookAuthor.replace("<b>", "").replace("</b>", ""),
+                bookPublisher = naverBookInfo.bookPublisher.replace("<b>", "").replace("</b>", ""),
                 bookThumbnail = naverBookInfo.bookThumbnail,
-                bookListPrice = naverBookInfo.bookListPrice.replace("<b>","").replace("</b>",""),
+                bookListPrice = naverBookInfo.bookListPrice.replace("<b>", "").replace("</b>", ""),
                 bookPubDate = naverBookInfo.bookPubDate ?: kotlin.run { "null" },
-                bookSummary = naverBookInfo.bookSummary.replace("<b>","").replace("</b>","")
+                bookSummary = naverBookInfo.bookSummary.replace("<b>", "").replace("</b>", "")
             ),
             title = articleNameTextView.text.toString(),
             price = articlePriceTextView.text.toString(),
@@ -354,7 +353,7 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
     override fun observeData() {
         viewModel.postArticleStateLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is PostArticleState.Uninitialized -> Unit
                 is PostArticleState.Loading -> handleLoading()
                 is PostArticleState.Success -> handleSuccess()
@@ -374,7 +373,7 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
     private fun handleError(state: PostArticleState.Error) = with(binding) {
         progressBar.isGone = true
-        when(state.code!!) {
+        when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
             else -> handleUnexpected(state.code)
         }
@@ -387,7 +386,7 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
     private fun handleT004() {
         lifecycleScope.launch {
             viewModel.getNewTokens().join()
-            viewModel.uploadArticle(files,postInfo)
+            viewModel.uploadArticle(files, postInfo)
         }
     }
 
@@ -405,5 +404,4 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
         const val NAVER_BOOK_REQUEST_CODE = 1001
     }
-
 }

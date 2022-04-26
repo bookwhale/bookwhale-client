@@ -1,11 +1,8 @@
 package com.example.bookwhale.util.provider
 
 import android.content.res.ColorStateList
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import androidx.annotation.ArrayRes
 import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
 interface ResourcesProvider {

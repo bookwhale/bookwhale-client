@@ -21,7 +21,7 @@ class DetailRepositoryImpl(
     override suspend fun getDetailArticle(articleId: Int): NetworkResult<DetailArticleModel> = withContext(ioDispatcher) {
         val response = serverApiService.getDetailArticle(articleId)
 
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 DetailArticleModel(
                     sellerId = response.body()!!.sellerId,
@@ -65,8 +65,5 @@ class DetailRepositoryImpl(
         NetworkResult.success(
             response
         )
-
     }
-
-
 }

@@ -2,7 +2,6 @@ package com.example.bookwhale.screen.chatroom
 
 import android.content.Context
 import android.content.Intent
-import android.os.Parcelable
 import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isGone
@@ -12,29 +11,20 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.R
-import com.example.bookwhale.data.response.article.ArticleStatusCategory
 import com.example.bookwhale.databinding.ActivityChatRoomBinding
 import com.example.bookwhale.model.main.chat.ChatModel
-import com.example.bookwhale.screen.article.DialogCategory
 import com.example.bookwhale.screen.base.BaseActivity
-import com.example.bookwhale.screen.main.MainActivity
 import com.example.bookwhale.util.EventBus
-import com.example.bookwhale.util.Events
 import com.example.bookwhale.util.MessageChannel
 import com.example.bookwhale.util.load
 import com.example.bookwhale.widget.adapter.ChatPagingAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
-
 
 class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding>() {
 
@@ -43,7 +33,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
     override fun getViewBinding(): ActivityChatRoomBinding = ActivityChatRoomBinding.inflate(layoutInflater)
 
     private val roomId by lazy { intent.getStringExtra(CHATROOM_ID) }
-    private lateinit var chatModel : ChatModel
+    private lateinit var chatModel: ChatModel
     private val eventBus by inject<EventBus>()
     private val messageChannel by inject<MessageChannel>()
 
@@ -116,25 +106,24 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
     private fun subscribeMessageChannel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    for (data in messageChannel.channel) {
-                        Log.i("ChatRoomActivity", data.toString())
+                for (data in messageChannel.channel) {
+                    Log.i("ChatRoomActivity", data.toString())
 
-                        binding.popupArticleTitleTextview.text = data.title
-                        binding.popupMessageTextView.text = data.message
+                    binding.popupArticleTitleTextview.text = data.title
+                    binding.popupMessageTextView.text = data.message
 
-                        binding.moveChatRoomButton.setOnClickListener {
-                            data.roomId?.let {
-                                startActivity(newIntent(this@ChatRoomActivity, it))
-                                binding.parentCardView.transitionToStart()
-                                finish()
-                            }
+                    binding.moveChatRoomButton.setOnClickListener {
+                        data.roomId?.let {
+                            startActivity(newIntent(this@ChatRoomActivity, it))
+                            binding.parentCardView.transitionToStart()
+                            finish()
                         }
-                        binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
-                        delay(3000L) // 3초간 나타난다
-                        binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
-                        delay(500L)
                     }
-
+                    binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
+                    delay(3000L) // 3초간 나타난다
+                    binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
+                    delay(500L)
+                }
             }
         }
     }
@@ -176,7 +165,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         }
     }
 
-    private fun getMessageText() : String = with(binding) {
+    private fun getMessageText(): String = with(binding) {
         return editText.text.toString()
     }
 
@@ -190,7 +179,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                 val currentScrollPosition =
                     (binding.recyclerView.layoutManager as LinearLayoutManager?)!!.findFirstCompletelyVisibleItemPosition()
 
-                if( currentScrollPosition <= NEW_MESSAGE_SCROLL_INDEX ) {
+                if (currentScrollPosition <= NEW_MESSAGE_SCROLL_INDEX) {
                     binding.recyclerView.scrollToPosition(0)
                 }
             }
@@ -199,7 +188,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
     override fun observeData() {
         viewModel.chatRoomState.observe(this) {
-            when(it) {
+            when (it) {
                 is ChatRoomState.Uninitialized -> Unit
                 is ChatRoomState.Loading -> handleLoading()
                 is ChatRoomState.Success -> handleSuccess()
@@ -207,7 +196,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
             }
         }
         viewModel.socketState.observe(this) {
-            when(it) {
+            when (it) {
                 is SocketState.Uninitialized -> Unit
                 is SocketState.Loading -> Unit
                 is SocketState.MsgReceived -> getMessages()
@@ -218,7 +207,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
     }
 
     private fun handleMsgError(state: SocketState.Error) {
-        Log.e("MsgError",state.code.toString())
+        Log.e("MsgError", state.code.toString())
     }
 
     private fun handleLoading() {
@@ -231,7 +220,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
     private fun handleError(state: ChatRoomState.Error) {
         binding.progressBar.isGone = true
-        when(state.code!!) {
+        when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
             else -> handleUnexpected(state.code)
         }
@@ -257,6 +246,4 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         const val CHATROOM_ID = "roomId"
         const val NEW_MESSAGE_SCROLL_INDEX = 5
     }
-
-
 }

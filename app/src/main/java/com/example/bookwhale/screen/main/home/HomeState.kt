@@ -11,5 +11,4 @@ sealed class HomeState {
     data class Error(
         val code: String?
     ) : HomeState()
-
 }

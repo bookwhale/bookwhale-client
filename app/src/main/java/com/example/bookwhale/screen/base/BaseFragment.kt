@@ -8,14 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.Job
 
-
-abstract class BaseFragment<VM: BaseViewModel, VB: ViewBinding>: Fragment() {
+abstract class BaseFragment<VM : BaseViewModel, VB : ViewBinding> : Fragment() {
 
     abstract val viewModel: VM
 
     protected lateinit var binding: VB
 
-    abstract fun getViewBinding() : VB
+    abstract fun getViewBinding(): VB
 
     private lateinit var fetchJob: Job
 
@@ -53,5 +52,4 @@ abstract class BaseFragment<VM: BaseViewModel, VB: ViewBinding>: Fragment() {
         }
         super.onDestroy()
     }
-
 }

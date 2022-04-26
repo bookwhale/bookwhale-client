@@ -26,7 +26,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
-
 class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     override val viewModel by viewModel<MyViewModel>()
 
@@ -38,7 +37,7 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
 
     override fun observeData() {
         viewModel.profileStateLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is MyState.Uninitialized -> Unit
                 is MyState.Loading -> handleLoading()
                 is MyState.LogOutSuccess -> handleLogOut()
@@ -85,10 +84,10 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         }
     }
 
-    private fun confirmName() = with(binding){
+    private fun confirmName() = with(binding) {
         val name = updateNameEditText.text
 
-        if(!name.isNullOrEmpty()) {
+        if (!name.isNullOrEmpty()) {
             viewModel.updateNickName(name.toString())
             updateNameEditText.text.clear()
             val mInputMethodManager =
@@ -97,8 +96,8 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
                 binding.updateNameEditText.windowToken,
                 0
             )
-            //updateNameEditText.
-            //keyboardHandle(true)
+            // updateNameEditText.
+            // keyboardHandle(true)
             updateNameGroup.isGone = true
         } else {
             errorTextView.text = getString(R.string.error_noNickName)
@@ -106,10 +105,10 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     }
 
     private fun keyboardHandle(handle: Boolean) {
-        val imm =MainActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (handle) {//내리기
+        val imm = MainActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (handle) { // 내리기
             imm.hideSoftInputFromWindow(binding.updateNameEditText.windowToken, 0)
-        } else {//올리기
+        } else { // 올리기
             imm.showSoftInput(binding.updateNameEditText, 0)
         }
     }
@@ -117,7 +116,7 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     private fun selectSingleImage() {
         TedImagePicker.with(requireContext())
             .mediaType(MediaType.IMAGE)
-            .start{ uri: Uri ->
+            .start { uri: Uri ->
                 val filePathColumn =
                     arrayOf(
                         MediaStore.MediaColumns.DATA
@@ -127,7 +126,8 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
                     filePathColumn,
                     null,
                     null,
-                    null)
+                    null
+                )
 
                 cursor?.let {
                     if (cursor.moveToFirst()) {
@@ -145,11 +145,9 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
 
     private fun uploadFile(file: File) {
         var requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-        var body : MultipartBody.Part = MultipartBody.Part.createFormData("profileImage",file.name,requestBody)
+        var body: MultipartBody.Part = MultipartBody.Part.createFormData("profileImage", file.name, requestBody)
         viewModel.updateProfileImage(body)
     }
-
-
 
     private fun handleLoading() {
         binding.progressBar.isVisible = true
@@ -173,7 +171,6 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         Toast.makeText(requireContext(), getString(R.string.success_logout), Toast.LENGTH_SHORT).show()
     }
 
-
     private fun handleSuccess(state: MyState.Success) {
         binding.progressBar.isGone = true
         binding.profileTextView.text = state.myInfo.nickName
@@ -189,5 +186,4 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         fun newInstance() = MyFragment()
         const val TAG = "MyFragment"
     }
-
 }

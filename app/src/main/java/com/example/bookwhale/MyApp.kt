@@ -7,13 +7,13 @@ import com.kakao.sdk.common.KakaoSdk
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-class MyApp: Application() {
+class MyApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
         appContext = this
 
-        KakaoSdk.init(this,BuildConfig.KAKAO_APP_KEY)
+        KakaoSdk.init(this, BuildConfig.KAKAO_APP_KEY)
 
         startKoin {
             androidContext(this@MyApp)
@@ -30,5 +30,4 @@ class MyApp: Application() {
         var appContext: Context? = null
             private set
     }
-
 }

@@ -13,11 +13,10 @@ sealed class MyState {
     object WithDrawSuccess : MyState()
 
     data class Success(
-        val myInfo : ProfileModel
+        val myInfo: ProfileModel
     ) : MyState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : MyState()
-
 }

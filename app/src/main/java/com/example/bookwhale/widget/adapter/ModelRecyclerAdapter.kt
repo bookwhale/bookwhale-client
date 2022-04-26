@@ -10,13 +10,13 @@ import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
 
-class ModelRecyclerAdapter<M: Model, VM: BaseViewModel>(
+class ModelRecyclerAdapter<M : Model, VM : BaseViewModel>(
     private var modelList: List<Model>,
     private val viewModel: VM,
     private val resourcesProvider: ResourcesProvider,
     private val adapterListener: AdapterListener
 
-): ListAdapter<Model, ModelViewHolder<M>>(Model.DIFF_CALLBACK) {
+) : ListAdapter<Model, ModelViewHolder<M>>(Model.DIFF_CALLBACK) {
 
     override fun getItemCount(): Int = modelList.size
 
@@ -31,7 +31,6 @@ class ModelRecyclerAdapter<M: Model, VM: BaseViewModel>(
         with(holder) {
             bindData(modelList[position] as M)
             bindViews(modelList[position] as M, adapterListener)
-
         }
     }
 
@@ -39,6 +38,4 @@ class ModelRecyclerAdapter<M: Model, VM: BaseViewModel>(
         list?.let { modelList = it }
         super.submitList(list)
     }
-
-
 }

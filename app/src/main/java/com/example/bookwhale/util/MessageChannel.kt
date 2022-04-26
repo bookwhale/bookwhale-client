@@ -1,7 +1,6 @@
 package com.example.bookwhale.util
 
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.sync.Mutex
 
 class MessageChannel {
 
@@ -16,8 +15,8 @@ class MessageChannel {
     }
 
     data class PopupMessage(
-        val title : String?,
-        val message : String?,
-        val roomId : String?
+        val title: String?,
+        val message: String?,
+        val roomId: String?
     )
 }

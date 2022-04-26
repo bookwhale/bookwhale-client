@@ -5,6 +5,5 @@ import com.example.bookwhale.data.response.article.ArticleDTO
 import okhttp3.MultipartBody
 interface PostArticleRepository {
 
-    suspend fun postArticle(images: List<MultipartBody.Part>, articleRequest: ArticleDTO) : NetworkResult<Boolean>
-
+    suspend fun postArticle(images: List<MultipartBody.Part>, articleRequest: ArticleDTO): NetworkResult<Boolean>
 }

@@ -7,11 +7,10 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.google.firebase.messaging.FirebaseMessagingService
-import com.google.firebase.messaging.RemoteMessage
 import com.example.bookwhale.R
 import com.example.bookwhale.data.preference.MyPreferenceManager
-import kotlinx.coroutines.CoroutineScope
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -60,14 +59,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // 해당 채팅방에 접속중이라면 push 알림을 받지 않는다
 
-        if(myPreferenceManager.getSocketStatus() && myPreferenceManager.getRoomId() == roomId) { // 해당 채팅방에 접속중이라면
-            Log.i(TAG,"Room Connected: RoomId = $roomId")
+        if (myPreferenceManager.getSocketStatus() && myPreferenceManager.getRoomId() == roomId) { // 해당 채팅방에 접속중이라면
+            Log.i(TAG, "Room Connected: RoomId = $roomId")
         } else {
-            Log.i(TAG,"Room Unconnected")
+            Log.i(TAG, "Room Unconnected")
             messageToChannel(title, description, roomId)
         }
 
-        //sendNotification(title, description)
+        // sendNotification(title, description)
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
@@ -95,7 +94,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param messageBody FCM message body received.
      */
-    private fun sendNotification(title : String?, message : String?) {
+    private fun sendNotification(title: String?, message: String?) {
 //        val intent = Intent(this, MainActivity::class.java)
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 //        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -109,15 +108,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentText(message)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
-        //.setContentIntent(pendingIntent)
+        // .setContentIntent(pendingIntent)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId,
+            val channel = NotificationChannel(
+                channelId,
                 "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
 

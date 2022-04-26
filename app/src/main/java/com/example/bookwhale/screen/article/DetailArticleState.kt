@@ -10,15 +10,14 @@ sealed class DetailArticleState {
     object Loading : DetailArticleState()
 
     data class FavoriteSuccess(
-        val favoriteList : List<FavoriteModel>
+        val favoriteList: List<FavoriteModel>
     ) : DetailArticleState()
 
     data class Success(
-        val article : DetailArticleModel
+        val article: DetailArticleModel
     ) : DetailArticleState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : DetailArticleState()
-
 }

@@ -15,7 +15,7 @@ import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
-class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
+class FavoriteFragment : BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
     override val viewModel by activityViewModels<MainViewModel>()
 
     override fun getViewBinding(): FragmentFavoriteBinding = FragmentFavoriteBinding.inflate(layoutInflater)
@@ -48,7 +48,7 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
 
     override fun observeData() {
         viewModel.favoriteArticleStateLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is FavoriteState.Loading -> handleLoading()
                 is FavoriteState.Success -> handleSuccess(it)
                 is FavoriteState.Error -> handleError(it)
@@ -63,7 +63,7 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
 
     private fun handleError(state: FavoriteState.Error) {
         binding.progressBar.isGone = true
-        when(state.code!!) {
+        when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
         }
     }
@@ -78,13 +78,12 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
     private fun handleSuccess(state: FavoriteState.Success) {
         binding.progressBar.isGone = true
         adapter.submitList(state.favorites.reversed())
-        if(state.favorites.isEmpty()) {
+        if (state.favorites.isEmpty()) {
             binding.noArticleTextView.isVisible = true
         } else {
             binding.noArticleTextView.isGone = true
         }
     }
-
 
     companion object {
 
@@ -92,5 +91,4 @@ class FavoriteFragment: BaseFragment<MainViewModel, FragmentFavoriteBinding>() {
 
         const val TAG = "FavoriteFragment"
     }
-
 }

@@ -7,13 +7,13 @@ data class FavoriteModel(
     override val id: Long,
     override val type: CellType = CellType.FAVORITE_LIST,
     val favoriteId: Int,
-    val articleId : Int,
-    var articleImage : String?,
-    val articleTitle : String,
-    val articlePrice : String,
+    val articleId: Int,
+    var articleImage: String?,
+    val articleTitle: String,
+    val articlePrice: String,
     val bookStatus: String,
-    val sellingLocation : String,
-    val chatCount : Int,
-    val favoriteCount : Int,
-    val beforeTime : String
+    val sellingLocation: String,
+    val chatCount: Int,
+    val favoriteCount: Int,
+    val beforeTime: String
 ) : Model(id, type)

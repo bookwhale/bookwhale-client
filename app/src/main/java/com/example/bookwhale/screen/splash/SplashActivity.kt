@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivitySplashBinding
 import com.example.bookwhale.screen.base.BaseActivity
-import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.screen.login.LoginActivity
 import com.example.bookwhale.screen.main.MainActivity
 import com.google.android.gms.tasks.OnCompleteListener
@@ -32,21 +31,22 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     }
 
     private fun getCurrentDeviceToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.e(ContentValues.TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(
+            OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.e(ContentValues.TAG, "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                Log.d("deviceToken", task.result.toString())
+                viewModel.saveDeviceToken(task.result)
             }
-
-            Log.d("deviceToken", task.result.toString())
-            viewModel.saveDeviceToken(task.result)
-
-        })
+        )
     }
 
     override fun observeData() {
-        viewModel.splashState.observe(this ) {
-            when(it) {
+        viewModel.splashState.observe(this) {
+            when (it) {
                 is SplashState.Uninitialized -> Unit
                 is SplashState.Loading -> handleLoading()
                 is SplashState.Success -> handleSuccess()
@@ -69,7 +69,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     }
 
     private fun handleError(state: SplashState.Error) {
-        when(state.code) {
+        when (state.code) {
             "S_001" -> handleS001()
             "T_001" -> handleGotoLogin()
             "T_002" -> handleGotoLogin()
@@ -115,5 +115,4 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
 
         const val FCM_DATA_ROOM_ID = "roomId"
     }
-
 }

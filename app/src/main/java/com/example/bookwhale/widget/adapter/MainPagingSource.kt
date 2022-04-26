@@ -37,13 +37,11 @@ class MainPagingSource(
                         beforeTime = data.beforeTime
                     )
                 },
-                prevKey = if(next == 0) null else next - 1,
+                prevKey = if (next == 0) null else next - 1,
                 nextKey = next + 1
             )
-
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }
-
 }

@@ -13,7 +13,6 @@ import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
 
-
 class ArticleListViewHolder(
     private val binding: ViewholderArticlelistBinding,
     viewModel: BaseViewModel,
@@ -43,12 +42,12 @@ class ArticleListViewHolder(
             locationTextView.text = model.sellingLocation
             thumbNailImageView.load(model.articleImage.toString(), 4f, CenterCrop())
 
-            if(model.chatCount == 0) {
+            if (model.chatCount == 0) {
                 chatGroup.isGone = true
             } else {
                 chatGroup.isVisible = true
             }
-            if(model.favoriteCount == 0) {
+            if (model.favoriteCount == 0) {
                 heartGroup.isGone = true
             } else {
                 heartGroup.isVisible = true

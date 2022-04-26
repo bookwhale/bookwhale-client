@@ -11,7 +11,6 @@ sealed class SocketState {
     object MsgSend : SocketState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : SocketState()
-
 }

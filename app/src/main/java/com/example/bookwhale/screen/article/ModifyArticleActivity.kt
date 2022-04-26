@@ -1,6 +1,5 @@
 package com.example.bookwhale.screen.article
 
-import com.example.bookwhale.databinding.ActivityModifyArticleBinding
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -16,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.R
 import com.example.bookwhale.data.response.article.ModifyArticleDTO
+import com.example.bookwhale.databinding.ActivityModifyArticleBinding
 import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.article.DetailImageModel
 import com.example.bookwhale.screen.base.BaseActivity
@@ -35,7 +35,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
-
 
 class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModifyArticleBinding>() {
 
@@ -89,7 +88,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         adapter.notifyItemRangeChanged(removeIndex, imageUriList.size)
     }
 
-    override fun initViews(){
+    override fun initViews() {
 
         binding.recyclerView.adapter = adapter
 
@@ -116,13 +115,12 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         }
     }
 
-    private fun enterKeyboard()= with(binding){
+    private fun enterKeyboard() = with(binding) {
         binding.articlePriceTextView.setOnKeyListener { _, keyCode, event ->
-            if ((event.action== KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 locationClicked()
                 true
-            }
-            else {
+            } else {
                 false
             }
         }
@@ -147,7 +145,8 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
                         filePathColumn,
                         null,
                         null,
-                        null)
+                        null
+                    )
 
                     cursor?.let {
                         if (cursor.moveToFirst()) {
@@ -162,7 +161,6 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
                     }
                     addRecyclerViewList(imageUriList)
                 }
-
             }
     }
 
@@ -185,7 +183,8 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
 
     private fun locationClicked() {
 
-        val items = arrayOf("서울",
+        val items = arrayOf(
+            "서울",
             "부산",
             "대구",
             "인천",
@@ -201,7 +200,8 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
             "전남",
             "경북",
             "경남",
-            "제주")
+            "제주"
+        )
 
         MaterialAlertDialogBuilder(this)
             .setTitle(resources.getString(R.string.location))
@@ -261,7 +261,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         }
     }
 
-    private fun postArticle()  {
+    private fun postArticle() {
         if (checkInputInfo()) {
 
             uploadPhoto()
@@ -276,39 +276,51 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
     private fun checkInputInfo(): Boolean = with(binding) {
         when {
             imageModelList.isEmpty() -> {
-                Toast.makeText(this@ModifyArticleActivity,
+                Toast.makeText(
+                    this@ModifyArticleActivity,
                     getString(R.string.inputError_image),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 return false
             }
             articleNameTextView.text.isEmpty() -> {
-                Toast.makeText(this@ModifyArticleActivity,
+                Toast.makeText(
+                    this@ModifyArticleActivity,
                     getString(R.string.inputError_title),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 return false
             }
             articlePriceTextView.text.isEmpty() -> {
-                Toast.makeText(this@ModifyArticleActivity,
+                Toast.makeText(
+                    this@ModifyArticleActivity,
                     getString(R.string.inputError_price),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 return false
             }
             locationTextView.text.isEmpty() -> {
-                Toast.makeText(this@ModifyArticleActivity,
+                Toast.makeText(
+                    this@ModifyArticleActivity,
                     getString(R.string.inputError_location),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 return false
             }
             statusRadioText.isEmpty() -> {
-                Toast.makeText(this@ModifyArticleActivity,
+                Toast.makeText(
+                    this@ModifyArticleActivity,
                     getString(R.string.inputError_status),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 return false
             }
             descriptionTextView.text.isEmpty() -> {
-                Toast.makeText(this@ModifyArticleActivity,
+                Toast.makeText(
+                    this@ModifyArticleActivity,
                     getString(R.string.inputError_description),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 return false
             }
             else -> return true
@@ -374,26 +386,47 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         officialBookNameTextView.text = state.article.bookResponse.bookTitle
         officialBookImageView.isVisible = true
         officialBookImageView.load(state.article.bookResponse.bookThumbnail, 4f, CenterCrop())
-        officialWriterTextView.text = getString(R.string.writer,
-            state.article.bookResponse.bookAuthor.replace("<b>", "").replace("</b>", ""))
-        officialPublisherTextView.text = getString(R.string.publisher,
-            state.article.bookResponse.bookPublisher.replace("<b>", "").replace("</b>", ""))
-        officialPriceTextView.text = getString(R.string.price,
-            state.article.bookResponse.bookListPrice.replace("<b>", "").replace("</b>", ""))
-        officialBookNameTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity,
-            R.color.black))
-        officialWriterTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity,
-            R.color.black))
-        officialPublisherTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity,
-            R.color.black))
-        officialPriceTextView.setTextColor(ContextCompat.getColor(this@ModifyArticleActivity,
-            R.color.black))
+        officialWriterTextView.text = getString(
+            R.string.writer,
+            state.article.bookResponse.bookAuthor.replace("<b>", "").replace("</b>", "")
+        )
+        officialPublisherTextView.text = getString(
+            R.string.publisher,
+            state.article.bookResponse.bookPublisher.replace("<b>", "").replace("</b>", "")
+        )
+        officialPriceTextView.text = getString(
+            R.string.price,
+            state.article.bookResponse.bookListPrice.replace("<b>", "").replace("</b>", "")
+        )
+        officialBookNameTextView.setTextColor(
+            ContextCompat.getColor(
+                this@ModifyArticleActivity,
+                R.color.black
+            )
+        )
+        officialWriterTextView.setTextColor(
+            ContextCompat.getColor(
+                this@ModifyArticleActivity,
+                R.color.black
+            )
+        )
+        officialPublisherTextView.setTextColor(
+            ContextCompat.getColor(
+                this@ModifyArticleActivity,
+                R.color.black
+            )
+        )
+        officialPriceTextView.setTextColor(
+            ContextCompat.getColor(
+                this@ModifyArticleActivity,
+                R.color.black
+            )
+        )
 
         for (i in 0 until state.article.images.size)
             imageUriList.add(state.article.images[i].articleImage.toString())
 
         addRecyclerViewList(imageUriList)
-
     }
 
     private fun handleError(state: ModifyArticleState.Error) = with(binding) {
@@ -437,7 +470,6 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         return R.id.radio_high
     }
 
-
     companion object {
 
         fun newIntent(context: Context, articleId: String) =
@@ -450,6 +482,4 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         const val DEFAULT_STATUS = "UPPER"
         const val DEFAULT_LOCATION = "SEOUL"
     }
-
 }
-

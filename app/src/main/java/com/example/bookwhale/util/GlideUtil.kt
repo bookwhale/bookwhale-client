@@ -27,8 +27,8 @@ fun ImageView.load(url: String, radius: Float = 0f, scaleType: Transformation<Bi
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .thumbnail(0.1f)
         .apply {
-            if ( radius >0 ) transform(scaleType, RoundedCorners(radius.fromDpToPx()))
-         }
+            if (radius > 0) transform(scaleType, RoundedCorners(radius.fromDpToPx()))
+        }
         .into(this)
 }
 

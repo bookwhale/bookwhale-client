@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.R
 import com.example.bookwhale.data.response.article.ArticleStatusCategory
 import com.example.bookwhale.data.response.chat.MakeChatDTO
@@ -59,7 +58,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
     private var favoriteId = 0
     private var sellerId = 0
     private var clicked: Boolean = false
-    private var articleStatus : ArticleStatusCategory = ArticleStatusCategory.SALE
+    private var articleStatus: ArticleStatusCategory = ArticleStatusCategory.SALE
 
     override fun initViews(): Unit = with(binding) {
 
@@ -74,7 +73,6 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             initButton()
             subscribeEvent()
         }
-
     }
 
     private fun initButton() = with(binding) {
@@ -86,10 +84,12 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         arrowUpAndDown.setOnClickListener {
 
             val currentDegree = arrowUpAndDown.rotation
-            ObjectAnimator.ofFloat(arrowUpAndDown,
+            ObjectAnimator.ofFloat(
+                arrowUpAndDown,
                 View.ROTATION,
                 currentDegree,
-                currentDegree + ARROW_ROTATE_DEGREE).setDuration(ARROW_ANIMATION_DURATION).start()
+                currentDegree + ARROW_ROTATE_DEGREE
+            ).setDuration(ARROW_ANIMATION_DURATION).start()
 
             if (isEnd) {
                 layout.transitionToStart()
@@ -104,17 +104,23 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
 
         chatButton.setOnClickListener { // 채팅방 개설
             lifecycleScope.launch {
-                viewModel.makeNewChat(MakeChatDTO(
-                    articleId = articleId.toInt(),
-                    sellerId = sellerId
-                )).join() // 채팅방이 다 개설되는것을 대기한 후 이동한다.
+                viewModel.makeNewChat(
+                    MakeChatDTO(
+                        articleId = articleId.toInt(),
+                        sellerId = sellerId
+                    )
+                ).join() // 채팅방이 다 개설되는것을 대기한 후 이동한다.
 
-                startActivity(ChatRoomActivity.newIntent(this@DetailArticleActivity,
-                    viewModel.roomId.value.toString()))
+                startActivity(
+                    ChatRoomActivity.newIntent(
+                        this@DetailArticleActivity,
+                        viewModel.roomId.value.toString()
+                    )
+                )
             }
         }
 
-        modifyButton.setOnClickListener{
+        modifyButton.setOnClickListener {
             startActivity(ModifyArticleActivity.newIntent(this@DetailArticleActivity, articleId))
         }
 
@@ -123,7 +129,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         }
 
         reservedButton.setOnClickListener {
-            if(articleStatus == ArticleStatusCategory.RESERVED) {
+            if (articleStatus == ArticleStatusCategory.RESERVED) {
                 showDialog(DialogCategory.ALREADY_RESERVED)
             } else {
                 showDialog(DialogCategory.RESERVED)
@@ -131,7 +137,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         }
 
         soldOutButton.setOnClickListener {
-            if(articleStatus == ArticleStatusCategory.SOLD_OUT) {
+            if (articleStatus == ArticleStatusCategory.SOLD_OUT) {
                 showDialog(DialogCategory.ALREADY_SOLD_OUT)
             } else {
                 showDialog(DialogCategory.SOLD_OUT)
@@ -139,18 +145,17 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         }
 
         dialButton.setOnClickListener {
-            if(!clicked) {
+            if (!clicked) {
                 dialUp()
             } else {
                 dialDown()
             }
         }
-
     }
 
     private fun showDialog(category: DialogCategory) {
 
-        val message = when(category) {
+        val message = when (category) {
             DialogCategory.DELETE -> resources.getString(R.string.delete_question)
             DialogCategory.RESERVED -> resources.getString(R.string.reserved_question)
             DialogCategory.SOLD_OUT -> resources.getString(R.string.soldOut_question)
@@ -165,7 +170,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
             }
             .setPositiveButton(resources.getString(R.string.confirm)) { _, _ ->
                 // Respond to positive button press
-                when(category) {
+                when (category) {
                     DialogCategory.RESERVED -> viewModel.updateStatus(articleId.toInt(), ArticleStatusCategory.RESERVED)
                     DialogCategory.SOLD_OUT -> viewModel.updateStatus(articleId.toInt(), ArticleStatusCategory.SOLD_OUT)
                     DialogCategory.DELETE -> viewModel.deleteArticle(articleId.toInt())
@@ -192,7 +197,6 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         soldOutButton.animate().translationY(0f)
         clicked = false
     }
-
 
     private fun subscribeEvent() {
         lifecycleScope.launch {
@@ -241,18 +245,22 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
                             unFilledHeartButton.setImageResource(R.drawable.ic_heart)
                             myFavorite = false
                         } else {
-                            Toast.makeText(this@DetailArticleActivity,
+                            Toast.makeText(
+                                this@DetailArticleActivity,
                                 getString(R.string.error_noFavorite),
-                                Toast.LENGTH_SHORT).show()
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 } else {
                     lifecycleScope.launch {
                         favoriteId = viewModel.addFavoriteAsync(articleId.toInt()).await()
                         if (favoriteId == 0) {
-                            Toast.makeText(this@DetailArticleActivity,
+                            Toast.makeText(
+                                this@DetailArticleActivity,
                                 getString(R.string.error_noFavorite),
-                                Toast.LENGTH_SHORT).show()
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
                             unFilledHeartButton.setImageResource(R.drawable.ic_heart_filled)
                             myFavorite = true
@@ -260,7 +268,6 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
                     }
                 }
             }
-
         })
     }
 
@@ -343,7 +350,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
     private fun handleError(state: DetailArticleState.Error) = with(binding) {
         binding.progressBar.isGone = true
 
-        Log.e("handleError",state.code.toString())
+        Log.e("handleError", state.code.toString())
 
         when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드

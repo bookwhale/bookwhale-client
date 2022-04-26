@@ -17,7 +17,6 @@ import com.example.bookwhale.widget.viewholder.main.chat.ChatViewHolder
 import com.example.bookwhale.widget.viewholder.main.favorite.FavoriteViewHolder
 import com.example.bookwhale.widget.viewholder.main.home.ArticleListViewHolder
 
-
 object ModelViewHolderMapper {
 
     @Suppress("UNCHECKED_CAST")
@@ -59,8 +58,6 @@ object ModelViewHolderMapper {
                 viewModel,
                 resourcesProvider
             )
-
-
         }
         return viewHolder as ModelViewHolder<M>
     }

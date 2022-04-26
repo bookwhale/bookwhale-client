@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
-class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
+class HomeFragment : BaseFragment<MainViewModel, FragmentHomeBinding>() {
     override val viewModel by activityViewModels<MainViewModel>()
 
     override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
@@ -61,11 +61,10 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
             adapter.refresh()
             swipeRefreshLayout.isRefreshing = false
         }
-
     }
 
-     suspend fun getArticles(search: String?) {
-         viewLifecycleOwner.lifecycleScope.launch {
+    suspend fun getArticles(search: String?) {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getArticlesPaging(search).collectLatest {
                 adapter.submitData(it)
             }
@@ -80,13 +79,13 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
 
     private fun initButton() = with(binding) {
         postArticleButton.setOnClickListener {
-            startActivity(PostArticleActivity.newIntent(requireContext(),null))
+            startActivity(PostArticleActivity.newIntent(requireContext(), null))
         }
     }
 
     override fun observeData() {
         viewModel.homeArticleStateLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is HomeState.Loading -> handleLoading()
                 is HomeState.Success -> handleSuccess()
                 is HomeState.Error -> handleError(it)
@@ -96,18 +95,17 @@ class HomeFragment: BaseFragment<MainViewModel, FragmentHomeBinding>() {
     }
 
     private fun handleLoading() {
-        Log.e(TAG,"handleLoading")
+        Log.e(TAG, "handleLoading")
         binding.progressBar.isVisible = true
     }
 
     private fun handleSuccess() {
-        //binding.progressBar.isGone = true
-
+        // binding.progressBar.isGone = true
     }
 
     private fun handleError(state: HomeState.Error) {
         binding.progressBar.isGone = true
-        when(state.code!!) {
+        when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
         }
     }

@@ -8,8 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface DetailRepository {
 
-    suspend fun getDetailArticle(articleId: Int) : NetworkResult<DetailArticleModel>
+    suspend fun getDetailArticle(articleId: Int): NetworkResult<DetailArticleModel>
 
-    suspend fun getNaverBookApi(title: String) : NetworkResult<Flow<PagingData<NaverBookModel>>>
-
+    suspend fun getNaverBookApi(title: String): NetworkResult<Flow<PagingData<NaverBookModel>>>
 }

@@ -9,7 +9,7 @@ sealed class LoginState {
     object Loading : LoginState()
 
     data class Success(
-        val apiTokens : LoginModel
+        val apiTokens: LoginModel
     ) : LoginState()
 
     object Error : LoginState()

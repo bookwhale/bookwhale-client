@@ -43,21 +43,21 @@ class NaverPagingAdapter(
             override fun areContentsTheSame(oldItem: NaverBookModel, newItem: NaverBookModel): Boolean {
                 return oldItem == newItem
             }
-        } }
+        }
+    }
 }
 
 class NaverPagingViewHolder(
     private val binding: ViewholderNaverbooklistBinding,
     private val resourcesProvider: ResourcesProvider
-): RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: NaverBookModel) {
-        binding.officialBookNameTextView.text = model.bookTitle.replace("<b>","").replace("</b>","")
-        binding.officialBookImageView.load(model.bookThumbnail,4f,CenterCrop())
-        binding.officialPriceTextView.text = resourcesProvider.getString(R.string.price, model.bookListPrice.replace("<b>","").replace("</b>",""))
-        binding.officialPublisherTextView.text = resourcesProvider.getString(R.string.publisher, model.bookPublisher.replace("<b>","").replace("</b>",""))
-        binding.officialWriterTextView.text = resourcesProvider.getString(R.string.writer, model.bookAuthor.replace("<b>","").replace("</b>",""))
-
+        binding.officialBookNameTextView.text = model.bookTitle.replace("<b>", "").replace("</b>", "")
+        binding.officialBookImageView.load(model.bookThumbnail, 4f, CenterCrop())
+        binding.officialPriceTextView.text = resourcesProvider.getString(R.string.price, model.bookListPrice.replace("<b>", "").replace("</b>", ""))
+        binding.officialPublisherTextView.text = resourcesProvider.getString(R.string.publisher, model.bookPublisher.replace("<b>", "").replace("</b>", ""))
+        binding.officialWriterTextView.text = resourcesProvider.getString(R.string.writer, model.bookAuthor.replace("<b>", "").replace("</b>", ""))
     }
 
     fun bindViews(model: NaverBookModel, adapterListener: AdapterListener) {

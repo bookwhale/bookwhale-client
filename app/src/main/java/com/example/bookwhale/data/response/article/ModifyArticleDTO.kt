@@ -7,4 +7,4 @@ data class ModifyArticleDTO(
     val bookStatus: String,
     val sellingLocation: String,
     val deleteImgUrls: ArrayList<String>?
-    )
+)

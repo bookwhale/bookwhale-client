@@ -14,7 +14,7 @@ import okhttp3.MultipartBody
 
 class MyViewModel(
     private val myRepository: MyRepository
-): BaseViewModel() {
+) : BaseViewModel() {
 
     val profileStateLiveData = MutableLiveData<MyState>(MyState.Uninitialized)
 
@@ -73,7 +73,7 @@ class MyViewModel(
 
         val response = myRepository.logOut(logOutDTO)
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             profileStateLiveData.value = MyState.LogOutSuccess
         } else {
             profileStateLiveData.value = MyState.Error(
@@ -92,7 +92,7 @@ class MyViewModel(
 
         val response = myRepository.withDraw(logOutDTO)
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             profileStateLiveData.value = MyState.WithDrawSuccess
         } else {
             profileStateLiveData.value = MyState.Error(
@@ -105,5 +105,4 @@ class MyViewModel(
         myPreferenceManager.removeAccessToken()
         myPreferenceManager.removeRefreshToken()
     }
-
 }

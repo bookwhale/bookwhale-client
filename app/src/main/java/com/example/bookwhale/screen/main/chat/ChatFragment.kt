@@ -1,6 +1,5 @@
 package com.example.bookwhale.screen.main.chat
 
-import android.util.Log
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -16,7 +15,7 @@ import com.example.bookwhale.widget.listener.main.chat.ChatListener
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
-class ChatFragment: BaseFragment<MainViewModel, FragmentChatBinding>() {
+class ChatFragment : BaseFragment<MainViewModel, FragmentChatBinding>() {
     override val viewModel by activityViewModels<MainViewModel>()
 
     override fun getViewBinding(): FragmentChatBinding = FragmentChatBinding.inflate(layoutInflater)
@@ -49,9 +48,9 @@ class ChatFragment: BaseFragment<MainViewModel, FragmentChatBinding>() {
         viewModel.loadChatList()
     }
 
-    override fun observeData()  {
+    override fun observeData() {
         viewModel.chatStateLiveData.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 is ChatState.Uninitialized -> Unit
                 is ChatState.Loading -> handleLoading()
                 is ChatState.Success -> handleSuccess(it)
@@ -68,12 +67,12 @@ class ChatFragment: BaseFragment<MainViewModel, FragmentChatBinding>() {
         binding.progressBar.isGone = true
 
         adapter.submitList(state.chatList)
-        if(state.chatList.isNotEmpty()) binding.noChatTextView.isGone = true
+        if (state.chatList.isNotEmpty()) binding.noChatTextView.isGone = true
     }
 
     private fun handleError(state: ChatState.Error) {
         binding.progressBar.isGone = true
-        when(state.code!!) {
+        when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
         }
     }
@@ -84,7 +83,6 @@ class ChatFragment: BaseFragment<MainViewModel, FragmentChatBinding>() {
             viewModel.fetchData()
         }
     }
-
 
     companion object {
 

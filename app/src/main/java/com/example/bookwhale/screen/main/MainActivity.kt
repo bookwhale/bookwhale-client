@@ -17,18 +17,15 @@ import com.example.bookwhale.databinding.ActivityMainBinding
 import com.example.bookwhale.screen.base.BaseActivity
 import com.example.bookwhale.screen.chatroom.ChatRoomActivity
 import com.example.bookwhale.screen.main.chat.ChatFragment
-import com.example.bookwhale.screen.main.home.HomeFragment
 import com.example.bookwhale.screen.main.favorite.FavoriteFragment
+import com.example.bookwhale.screen.main.home.HomeFragment
 import com.example.bookwhale.screen.main.my.MyFragment
 import com.example.bookwhale.screen.main.mypost.MyPostFragment
-import com.example.bookwhale.util.EventBus
-import com.example.bookwhale.util.Events
 import com.example.bookwhale.util.MessageChannel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.withLock
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
@@ -72,7 +69,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
             }
         }
         searchButton.setOnClickListener {
-            Log.e("searchStatus",searchStatus.toString())
+            Log.e("searchStatus", searchStatus.toString())
             when (searchStatus) {
                 SearchStatus.SEARCH_ING -> {
                     searchStatus = SearchStatus.SEARCH_NOT
@@ -99,7 +96,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
                     toolBarLayout.transitionToEnd()
                     binding.searchEditText.requestFocus()
                     keyboardHandle(handle = false)
-               }
+                }
             }
         }
         backButton.setOnClickListener {
@@ -123,7 +120,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
             }
         }
     }
-
 
     private fun initBottomNav() = with(binding) {
         bottomNav.setOnItemSelectedListener { item ->
@@ -198,9 +194,9 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     private fun keyboardHandle(handle: Boolean) {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (handle) {//내리기
+        if (handle) { // 내리기
             imm.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
-        } else {//올리기
+        } else { // 올리기
             imm.showSoftInput(binding.searchEditText, 0)
         }
     }
@@ -218,7 +214,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun observeData() {
         viewModel.notiSettingLiveData.observe(this) {
-            when(it.pushActivate) {
+            when (it.pushActivate) {
                 NOTI_SUBSCRIBE -> binding.notiButton.setImageResource(R.drawable.ic_notification)
                 NOTI_UNSUBSCRIBE -> binding.notiButton.setImageResource(R.drawable.ic_notification_off)
             }
@@ -235,22 +231,24 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     }
 
     override fun onBackPressed() {
-        disposable.add(backBtnSubject
-            .debounce(100, TimeUnit.MILLISECONDS)
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext {
-                Toast.makeText(this, R.string.finishInfo, Toast.LENGTH_SHORT)
-                    .show()
-            }
-            .timeInterval(TimeUnit.MILLISECONDS)
-            .skip(1)
-            .filter { interval ->
-                interval.time() < BACK_BTN_EXIT_TIMEOUT
-            }
-            .subscribe {
-                finishActivity(0)
-                exitProcess(0)
-            })
+        disposable.add(
+            backBtnSubject
+                .debounce(100, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext {
+                    Toast.makeText(this, R.string.finishInfo, Toast.LENGTH_SHORT)
+                        .show()
+                }
+                .timeInterval(TimeUnit.MILLISECONDS)
+                .skip(1)
+                .filter { interval ->
+                    interval.time() < BACK_BTN_EXIT_TIMEOUT
+                }
+                .subscribe {
+                    finishActivity(0)
+                    exitProcess(0)
+                }
+        )
 
         backBtnSubject.onNext(true)
     }
@@ -269,8 +267,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun onResume() {
         super.onResume()
-
-
     }
 
     companion object {
