@@ -7,6 +7,7 @@ import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.screen.base.BaseViewModel
+import com.example.bookwhale.util.DEFAULT_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
@@ -40,7 +41,7 @@ class FavoriteViewHolder(
             heartTextView.text = model.favoriteCount.toString()
             qualityTextView.text = model.bookStatus
             locationTextView.text = model.sellingLocation
-            thumbNailImageView.load(model.articleImage.toString(), 4f, CenterCrop())
+            thumbNailImageView.load(model.articleImage.toString(), DEFAULT_IMAGEVIEW_RADIUS, CenterCrop())
 
             if (model.chatCount == 0) {
                 chatGroup.isGone = true

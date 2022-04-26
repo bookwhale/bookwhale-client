@@ -4,6 +4,8 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.util.DEFAULT_PAGING_CAPACITY
+import com.example.bookwhale.util.DEFAULT_PAGING_PARAM
 import java.lang.Exception
 
 class MainPagingSource(
@@ -19,8 +21,8 @@ class MainPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ArticleModel> {
         return try {
-            val next = params.key ?: 0
-            val response = service.getAllArticles(null, next, 10)
+            val next = params.key ?: DEFAULT_PAGING_PARAM
+            val response = service.getAllArticles(null, next, DEFAULT_PAGING_CAPACITY)
 
             LoadResult.Page(
                 data = response.body()!!.mapIndexed { index, data ->

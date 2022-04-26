@@ -11,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.util.DEFAULT_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
@@ -62,7 +63,7 @@ class PagingViewHolder(
         chatTextView.text = model.chatCount.toString()
         priceTextView.text = resourcesProvider.getString(R.string.price, model.articlePrice)
         heartTextView.text = model.favoriteCount.toString()
-        thumbNailImageView.load(model.articleImage.toString(), 4f, CenterCrop())
+        thumbNailImageView.load(model.articleImage.toString(), DEFAULT_IMAGEVIEW_RADIUS, CenterCrop())
 
         if (model.chatCount == 0) {
             chatGroup.isGone = true

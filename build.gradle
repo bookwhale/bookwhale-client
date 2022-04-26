@@ -25,6 +25,7 @@ subprojects {
 
     configurations {
         ktlint
+        detekt
     }
 
     afterEvaluate { project ->
@@ -36,6 +37,7 @@ subprojects {
         // additional 3rd party ruleset(s) can be specified here
         // just add them to the classpath (e.g. ktlint 'groupId:artifactId:version') and
         // ktlint will pick them up
+        detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.20.0'
     }
 
     task ktlint(type: JavaExec, group: "verification") {
@@ -53,6 +55,17 @@ subprojects {
         main = "com.pinterest.ktlint.Main"
         classpath = configurations.ktlint
         args "-F", "src/**/*.kt"
+    }
+
+    task detekt(type: JavaExec) {
+        main = "io.gitlab.arturbosch.detekt.cli.Main"
+        classpath = configurations.detekt
+
+        def input = "$projectDir"
+        def exclude = ".*/build/.*,.*/resources/.*"
+        def params = [ '-i', input, '-ex', exclude]
+
+        args(params)
     }
 }
 

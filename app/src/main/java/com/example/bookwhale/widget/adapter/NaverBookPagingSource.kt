@@ -4,6 +4,8 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.model.article.NaverBookModel
+import com.example.bookwhale.util.DEFAULT_PAGING_CAPACITY
+import com.example.bookwhale.util.NAVER_BOOK_PAGING_PARAM
 
 class NaverBookPagingSource(
     private val serverApiService: ServerApiService,
@@ -13,8 +15,8 @@ class NaverBookPagingSource(
         params: LoadParams<Int>
     ): LoadResult<Int, NaverBookModel> {
         return try {
-            val next = params.key ?: 1
-            val response = serverApiService.getNaverBookApi(title, 10, next).body()!!.map {
+            val next = params.key ?: NAVER_BOOK_PAGING_PARAM
+            val response = serverApiService.getNaverBookApi(title, DEFAULT_PAGING_CAPACITY, next).body()!!.map {
                 NaverBookModel(
                     bookIsbn = it.bookIsbn,
                     bookTitle = it.bookTitle,

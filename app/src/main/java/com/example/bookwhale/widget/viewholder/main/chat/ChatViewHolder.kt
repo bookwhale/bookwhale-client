@@ -5,6 +5,7 @@ import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ViewholderChatBinding
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseViewModel
+import com.example.bookwhale.util.DEFAULT_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
@@ -33,7 +34,7 @@ class ChatViewHolder(
             profileTextView.text = model.opponentIdentity
             articleNameTextView.text = model.articleTitle
             model.articleImage?.let {
-                articleImageView.load(it, 4f, CenterCrop())
+                articleImageView.load(it, DEFAULT_IMAGEVIEW_RADIUS, CenterCrop())
             } ?: run {
                 articleImageView.setImageResource(R.drawable.ic_logo)
             }

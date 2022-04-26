@@ -181,7 +181,7 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
     }
 
     private fun dialUp() = with(binding) {
-        dialButton.animate().rotation(45f)
+        dialButton.animate().rotation(DIAL_ROTATE_DEGREE)
         modifyButton.animate().translationY(-resources.getDimension(R.dimen.modify))
         deleteButton.animate().translationY(-resources.getDimension(R.dimen.delete))
         reservedButton.animate().translationY(-resources.getDimension(R.dimen.reserved))
@@ -190,11 +190,11 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
     }
 
     private fun dialDown() = with(binding) {
-        dialButton.animate().rotation(0f)
-        modifyButton.animate().translationY(0f)
-        deleteButton.animate().translationY(0f)
-        reservedButton.animate().translationY(0f)
-        soldOutButton.animate().translationY(0f)
+        dialButton.animate().rotation(DIAL_DEFAULT_DEGREE)
+        modifyButton.animate().translationY(DIAL_DEFAULT_DEGREE)
+        deleteButton.animate().translationY(DIAL_DEFAULT_DEGREE)
+        reservedButton.animate().translationY(DIAL_DEFAULT_DEGREE)
+        soldOutButton.animate().translationY(DIAL_DEFAULT_DEGREE)
         clicked = false
     }
 
@@ -382,6 +382,8 @@ class DetailArticleActivity : BaseActivity<DetailArticleViewModel, ActivityDetai
         const val RESERVED_STRING = "예약중"
         const val ARROW_ANIMATION_DURATION = 200L
         const val ARROW_ROTATE_DEGREE = 180f
+        const val DIAL_ROTATE_DEGREE = 45f
+        const val DIAL_DEFAULT_DEGREE = 0f
     }
 }
 

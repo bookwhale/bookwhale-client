@@ -56,8 +56,10 @@ fun buildOkHttpClient(): OkHttpClient {
         interceptor.level = HttpLoggingInterceptor.Level.NONE
     }
     return OkHttpClient.Builder()
-        .connectTimeout(5, TimeUnit.SECONDS)
+        .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .addInterceptor(interceptor)
         .addInterceptor(CustomAuthInterceptor(myPreferenceManager))
         .build()
 }
+
+const val CONNECT_TIMEOUT_SECONDS = 5L

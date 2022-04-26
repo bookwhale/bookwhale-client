@@ -4,4 +4,6 @@
     <dimen name="reserved">130dp</dimen>
     <dimen name="delete">195dp</dimen>
     <dimen name="modify">260dp</dimen>
+
+    <dimen name="imageview_default_radius">16dp</dimen>
 </resources>
