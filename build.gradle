@@ -57,17 +57,30 @@ subprojects {
         args "-F", "src/**/*.kt"
     }
 
-    task detekt(type: JavaExec) {
+//    task detekt(type: JavaExec) {
+//        main = "io.gitlab.arturbosch.detekt.cli.Main"
+//        classpath = configurations.detekt
+//
+//        def input = "$projectDir"
+//        def exclude = ".*/build/.*,.*/resources/.*"
+//        def params = [ '-i', input, '-ex', exclude]
+//
+//        args(params)
+//    }
+
+    def detektTask = tasks.register("detekt", JavaExec) {
         main = "io.gitlab.arturbosch.detekt.cli.Main"
         classpath = configurations.detekt
 
         def input = "$projectDir"
+        def config = "$projectDir/detekt.yml"
         def exclude = ".*/build/.*,.*/resources/.*"
-        def params = [ '-i', input, '-ex', exclude]
+        def params = [ '-i', input, '-c', config, '-ex', exclude]
 
         args(params)
     }
 }
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

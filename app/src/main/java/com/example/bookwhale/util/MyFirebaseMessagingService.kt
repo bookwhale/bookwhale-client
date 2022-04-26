@@ -94,10 +94,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * @param messageBody FCM message body received.
      */
     private fun sendNotification(title: String?, message: String?) {
-//        val intent = Intent(this, MainActivity::class.java)
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-//            PendingIntent.FLAG_ONE_SHOT)
 
         val channelId = DEFAULT_CHANNEL
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)

@@ -11,7 +11,6 @@ import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseViewModel
-import com.example.bookwhale.util.EventBus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -20,8 +19,7 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent
 import ua.naiksoftware.stomp.dto.StompHeader
 
 class ChatRoomViewModel(
-    private val chatRepository: ChatRepository,
-    private val eventBus: EventBus
+    private val chatRepository: ChatRepository
 ) : BaseViewModel() {
     val chatRoomState = MutableLiveData<ChatRoomState>(ChatRoomState.Uninitialized)
     val socketState = MutableLiveData<SocketState>(SocketState.Uninitialized)

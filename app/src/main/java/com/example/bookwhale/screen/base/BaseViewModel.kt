@@ -16,8 +16,10 @@ abstract class BaseViewModel : ViewModel() {
 
     protected var stateBundle: Bundle? = null
 
-    open val myPreferenceManager = object : KoinComponent { val myPreferenceManager: MyPreferenceManager by inject() }.myPreferenceManager
-    open val loginRepository = object : KoinComponent { val loginRepository: LoginRepository by inject() }.loginRepository
+    open val myPreferenceManager =
+        object : KoinComponent { val myPreferenceManager: MyPreferenceManager by inject() }.myPreferenceManager
+    open val loginRepository =
+        object : KoinComponent { val loginRepository: LoginRepository by inject() }.loginRepository
 
     open fun fetchData(): Job = viewModelScope.launch {
     }

@@ -1,6 +1,5 @@
 package com.example.bookwhale.screen.main.my
 
-import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.database.Cursor
@@ -15,7 +14,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentMyBinding
 import com.example.bookwhale.screen.base.BaseFragment
-import com.example.bookwhale.screen.main.MainActivity
 import com.example.bookwhale.screen.splash.SplashActivity
 import com.example.bookwhale.util.PROFILE_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.load
@@ -97,20 +95,9 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
                 binding.updateNameEditText.windowToken,
                 0
             )
-            // updateNameEditText.
-            // keyboardHandle(true)
             updateNameGroup.isGone = true
         } else {
             errorTextView.text = getString(R.string.error_noNickName)
-        }
-    }
-
-    private fun keyboardHandle(handle: Boolean) {
-        val imm = MainActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (handle) { // 내리기
-            imm.hideSoftInputFromWindow(binding.updateNameEditText.windowToken, 0)
-        } else { // 올리기
-            imm.showSoftInput(binding.updateNameEditText, 0)
         }
     }
 
@@ -167,7 +154,9 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
         binding.progressBar.isGone = true
         viewModel.deleteSavedToken()
         val intent = SplashActivity.newIntent(requireContext())
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+            Intent.FLAG_ACTIVITY_CLEAR_TASK or
+            Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         Toast.makeText(requireContext(), getString(R.string.success_logout), Toast.LENGTH_SHORT).show()
     }
@@ -175,7 +164,9 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     private fun handleSuccess(state: MyState.Success) {
         binding.progressBar.isGone = true
         binding.profileTextView.text = state.myInfo.nickName
-        state.myInfo.profileImage?.let { url -> binding.profileImageView.load(url, PROFILE_IMAGEVIEW_RADIUS, CenterCrop()) }
+        state.myInfo.profileImage?.let { url ->
+            binding.profileImageView.load(url, PROFILE_IMAGEVIEW_RADIUS, CenterCrop())
+        }
     }
 
     private fun handleError(state: MyState.Error) {

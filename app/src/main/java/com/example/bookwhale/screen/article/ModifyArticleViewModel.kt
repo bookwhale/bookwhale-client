@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
 class ModifyArticleViewModel(
-    private val ModifyArticleRepository: ModifyArticleRepository,
+    private val modifyArticleRepository: ModifyArticleRepository,
     private val detailRepository: DetailRepository
 ) : BaseViewModel() {
 
@@ -35,7 +35,7 @@ class ModifyArticleViewModel(
     fun uploadArticle(articleId: Int, files: List<MultipartBody.Part>, articleDTO: ModifyArticleDTO) = viewModelScope.launch {
 
         modifyArticleStateLiveData.value = ModifyArticleState.Loading
-        val response = ModifyArticleRepository.modifyArticle(articleId, files, articleDTO)
+        val response = modifyArticleRepository.modifyArticle(articleId, files, articleDTO)
 
         if (response.status == NetworkResult.Status.SUCCESS) {
             modifyArticleStateLiveData.value = ModifyArticleState.ModifySuccess

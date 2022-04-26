@@ -99,6 +99,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
                     } else {
                         val errorCode: String = mOAuthLoginModule.getLastErrorCode(this@LoginActivity).code
                         val errorDesc = mOAuthLoginModule.getLastErrorDesc(this@LoginActivity)
+                        Log.i("Naver Login Error : ", "code : $errorCode, desc : $errorDesc")
                     }
                 }
             }
@@ -126,8 +127,11 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
     }
     private fun handleSuccess(state: LoginState.Success) {
         binding.progressBar.isGone = true
+        Log.i("Access Token : ", "${state.apiTokens}")
         val intent = MainActivity.newIntent(this@LoginActivity)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+            Intent.FLAG_ACTIVITY_CLEAR_TASK or
+            Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }
     private fun handleError(state: LoginState.Error) {

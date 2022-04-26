@@ -393,9 +393,10 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
 
     companion object {
 
-        fun newIntent(context: Context, bookInfo: NaverBookModel?) = Intent(context, PostArticleActivity::class.java).apply {
-            putExtra(NAVER_BOOK_INFO, bookInfo)
-        }
+        fun newIntent(context: Context, bookInfo: NaverBookModel?) =
+            Intent(context, PostArticleActivity::class.java).apply {
+                putExtra(NAVER_BOOK_INFO, bookInfo)
+            }
 
         const val NAVER_BOOK_INFO = "NaverBookInfo"
         const val MAX_IMAGE_NUM = 5
