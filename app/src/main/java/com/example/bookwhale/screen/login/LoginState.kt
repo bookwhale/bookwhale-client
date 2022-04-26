@@ -12,5 +12,7 @@ sealed class LoginState {
         val apiTokens: LoginModel
     ) : LoginState()
 
-    object Error : LoginState()
+    data class Error(
+        val code: String?
+    ) : LoginState()
 }
