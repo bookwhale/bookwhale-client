@@ -1,8 +1,18 @@
 package com.example.bookwhale.di
 
-import com.example.bookwhale.data.network.*
+import com.example.bookwhale.data.network.buildOkHttpClient
+import com.example.bookwhale.data.network.provideArticleApiService
+import com.example.bookwhale.data.network.provideArticleRetrofit
+import com.example.bookwhale.data.network.provideChatApiService
+import com.example.bookwhale.data.network.provideChatRetrofit
+import com.example.bookwhale.data.network.provideGsonConvertFactory
 import com.example.bookwhale.data.preference.MyPreferenceManager
-import com.example.bookwhale.data.repository.article.*
+import com.example.bookwhale.data.repository.article.DetailRepository
+import com.example.bookwhale.data.repository.article.DetailRepositoryImpl
+import com.example.bookwhale.data.repository.article.ModifyArticleRepository
+import com.example.bookwhale.data.repository.article.ModifyArticleRepositoryImpl
+import com.example.bookwhale.data.repository.article.PostArticleRepository
+import com.example.bookwhale.data.repository.article.PostArticleRepositoryImpl
 import com.example.bookwhale.data.repository.chat.ChatRepository
 import com.example.bookwhale.data.repository.chat.ChatRepositoryImpl
 import com.example.bookwhale.data.repository.login.LoginRepository
