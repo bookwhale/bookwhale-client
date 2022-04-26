@@ -44,7 +44,10 @@ class HomeFragment : BaseFragment<MainViewModel, FragmentHomeBinding>() {
         recyclerView.adapter = adapter
 
         adapter.addLoadStateListener { loadState ->
-            if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapter.itemCount < 1) {
+            if (loadState.source.refresh is LoadState.NotLoading &&
+                loadState.append.endOfPaginationReached &&
+                adapter.itemCount < 1
+            ) {
                 noArticleTextView.isVisible = true
                 binding.progressBar.isGone = true
             } else {

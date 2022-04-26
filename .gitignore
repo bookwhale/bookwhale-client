@@ -237,4 +237,10 @@ fabric.properties
 # APP KEY
 api_key.xml
 
+# detekt config file
+detekt.yml
+
+# google-service
+google-services.json
+
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,kotlin

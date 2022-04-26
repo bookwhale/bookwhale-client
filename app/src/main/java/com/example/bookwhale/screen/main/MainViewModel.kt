@@ -104,6 +104,7 @@ class MainViewModel(
             myPreferenceManager.putId(response.data!!.userId)
             myPreferenceManager.putName(response.data!!.nickName)
         } else {
+            Log.e("GetMyInfo Error: ", "${response.code}")
         }
     }
 

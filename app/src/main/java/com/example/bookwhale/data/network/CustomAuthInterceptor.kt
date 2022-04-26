@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import okhttp3.Interceptor
 import okhttp3.Response
+import java.net.SocketTimeoutException
 
 class CustomAuthInterceptor(
     private val myPreferenceManager: MyPreferenceManager
@@ -19,8 +20,8 @@ class CustomAuthInterceptor(
                 .build()
 
             chain.proceed(request)
-        } catch (SocketTimeoutException: Exception) {
-            Log.e("SocketTimeoutException", "$SocketTimeoutException")
+        } catch (socketTimeoutException: SocketTimeoutException) {
+            Log.e("SocketTimeoutException", "$socketTimeoutException")
             chain.proceed(chain.request())
         }
     }
