@@ -21,7 +21,9 @@ import com.example.bookwhale.screen.main.favorite.FavoriteFragment
 import com.example.bookwhale.screen.main.home.HomeFragment
 import com.example.bookwhale.screen.main.my.MyFragment
 import com.example.bookwhale.screen.main.mypost.MyPostFragment
+import com.example.bookwhale.util.DIS_POPUP_MESSAGE_DURATION
 import com.example.bookwhale.util.MessageChannel
+import com.example.bookwhale.util.SHOW_POPUP_MESSAGE_DURATION
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -206,9 +208,9 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     private suspend fun showPopupAnimation() = withContext(Dispatchers.Main) {
         binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
-        delay(3000L) // 3초간 나타난다
+        delay(SHOW_POPUP_MESSAGE_DURATION) // 3초간 나타난다
         binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
-        delay(500L)
+        delay(DIS_POPUP_MESSAGE_DURATION)
     }
 
     private fun clearAnimation() {
@@ -236,20 +238,20 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
     override fun onBackPressed() {
         disposable.add(
             backBtnSubject
-                .debounce(100, TimeUnit.MILLISECONDS)
+                .debounce(BACK_PRESSED_DEBOUNCE_DELAY, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext {
                     Toast.makeText(this, R.string.finishInfo, Toast.LENGTH_SHORT)
                         .show()
                 }
                 .timeInterval(TimeUnit.MILLISECONDS)
-                .skip(1)
+                .skip(BACK_PRESSED_SKIP_COUNT)
                 .filter { interval ->
                     interval.time() < BACK_BTN_EXIT_TIMEOUT
                 }
                 .subscribe {
-                    finishActivity(0)
-                    exitProcess(0)
+                    finishActivity(ZERO)
+                    exitProcess(ZERO)
                 }
         )
 
@@ -284,6 +286,10 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
         const val NOTI_SUBSCRIBE = "Y"
         const val NOTI_UNSUBSCRIBE = "N"
+
+        const val ZERO = 0
+        const val BACK_PRESSED_SKIP_COUNT = 1L
+        const val BACK_PRESSED_DEBOUNCE_DELAY = 100L
 
         enum class SearchStatus {
             SEARCH_NOT,

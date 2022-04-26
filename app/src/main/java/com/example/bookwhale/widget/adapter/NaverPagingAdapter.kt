@@ -9,6 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ViewholderNaverbooklistBinding
 import com.example.bookwhale.model.article.NaverBookModel
+import com.example.bookwhale.util.DEFAULT_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
@@ -53,11 +54,15 @@ class NaverPagingViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: NaverBookModel) {
-        binding.officialBookNameTextView.text = model.bookTitle.replace("<b>", "").replace("</b>", "")
-        binding.officialBookImageView.load(model.bookThumbnail, 4f, CenterCrop())
-        binding.officialPriceTextView.text = resourcesProvider.getString(R.string.price, model.bookListPrice.replace("<b>", "").replace("</b>", ""))
-        binding.officialPublisherTextView.text = resourcesProvider.getString(R.string.publisher, model.bookPublisher.replace("<b>", "").replace("</b>", ""))
-        binding.officialWriterTextView.text = resourcesProvider.getString(R.string.writer, model.bookAuthor.replace("<b>", "").replace("</b>", ""))
+        binding.officialBookNameTextView.text =
+            model.bookTitle.replace("<b>", "").replace("</b>", "")
+        binding.officialBookImageView.load(model.bookThumbnail, DEFAULT_IMAGEVIEW_RADIUS, CenterCrop())
+        binding.officialPriceTextView.text =
+            resourcesProvider.getString(R.string.price, model.bookListPrice.replace("<b>", "").replace("</b>", ""))
+        binding.officialPublisherTextView.text =
+            resourcesProvider.getString(R.string.publisher, model.bookPublisher.replace("<b>", "").replace("</b>", ""))
+        binding.officialWriterTextView.text =
+            resourcesProvider.getString(R.string.writer, model.bookAuthor.replace("<b>", "").replace("</b>", ""))
     }
 
     fun bindViews(model: NaverBookModel, adapterListener: AdapterListener) {

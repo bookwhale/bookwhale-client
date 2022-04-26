@@ -11,6 +11,7 @@ import com.example.bookwhale.databinding.ViewholderMyChatBinding
 import com.example.bookwhale.databinding.ViewholderOpponentChatBinding
 import com.example.bookwhale.model.MessageType
 import com.example.bookwhale.model.main.chat.ChatMessageModel
+import com.example.bookwhale.util.PROFILE_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.load
 
 class ChatPagingAdapter(
@@ -20,8 +21,10 @@ class ChatPagingAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            MY_MESSAGE -> MyChatPagingViewHolder(ViewholderMyChatBinding.inflate(layoutInflater, parent, false))
-            OPPONENT_MESSAGE -> OpponentChatPagingViewHolder(ViewholderOpponentChatBinding.inflate(layoutInflater, parent, false), senderProfileImage)
+            MY_MESSAGE ->
+                MyChatPagingViewHolder(ViewholderMyChatBinding.inflate(layoutInflater, parent, false))
+            OPPONENT_MESSAGE ->
+                OpponentChatPagingViewHolder(ViewholderOpponentChatBinding.inflate(layoutInflater, parent, false), senderProfileImage)
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
@@ -91,7 +94,7 @@ class OpponentChatPagingViewHolder(
     fun bind(model: ChatMessageModel) {
         binding.opponentTextView.text = model.content
         senderProfileImage?.let {
-            binding.opponentProfileImageView.load(it, 16f, CenterCrop())
+            binding.opponentProfileImageView.load(it, PROFILE_IMAGEVIEW_RADIUS, CenterCrop())
         }
     }
 }

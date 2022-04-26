@@ -4,6 +4,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.databinding.ViewholderTempimageBinding
 import com.example.bookwhale.model.article.DetailImageModel
 import com.example.bookwhale.screen.base.BaseViewModel
+import com.example.bookwhale.util.DEFAULT_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
@@ -32,7 +33,7 @@ class TempImageViewHolder(
     override fun bindData(model: DetailImageModel) {
         super.bindData(model)
         with(binding) {
-            model.articleImage?.let { imageView.load(it, 4f, CenterCrop()) }
+            model.articleImage?.let { imageView.load(it, DEFAULT_IMAGEVIEW_RADIUS, CenterCrop()) }
         }
     }
 }
