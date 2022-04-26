@@ -6,7 +6,6 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.example.bookwhale.databinding.ViewholderClosedChatBinding
 import com.example.bookwhale.databinding.ViewholderMyChatBinding
 import com.example.bookwhale.databinding.ViewholderOpponentChatBinding
 import com.example.bookwhale.model.MessageType
