@@ -16,8 +16,7 @@ class DetailImageViewHolder(
 
     override fun reset() = Unit
 
-    override fun bindViews(model: DetailImageModel, adapterListener: AdapterListener) {
-    }
+    override fun bindViews(model: DetailImageModel, adapterListener: AdapterListener) = Unit
 
     override fun bindData(model: DetailImageModel) {
         super.bindData(model)

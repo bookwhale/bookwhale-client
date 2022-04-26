@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class TokenRequestDTO(
     @SerializedName("apiToken")
-    private val apiToken: String,
+    val apiToken: String,
     @SerializedName("refreshToken")
-    private val refreshToken: String
+    val refreshToken: String
 )

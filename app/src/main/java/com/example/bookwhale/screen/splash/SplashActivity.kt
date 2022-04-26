@@ -96,16 +96,16 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     private fun passToMain() {
         val intent = MainActivity.newIntent(this@SplashActivity, roomId as String?)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                Intent.FLAG_ACTIVITY_CLEAR_TOP
+            Intent.FLAG_ACTIVITY_CLEAR_TASK or
+            Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }
 
     private fun passToLogin() {
         val intent = LoginActivity.newIntent(this@SplashActivity)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                Intent.FLAG_ACTIVITY_CLEAR_TOP
+            Intent.FLAG_ACTIVITY_CLEAR_TASK or
+            Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }
 

@@ -24,7 +24,10 @@ class ChatPagingAdapter(
             MY_MESSAGE ->
                 MyChatPagingViewHolder(ViewholderMyChatBinding.inflate(layoutInflater, parent, false))
             OPPONENT_MESSAGE ->
-                OpponentChatPagingViewHolder(ViewholderOpponentChatBinding.inflate(layoutInflater, parent, false), senderProfileImage)
+                OpponentChatPagingViewHolder(
+                    ViewholderOpponentChatBinding.inflate(layoutInflater, parent, false),
+                    senderProfileImage
+                )
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
@@ -38,12 +41,6 @@ class ChatPagingAdapter(
                 }
             }
             is OpponentChatPagingViewHolder -> {
-                if (model != null) {
-                    holder.bind(model)
-                }
-            }
-
-            is ClosedChatViewHolder -> {
                 if (model != null) {
                     holder.bind(model)
                 }
@@ -97,11 +94,4 @@ class OpponentChatPagingViewHolder(
             binding.opponentProfileImageView.load(it, PROFILE_IMAGEVIEW_RADIUS, CenterCrop())
         }
     }
-}
-
-class ClosedChatViewHolder(
-    private val binding: ViewholderClosedChatBinding
-) : RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(model: ChatMessageModel) {}
 }
