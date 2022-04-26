@@ -13,35 +13,35 @@ class LoginRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher
 ) : LoginRepository {
 
-    override suspend fun getNaverLoginInfo(code: String, deviceToken: String): LoginModel = withContext(ioDispatcher) {
+    override suspend fun getNaverLoginInfo(code: String, deviceToken: String): NetworkResult<LoginModel> = withContext(ioDispatcher) {
         val response = serverApiService.getNaverLoginInfo(code, deviceToken)
 
-        response.body()?.let {
-            return@withContext LoginModel(
-                apiToken = it.apiToken,
-                refreshToken = it.refreshToken
+        if (response.isSuccessful) {
+            NetworkResult.success(
+                LoginModel(
+                    apiToken = response.body()!!.apiToken,
+                    refreshToken = response.body()!!.refreshToken
+                )
             )
-        } ?: kotlin.run {
-            return@withContext LoginModel(
-                apiToken = null,
-                refreshToken = null
-            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
         }
     }
 
-    override suspend fun getKaKaoLoginInfo(code: String, deviceToken: String): LoginModel = withContext(ioDispatcher) {
+    override suspend fun getKaKaoLoginInfo(code: String, deviceToken: String): NetworkResult<LoginModel> = withContext(ioDispatcher) {
         val response = serverApiService.getKaKaoLoginInfo(code, deviceToken)
 
-        response.body()?.let {
-            return@withContext LoginModel(
-                apiToken = it.apiToken,
-                refreshToken = it.refreshToken
+        if (response.isSuccessful) {
+            NetworkResult.success(
+                LoginModel(
+                    apiToken = response.body()!!.apiToken,
+                    refreshToken = response.body()!!.refreshToken
+                )
             )
-        } ?: kotlin.run {
-            return@withContext LoginModel(
-                apiToken = null,
-                refreshToken = null
-            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
         }
     }
 

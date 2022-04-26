@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.bookwhale.BuildConfig
 import com.example.bookwhale.R
@@ -113,20 +115,25 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
             when (it) {
                 is LoginState.Loading -> handleLoading()
                 is LoginState.Success -> handleSuccess(it)
-                is LoginState.Error -> handleError()
+                is LoginState.Error -> handleError(it)
                 else -> Unit
             }
         }
     }
 
-    private fun handleLoading() {}
+    private fun handleLoading() {
+        binding.progressBar.isVisible = true
+    }
     private fun handleSuccess(state: LoginState.Success) {
-
+        binding.progressBar.isGone = true
         val intent = MainActivity.newIntent(this@LoginActivity)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }
-    private fun handleError() {}
+    private fun handleError(state: LoginState.Error) {
+        binding.progressBar.isGone = true
+        Toast.makeText(this, getString(R.string.error_unKnown, state.code), Toast.LENGTH_SHORT).show()
+    }
 
     companion object {
         fun newIntent(context: Context) = Intent(context, LoginActivity::class.java)
