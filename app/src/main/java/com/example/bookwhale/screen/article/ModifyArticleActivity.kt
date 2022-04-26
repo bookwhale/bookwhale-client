@@ -19,6 +19,7 @@ import com.example.bookwhale.databinding.ActivityModifyArticleBinding
 import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.article.DetailImageModel
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.util.DEFAULT_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.EventBus
 import com.example.bookwhale.util.Events
 import com.example.bookwhale.util.load
@@ -385,7 +386,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
         descriptionTextView.setText(state.article.description)
         officialBookNameTextView.text = state.article.bookResponse.bookTitle
         officialBookImageView.isVisible = true
-        officialBookImageView.load(state.article.bookResponse.bookThumbnail, 4f, CenterCrop())
+        officialBookImageView.load(state.article.bookResponse.bookThumbnail, DEFAULT_IMAGEVIEW_RADIUS, CenterCrop())
         officialWriterTextView.text = getString(
             R.string.writer,
             state.article.bookResponse.bookAuthor.replace("<b>", "").replace("</b>", "")

@@ -24,7 +24,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      */
 
     private val myPreferenceManager by inject<MyPreferenceManager>()
-    private val eventBus by inject<EventBus>()
     private val messageChannel by inject<MessageChannel>()
 
     // [START receive_message]

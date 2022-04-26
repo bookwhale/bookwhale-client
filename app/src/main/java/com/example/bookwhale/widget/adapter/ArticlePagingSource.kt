@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.model.main.home.ArticleModel
+import com.example.bookwhale.util.DEFAULT_PAGING_CAPACITY
 
 class ArticlePagingSource(
     private val serverApiService: ServerApiService,
@@ -14,7 +15,7 @@ class ArticlePagingSource(
     ): LoadResult<Int, ArticleModel> {
         return try {
             val next = params.key ?: 0
-            val response = serverApiService.getAllArticles(search, next, 10).body()!!.map {
+            val response = serverApiService.getAllArticles(search, next, DEFAULT_PAGING_CAPACITY).body()!!.map {
                 ArticleModel(
                     id = it.articleId.toLong(),
                     articleId = it.articleId,

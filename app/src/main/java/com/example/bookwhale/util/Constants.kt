@@ -1,0 +1,12 @@
+package com.example.bookwhale.util
+
+const val DEFAULT_IMAGEVIEW_RADIUS = 4f
+const val PROFILE_IMAGEVIEW_RADIUS = 16f
+const val DEFAULT_PAGING_CAPACITY = 10
+const val CHAT_PAGING_CAPACITY = 30
+const val CONST_ZERO = 0
+const val GLIDE_THUMBNAIL = 0.1f
+const val DEFAULT_PAGING_PARAM = 0
+const val NAVER_BOOK_PAGING_PARAM = 1
+const val SHOW_POPUP_MESSAGE_DURATION = 3000L
+const val DIS_POPUP_MESSAGE_DURATION = 500L

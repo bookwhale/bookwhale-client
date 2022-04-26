@@ -24,6 +24,7 @@ import com.example.bookwhale.model.CellType
 import com.example.bookwhale.model.article.DetailImageModel
 import com.example.bookwhale.model.article.NaverBookModel
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.util.DEFAULT_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.load
 import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.adapter.ModelRecyclerAdapter
@@ -135,7 +136,7 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
     private fun handleNaverBookApi() = with(binding) {
         naverBookInfo?.let {
             officialBookImageView.isVisible = true
-            officialBookImageView.load(it.bookThumbnail, 4f, CenterCrop())
+            officialBookImageView.load(it.bookThumbnail, DEFAULT_IMAGEVIEW_RADIUS, CenterCrop())
             officialBookNameTextView.text = it.bookTitle.replace("<b>", "").replace("</b>", "")
             officialWriterTextView.text = getString(R.string.writer, it.bookAuthor.replace("<b>", "").replace("</b>", ""))
             officialPublisherTextView.text = getString(R.string.publisher, it.bookPublisher.replace("<b>", "").replace("</b>", ""))

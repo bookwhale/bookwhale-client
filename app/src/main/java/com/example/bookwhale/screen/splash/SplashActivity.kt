@@ -61,7 +61,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
 
     private fun handleSuccess() {
         lifecycleScope.launch {
-            delay(1500L) // 추후 특정 시간 걸리는 작업을 염두하고 임의로 딜레이를 주었다.
+            delay(LOGIN_DELAY) // 추후 특정 시간 걸리는 작업을 염두하고 임의로 딜레이를 주었다.
             binding.progressBar.isGone = true
 
             passToMain()
@@ -86,7 +86,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
 
     private fun handleGotoLogin() {
         lifecycleScope.launch {
-            delay(1500L) // 추후 특정 시간 걸리는 작업을 염두하고 임의로 딜레이를 주었다.
+            delay(LOGIN_DELAY) // 추후 특정 시간 걸리는 작업을 염두하고 임의로 딜레이를 주었다.
             binding.progressBar.isGone = true
 
             passToLogin()
@@ -95,13 +95,17 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
 
     private fun passToMain() {
         val intent = MainActivity.newIntent(this@SplashActivity, roomId as String?)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }
 
     private fun passToLogin() {
         val intent = LoginActivity.newIntent(this@SplashActivity)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }
 
@@ -114,5 +118,6 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         fun newIntent(context: Context) = Intent(context, SplashActivity::class.java)
 
         const val FCM_DATA_ROOM_ID = "roomId"
+        const val LOGIN_DELAY = 1500L
     }
 }

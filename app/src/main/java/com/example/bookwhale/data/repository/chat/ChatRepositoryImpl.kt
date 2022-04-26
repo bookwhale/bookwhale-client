@@ -12,6 +12,8 @@ import com.example.bookwhale.data.response.chat.MakeChatDTO
 import com.example.bookwhale.model.MessageType
 import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.main.chat.ChatModel
+import com.example.bookwhale.util.DEFAULT_PAGING_CAPACITY
+import com.example.bookwhale.util.DEFAULT_PAGING_PARAM
 import com.example.bookwhale.widget.adapter.ChatPagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -71,7 +73,7 @@ class ChatRepositoryImpl(
     }
 
     override suspend fun getChatRoomDetail(roomId: Int): NetworkResult<List<ChatMessageModel>> = withContext(ioDispatcher) {
-        val response = chatApiService.getChatMessages(roomId, 0, 10)
+        val response = chatApiService.getChatMessages(roomId, DEFAULT_PAGING_PARAM, DEFAULT_PAGING_CAPACITY)
 
         if (response.isSuccessful) {
             NetworkResult.success(

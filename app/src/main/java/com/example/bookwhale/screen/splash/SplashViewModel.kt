@@ -23,7 +23,8 @@ class SplashViewModel(
 
         splashState.value = SplashState.Loading
 
-        if (!myPreferenceManager.getAccessToken().isNullOrEmpty() && !myPreferenceManager.getRefreshToken().isNullOrEmpty()) {
+        if (!myPreferenceManager.getAccessToken().isNullOrEmpty() &&
+            !myPreferenceManager.getRefreshToken().isNullOrEmpty()) {
             val response = myRepository.getMyInfo()
             if (response.status == NetworkResult.Status.SUCCESS) {
                 // 엑세스토큰 유효. 로그인 성공.

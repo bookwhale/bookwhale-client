@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.example.bookwhale.data.network.ChatApiService
 import com.example.bookwhale.model.MessageType
 import com.example.bookwhale.model.main.chat.ChatMessageModel
+import com.example.bookwhale.util.CHAT_PAGING_CAPACITY
 
 class ChatPagingSource(
     private val chatApiService: ChatApiService,
@@ -16,7 +17,7 @@ class ChatPagingSource(
     ): LoadResult<Int, ChatMessageModel> {
         return try {
             val next = params.key ?: 0
-            val response = chatApiService.getChatMessages(roomId, next, 30).body()!!.map {
+            val response = chatApiService.getChatMessages(roomId, next, CHAT_PAGING_CAPACITY).body()!!.map {
                 if (it.senderId == userId) {
                     ChatMessageModel(
                         senderId = it.senderId,

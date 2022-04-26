@@ -16,8 +16,11 @@ import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityChatRoomBinding
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseActivity
+import com.example.bookwhale.util.DEFAULT_IMAGEVIEW_RADIUS
+import com.example.bookwhale.util.DIS_POPUP_MESSAGE_DURATION
 import com.example.bookwhale.util.EventBus
 import com.example.bookwhale.util.MessageChannel
+import com.example.bookwhale.util.SHOW_POPUP_MESSAGE_DURATION
 import com.example.bookwhale.util.load
 import com.example.bookwhale.widget.adapter.ChatPagingAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -124,9 +127,9 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
                         }
                     }
                     binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
-                    delay(3000L) // 3초간 나타난다
+                    delay(SHOW_POPUP_MESSAGE_DURATION) // 3초간 나타난다
                     binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
-                    delay(500L)
+                    delay(DIS_POPUP_MESSAGE_DURATION)
                 }
             }
         }
@@ -141,9 +144,9 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
 
     private suspend fun showPopupAnimation() = withContext(Dispatchers.Main) {
         binding.parentCardView.transitionToEnd() // 상단에 ui를 보여주는 애니메이션
-        delay(3000L) // 3초간 나타난다
+        delay(SHOW_POPUP_MESSAGE_DURATION) // 3초간 나타난다
         binding.parentCardView.transitionToStart() // ui 없애는 애니메이션
-        delay(500L)
+        delay(DIS_POPUP_MESSAGE_DURATION)
     }
 
     private fun clearAnimation() {
@@ -154,7 +157,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         chatModel.let { data ->
             binding.articleTitleTextView.text = data.articleTitle
             data.articleImage?.let {
-                binding.articleImageView.load(it, 4f, CenterCrop())
+                binding.articleImageView.load(it, DEFAULT_IMAGEVIEW_RADIUS, CenterCrop())
             }
         }
     }

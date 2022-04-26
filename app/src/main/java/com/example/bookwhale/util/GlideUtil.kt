@@ -25,9 +25,9 @@ fun ImageView.load(url: String, radius: Float = 0f, scaleType: Transformation<Bi
         .load(url)
         .transition(DrawableTransitionOptions.withCrossFade(factory))
         .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .thumbnail(0.1f)
+        .thumbnail(GLIDE_THUMBNAIL)
         .apply {
-            if (radius > 0) transform(scaleType, RoundedCorners(radius.fromDpToPx()))
+            if (radius > CONST_ZERO) transform(scaleType, RoundedCorners(radius.fromDpToPx()))
         }
         .into(this)
 }

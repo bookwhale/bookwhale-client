@@ -17,6 +17,7 @@ import com.example.bookwhale.databinding.FragmentMyBinding
 import com.example.bookwhale.screen.base.BaseFragment
 import com.example.bookwhale.screen.main.MainActivity
 import com.example.bookwhale.screen.splash.SplashActivity
+import com.example.bookwhale.util.PROFILE_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.load
 import gun0912.tedimagepicker.builder.TedImagePicker
 import gun0912.tedimagepicker.builder.type.MediaType
@@ -174,7 +175,7 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     private fun handleSuccess(state: MyState.Success) {
         binding.progressBar.isGone = true
         binding.profileTextView.text = state.myInfo.nickName
-        state.myInfo.profileImage?.let { url -> binding.profileImageView.load(url, 16f, CenterCrop()) }
+        state.myInfo.profileImage?.let { url -> binding.profileImageView.load(url, PROFILE_IMAGEVIEW_RADIUS, CenterCrop()) }
     }
 
     private fun handleError(state: MyState.Error) {
