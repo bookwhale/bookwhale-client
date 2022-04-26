@@ -34,9 +34,12 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
             resourcesProvider = resourcesProvider,
             adapterListener = object : NaverBookListener {
                 override fun onClickItem(model: NaverBookModel) {
-                    setResult(RESULT_OK, Intent().apply {
-                        putExtra(NAVER_BOOK_MODEL, model)
-                    })
+                    setResult(
+                        RESULT_OK,
+                        Intent().apply {
+                            putExtra(NAVER_BOOK_MODEL, model)
+                        }
+                    )
                     finish()
                 }
             }
@@ -70,12 +73,11 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
         }
     }
 
-    private fun keyboardHandle(handle : Boolean){
+    private fun keyboardHandle(handle: Boolean) {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        if(handle){//내리기
+        if (handle) { // 내리기
             imm.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
-        }
-        else{//올리기
+        } else { // 올리기
             imm.showSoftInput(binding.searchEditText, 0)
         }
     }
@@ -132,6 +134,5 @@ class SearchActivity : BaseActivity<SearchViewModel, ActivitySearchBinding>() {
         fun newIntent(context: Context) = Intent(context, SearchActivity::class.java)
 
         const val NAVER_BOOK_MODEL = "naverBookModel"
-
     }
 }

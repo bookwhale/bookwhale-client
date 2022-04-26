@@ -11,7 +11,6 @@ import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.listener.main.chat.ChatListener
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
 
-
 class ChatViewHolder(
     private val binding: ViewholderChatBinding,
     viewModel: BaseViewModel,
@@ -33,12 +32,12 @@ class ChatViewHolder(
         with(binding) {
             profileTextView.text = model.opponentIdentity
             articleNameTextView.text = model.articleTitle
-            model.articleImage?.let{
+            model.articleImage?.let {
                 articleImageView.load(it, 4f, CenterCrop())
-            }?: run {
+            } ?: run {
                 articleImageView.setImageResource(R.drawable.ic_logo)
             }
-            if(model.lastContent.isNullOrEmpty()) {
+            if (model.lastContent.isNullOrEmpty()) {
                 lastChatTextView.text = resourcesProvider.getString(R.string.noChatMessage)
             } else {
                 lastChatTextView.text = model.lastContent

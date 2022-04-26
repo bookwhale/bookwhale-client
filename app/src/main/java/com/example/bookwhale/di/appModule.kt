@@ -5,26 +5,26 @@ import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.repository.article.*
 import com.example.bookwhale.data.repository.chat.ChatRepository
 import com.example.bookwhale.data.repository.chat.ChatRepositoryImpl
-import com.example.bookwhale.data.repository.login.LoginRepositoryImpl
 import com.example.bookwhale.data.repository.login.LoginRepository
-import com.example.bookwhale.data.repository.main.ArticleRepositoryImpl
+import com.example.bookwhale.data.repository.login.LoginRepositoryImpl
 import com.example.bookwhale.data.repository.main.ArticleRepository
-import com.example.bookwhale.data.repository.my.MyRepositoryImpl
+import com.example.bookwhale.data.repository.main.ArticleRepositoryImpl
 import com.example.bookwhale.data.repository.my.MyRepository
+import com.example.bookwhale.data.repository.my.MyRepositoryImpl
 import com.example.bookwhale.screen.article.DetailArticleViewModel
 import com.example.bookwhale.screen.article.ModifyArticleViewModel
 import com.example.bookwhale.screen.article.PostArticleViewModel
 import com.example.bookwhale.screen.article.SearchViewModel
 import com.example.bookwhale.screen.chatroom.ChatRoomViewModel
-import com.example.bookwhale.screen.main.my.MyViewModel
 import com.example.bookwhale.screen.login.LoginViewModel
 import com.example.bookwhale.screen.main.MainViewModel
+import com.example.bookwhale.screen.main.my.MyViewModel
 import com.example.bookwhale.screen.splash.SplashViewModel
 import com.example.bookwhale.util.EventBus
 import com.example.bookwhale.util.MessageChannel
-import com.example.bookwhale.widget.adapter.MainPagingSource
-import com.example.bookwhale.util.provider.ResourcesProviderImpl
 import com.example.bookwhale.util.provider.ResourcesProvider
+import com.example.bookwhale.util.provider.ResourcesProviderImpl
+import com.example.bookwhale.widget.adapter.MainPagingSource
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
@@ -54,19 +54,19 @@ val appModule = module {
     single { Dispatchers.IO }
     single { Dispatchers.Main }
 
-    //ResourcesProvider
+    // ResourcesProvider
     single<ResourcesProvider> { ResourcesProviderImpl(androidApplication()) }
 
-    //EventBus
+    // EventBus
     single { EventBus() }
 
-    //MessageChannel
+    // MessageChannel
     single { MessageChannel() }
 
-    //SharedPreference
+    // SharedPreference
     single { MyPreferenceManager(androidApplication()) }
 
-    //Retrofit
+    // Retrofit
     single(named("article")) { provideArticleRetrofit(get(), get()) }
     single { provideArticleApiService(get(qualifier = named("article"))) }
 

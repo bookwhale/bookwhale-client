@@ -9,11 +9,10 @@ sealed class FavoriteState {
     object Loading : FavoriteState()
 
     data class Success(
-        val favorites : List<FavoriteModel>
+        val favorites: List<FavoriteModel>
     ) : FavoriteState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : FavoriteState()
-
 }

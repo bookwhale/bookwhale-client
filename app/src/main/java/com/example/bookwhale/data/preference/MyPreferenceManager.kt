@@ -35,7 +35,6 @@ class MyPreferenceManager(
 
     private val editor by lazy { prefs.edit() }
 
-
     /**
      * String 값 저장
      * @param context
@@ -303,6 +302,4 @@ class MyPreferenceManager(
     fun getMessage(): String? {
         return prefs.getString(ARTICLE_MESSAGE, null)
     }
-
-
 }

@@ -9,7 +9,6 @@ sealed class ChatRoomState {
     object Success : ChatRoomState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : ChatRoomState()
-
 }

@@ -45,13 +45,14 @@ class PagingAdapter(
             override fun areContentsTheSame(oldItem: ArticleModel, newItem: ArticleModel): Boolean {
                 return oldItem == newItem
             }
-        } }
+        }
+    }
 }
 
 class PagingViewHolder(
     private val binding: ViewholderArticlelistBinding,
     private val resourcesProvider: ResourcesProvider
-): RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: ArticleModel) = with(binding) {
         timeTextView.text = model.beforeTime
@@ -63,12 +64,12 @@ class PagingViewHolder(
         heartTextView.text = model.favoriteCount.toString()
         thumbNailImageView.load(model.articleImage.toString(), 4f, CenterCrop())
 
-        if(model.chatCount == 0) {
+        if (model.chatCount == 0) {
             chatGroup.isGone = true
         } else {
             chatGroup.isVisible = true
         }
-        if(model.favoriteCount == 0) {
+        if (model.favoriteCount == 0) {
             heartGroup.isGone = true
         } else {
             heartGroup.isVisible = true

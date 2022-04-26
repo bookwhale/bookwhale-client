@@ -9,9 +9,9 @@ import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.chat.MakeChatDTO
+import com.example.bookwhale.model.MessageType
 import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.main.chat.ChatModel
-import com.example.bookwhale.model.MessageType
 import com.example.bookwhale.widget.adapter.ChatPagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +26,7 @@ class ChatRepositoryImpl(
     override suspend fun getChatList(): NetworkResult<List<ChatModel>> = withContext(ioDispatcher) {
         val response = serverApiService.getChatList()
 
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 response.body()!!.mapIndexed { index, it ->
                     val dateFormat = Regex("[^0-9]")
@@ -43,8 +43,8 @@ class ChatRepositoryImpl(
                         roomCreateAt = roomCreateAt,
                         lastContent = it.lastContent,
                         lastContentCreateAt = // 마지막 메세지가 없으면 방 생성 일시를 기준으로 한다.
-                            if (it.lastContent.isNullOrEmpty()) roomCreateAt
-                            else lastContentCreateAt,
+                        if (it.lastContent.isNullOrEmpty()) roomCreateAt
+                        else lastContentCreateAt,
                         opponentDelete = it.opponentDelete
                     )
                 }.sortedByDescending { // 채팅방 정렬
@@ -60,7 +60,7 @@ class ChatRepositoryImpl(
     override suspend fun makeNewChat(makeChatDTO: MakeChatDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
         val response = serverApiService.makeNewChat(makeChatDTO)
 
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 true
             )
@@ -73,7 +73,7 @@ class ChatRepositoryImpl(
     override suspend fun getChatRoomDetail(roomId: Int): NetworkResult<List<ChatMessageModel>> = withContext(ioDispatcher) {
         val response = chatApiService.getChatMessages(roomId, 0, 10)
 
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 response.body()!!.map {
                     if (it.senderId == myPreferenceManager.getId()) {
@@ -115,7 +115,7 @@ class ChatRepositoryImpl(
     override suspend fun deleteChatRoom(roomId: Int): NetworkResult<Boolean> = withContext(ioDispatcher) {
         val response = serverApiService.deleteChatRoom(roomId)
 
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 true
             )

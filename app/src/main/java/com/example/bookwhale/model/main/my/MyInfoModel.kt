@@ -1,6 +1,6 @@
 package com.example.bookwhale.model.main.my
 
-data class MyInfoModel (
+data class MyInfoModel(
     val userId: Int,
     val nickName: String,
     val email: String,

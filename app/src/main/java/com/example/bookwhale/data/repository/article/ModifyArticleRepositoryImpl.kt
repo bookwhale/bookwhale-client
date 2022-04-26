@@ -9,27 +9,14 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
-class ModifyArticleRepositoryImpl (
+class ModifyArticleRepositoryImpl(
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher,
-): ModifyArticleRepository {
-        override suspend fun modifyArticle(articleId : Int ,images: List<MultipartBody.Part>, articleUpdateRequest: ModifyArticleDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
-            val response = serverApiService.modifyArticle(articleId, images, articleUpdateRequest)
+) : ModifyArticleRepository {
+    override suspend fun modifyArticle(articleId: Int, images: List<MultipartBody.Part>, articleUpdateRequest: ModifyArticleDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.modifyArticle(articleId, images, articleUpdateRequest)
 
-            if(response.isSuccessful) {
-                NetworkResult.success(
-                    true
-                )
-            } else {
-                val errorCode = ErrorConverter.convert(response.errorBody()?.string())
-                NetworkResult.error(code = errorCode)
-            }
-        }
-
-    override suspend fun deleteArticle(articleId: Int) : NetworkResult<Boolean> = withContext(ioDispatcher) {
-        val response = serverApiService.deleteArticle(articleId)
-
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 true
             )
@@ -39,10 +26,23 @@ class ModifyArticleRepositoryImpl (
         }
     }
 
-    override suspend fun updateStatus(articleId: Int, articleStatus: ArticleStatusDTO) : NetworkResult<Boolean> = withContext(ioDispatcher) {
+    override suspend fun deleteArticle(articleId: Int): NetworkResult<Boolean> = withContext(ioDispatcher) {
+        val response = serverApiService.deleteArticle(articleId)
+
+        if (response.isSuccessful) {
+            NetworkResult.success(
+                true
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
+    override suspend fun updateStatus(articleId: Int, articleStatus: ArticleStatusDTO): NetworkResult<Boolean> = withContext(ioDispatcher) {
         val response = serverApiService.updateArticleStatus(articleId, articleStatus)
 
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 true
             )

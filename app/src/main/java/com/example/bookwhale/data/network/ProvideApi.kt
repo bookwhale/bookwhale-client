@@ -11,7 +11,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-
 fun provideArticleApiService(retrofit: Retrofit): ServerApiService {
     return retrofit.create(ServerApiService::class.java)
 }
@@ -42,14 +41,13 @@ fun provideChatRetrofit(
         .build()
 }
 
-
 fun provideGsonConvertFactory(): GsonConverterFactory {
     return GsonConverterFactory.create()
 }
 
 fun buildOkHttpClient(): OkHttpClient {
 
-    val myPreferenceManager = object: KoinComponent {val myPreferenceManager: MyPreferenceManager by inject()}.myPreferenceManager
+    val myPreferenceManager = object : KoinComponent { val myPreferenceManager: MyPreferenceManager by inject() }.myPreferenceManager
 
     val interceptor = HttpLoggingInterceptor()
     if (BuildConfig.DEBUG) {

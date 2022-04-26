@@ -6,24 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.bookwhale.data.repository.article.DetailRepository
 import com.example.bookwhale.data.repository.chat.ChatRepository
 import com.example.bookwhale.data.repository.main.ArticleRepository
 import com.example.bookwhale.data.repository.my.MyRepository
 import com.example.bookwhale.data.response.NetworkResult
-import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.model.main.favorite.FavoriteModel
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.model.main.my.NotiModel
-import com.example.bookwhale.screen.article.DetailArticleState
 import com.example.bookwhale.screen.base.BaseViewModel
 import com.example.bookwhale.screen.main.chat.ChatState
 import com.example.bookwhale.screen.main.favorite.FavoriteState
 import com.example.bookwhale.screen.main.home.HomeState
 import com.example.bookwhale.screen.main.mypost.MyPostState
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -31,18 +25,18 @@ class MainViewModel(
     private val articleRepository: ArticleRepository,
     private val myRepository: MyRepository,
     private val chatRepository: ChatRepository
-): BaseViewModel() {
+) : BaseViewModel() {
 
     private val _notiSettingLiveData = MutableLiveData<NotiModel>()
-    val notiSettingLiveData : LiveData<NotiModel> = _notiSettingLiveData
+    val notiSettingLiveData: LiveData<NotiModel> = _notiSettingLiveData
 
     val homeArticleStateLiveData = MutableLiveData<HomeState>(HomeState.Uninitialized)
     val favoriteArticleStateLiveData = MutableLiveData<FavoriteState>(FavoriteState.Uninitialized)
     val myArticleStateLiveData = MutableLiveData<MyPostState>(MyPostState.Uninitialized)
     val chatStateLiveData = MutableLiveData<ChatState>(ChatState.Uninitialized)
 
-    var favoriteList : List<FavoriteModel>? = null
-    var myArticleList : List<ArticleModel>? = null
+    var favoriteList: List<FavoriteModel>? = null
+    var myArticleList: List<ArticleModel>? = null
 
     init {
         myPreferenceManager.removeSocketStatus()
@@ -52,16 +46,15 @@ class MainViewModel(
         getNotiSetting()
     }
 
-    suspend fun getArticlesPaging(search: String? = null) : Flow<PagingData<ArticleModel>> {
+    suspend fun getArticlesPaging(search: String? = null): Flow<PagingData<ArticleModel>> {
         homeArticleStateLiveData.value = HomeState.Loading
 
         val response = articleRepository.getAllArticlesPaging(search)
 
-        if(response.status == NetworkResult.Status.SUCCESS) homeArticleStateLiveData.value = HomeState.Success
+        if (response.status == NetworkResult.Status.SUCCESS) homeArticleStateLiveData.value = HomeState.Success
         else HomeState.Error(response.code)
 
         return response.data!!.cachedIn(viewModelScope)
-
     }
 
     fun getFavorites() = viewModelScope.launch {
@@ -69,7 +62,7 @@ class MainViewModel(
 
         val response = articleRepository.getFavoriteArticles()
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             favoriteList = response.data?.map {
                 FavoriteModel(
                     id = it.hashCode().toLong(),
@@ -96,7 +89,7 @@ class MainViewModel(
 
         val response = articleRepository.getMyArticles()
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             myArticleList = response.data
             myArticleStateLiveData.value = MyPostState.Success(myArticleList!!)
         } else {
@@ -107,11 +100,10 @@ class MainViewModel(
     fun getMyInfo() = viewModelScope.launch {
         val response = myRepository.getMyInfo()
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             myPreferenceManager.putId(response.data!!.userId)
             myPreferenceManager.putName(response.data!!.nickName)
         } else {
-
         }
     }
 
@@ -120,7 +112,7 @@ class MainViewModel(
 
         val response = chatRepository.getChatList()
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             val chatList = response.data!!
             chatStateLiveData.value = ChatState.Success(chatList)
         } else {
@@ -133,7 +125,7 @@ class MainViewModel(
     fun getNotiSetting() = viewModelScope.launch {
         val response = myRepository.getNotiSetting()
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             _notiSettingLiveData.value = response.data!!
         } else {
             Log.e("Get Noti Error", "${response.code}")
@@ -143,7 +135,7 @@ class MainViewModel(
     fun toggleNotiSetting() = viewModelScope.launch {
         val response = myRepository.toggleNotiSetting()
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             Log.i("Noti Toggle : ", "Success")
         } else {
             Log.e("Get Noti Error", "${response.code}")

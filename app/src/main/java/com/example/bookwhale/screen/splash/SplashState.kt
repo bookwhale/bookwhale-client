@@ -9,7 +9,6 @@ sealed class SplashState {
     object Success : SplashState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : SplashState()
-
 }

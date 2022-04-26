@@ -12,17 +12,17 @@ import kotlinx.coroutines.flow.Flow
 
 class SearchViewModel(
     private val detailRepository: DetailRepository
-):BaseViewModel() {
+) : BaseViewModel() {
 
     val searchStateLiveData = MutableLiveData<SearchState>(SearchState.Uninitialized)
 
-    suspend fun getNaverBookPaging(title: String) : Flow<PagingData<NaverBookModel>> {
+    suspend fun getNaverBookPaging(title: String): Flow<PagingData<NaverBookModel>> {
 
         searchStateLiveData.value = SearchState.Loading
 
         val response = detailRepository.getNaverBookApi(title)
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             searchStateLiveData.value = SearchState.Success
         } else {
             searchStateLiveData.value = SearchState.Error(response.code)

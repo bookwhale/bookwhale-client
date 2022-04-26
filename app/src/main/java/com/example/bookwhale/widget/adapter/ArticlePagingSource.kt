@@ -44,5 +44,4 @@ class ArticlePagingSource(
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
-
 }

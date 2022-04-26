@@ -83,11 +83,11 @@ interface ServerApiService {
 
     // 게시물 삭제
     @DELETE("api/article/{articleId}")
-    suspend fun deleteArticle(@Path ("articleId") articleId: Int) : Response<Unit>
+    suspend fun deleteArticle(@Path("articleId") articleId: Int): Response<Unit>
 
     // 게시물 상태 변경
     @PATCH("api/article/{articleId}/status")
-    suspend fun updateArticleStatus(@Path ("articleId") articleId: Int, @Body articleStatusDTO: ArticleStatusDTO) : Response<Unit>
+    suspend fun updateArticleStatus(@Path("articleId") articleId: Int, @Body articleStatusDTO: ArticleStatusDTO): Response<Unit>
 
     // 내 게시물
     @GET("api/articles/me")
@@ -108,7 +108,7 @@ interface ServerApiService {
     ): Response<List<GetChatMessageResponse>>
 
     @DELETE("api/room/{roomId}")
-    suspend fun deleteChatRoom(@Path ("roomId") roomId: Int) : Response<Unit>
+    suspend fun deleteChatRoom(@Path("roomId") roomId: Int): Response<Unit>
 
     // 내 정보
     @GET("api/user/me")
@@ -128,10 +128,8 @@ interface ServerApiService {
     suspend fun withDraw(@Body logOutDTO: LogOutDTO): Response<Unit>
 
     @GET("api/user/me/push-setting")
-    suspend fun getNotiSetting() : Response<NotiResponse>
+    suspend fun getNotiSetting(): Response<NotiResponse>
 
     @PATCH("api/user/me/push-setting")
-    suspend fun toggleNotiSetting() : Response<Unit>
-
-
+    suspend fun toggleNotiSetting(): Response<Unit>
 }

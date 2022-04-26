@@ -1,4 +1,3 @@
 package com.example.bookwhale.widget.listener
 
-interface AdapterListener {
-}
+interface AdapterListener

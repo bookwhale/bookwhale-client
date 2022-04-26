@@ -9,10 +9,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.databinding.ViewholderClosedChatBinding
 import com.example.bookwhale.databinding.ViewholderMyChatBinding
 import com.example.bookwhale.databinding.ViewholderOpponentChatBinding
-import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.MessageType
+import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.util.load
-
 
 class ChatPagingAdapter(
     private val senderProfileImage: String?
@@ -20,7 +19,7 @@ class ChatPagingAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return when(viewType) {
+        return when (viewType) {
             MY_MESSAGE -> MyChatPagingViewHolder(ViewholderMyChatBinding.inflate(layoutInflater, parent, false))
             OPPONENT_MESSAGE -> OpponentChatPagingViewHolder(ViewholderOpponentChatBinding.inflate(layoutInflater, parent, false), senderProfileImage)
             else -> throw ClassCastException("Unknown viewType $viewType")
@@ -69,7 +68,6 @@ class ChatPagingAdapter(
             }
         }
 
-
         const val MY_MESSAGE = 0
         const val OPPONENT_MESSAGE = 1
         const val CLOSED_ROOM = 2
@@ -78,7 +76,7 @@ class ChatPagingAdapter(
 
 class MyChatPagingViewHolder(
     private val binding: ViewholderMyChatBinding
-): RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: ChatMessageModel) {
         binding.myTextView.text = model.content
@@ -88,7 +86,7 @@ class MyChatPagingViewHolder(
 class OpponentChatPagingViewHolder(
     private val binding: ViewholderOpponentChatBinding,
     private val senderProfileImage: String?
-): RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: ChatMessageModel) {
         binding.opponentTextView.text = model.content
@@ -100,8 +98,7 @@ class OpponentChatPagingViewHolder(
 
 class ClosedChatViewHolder(
     private val binding: ViewholderClosedChatBinding
-): RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(model: ChatMessageModel) {}
 }
-

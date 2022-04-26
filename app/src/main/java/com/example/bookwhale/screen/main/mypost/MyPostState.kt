@@ -9,11 +9,10 @@ sealed class MyPostState {
     object Loading : MyPostState()
 
     data class Success(
-        val myArticles : List<ArticleModel>
+        val myArticles: List<ArticleModel>
     ) : MyPostState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : MyPostState()
-
 }

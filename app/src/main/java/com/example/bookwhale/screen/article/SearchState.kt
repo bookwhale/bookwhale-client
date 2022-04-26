@@ -9,7 +9,6 @@ sealed class SearchState {
     object Success : SearchState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : SearchState()
-
 }

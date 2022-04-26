@@ -15,7 +15,7 @@ import com.example.bookwhale.widget.listener.main.home.ArticleListListener
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
-class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
+class MyPostFragment : BaseFragment<MainViewModel, FragmentMypostBinding>() {
     override val viewModel by activityViewModels<MainViewModel>()
 
     override fun getViewBinding(): FragmentMypostBinding =
@@ -49,7 +49,7 @@ class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
 
     override fun observeData() {
         viewModel.myArticleStateLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is MyPostState.Uninitialized -> Unit
                 is MyPostState.Loading -> handleLoading()
                 is MyPostState.Success -> handleSuccess(it)
@@ -64,7 +64,7 @@ class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
 
     private fun handleError(state: MyPostState.Error) {
         binding.progressBar.isGone = true
-        when(state.code!!) {
+        when (state.code!!) {
             "T_004" -> handleT004() // AccessToken 만료 코드
         }
     }
@@ -79,7 +79,7 @@ class MyPostFragment: BaseFragment<MainViewModel, FragmentMypostBinding>() {
     private fun handleSuccess(state: MyPostState.Success) {
         binding.progressBar.isGone = true
         adapter.submitList(state.myArticles.reversed())
-        if(state.myArticles.isEmpty()) {
+        if (state.myArticles.isEmpty()) {
             binding.noArticleTextView.isVisible = true
         } else {
             binding.noArticleTextView.isGone = true

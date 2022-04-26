@@ -3,9 +3,8 @@ package com.example.bookwhale.widget.adapter
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.bookwhale.data.network.ChatApiService
-import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.MessageType
-
+import com.example.bookwhale.model.main.chat.ChatMessageModel
 
 class ChatPagingSource(
     private val chatApiService: ChatApiService,
@@ -51,5 +50,4 @@ class ChatPagingSource(
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
-
 }

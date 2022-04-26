@@ -3,7 +3,6 @@ package com.example.bookwhale.widget.viewholder.main.favorite
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.example.bookwhale.MyApp.Companion.appContext
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ViewholderArticlelistBinding
 import com.example.bookwhale.model.main.favorite.FavoriteModel
@@ -13,7 +12,6 @@ import com.example.bookwhale.util.provider.ResourcesProvider
 import com.example.bookwhale.widget.listener.AdapterListener
 import com.example.bookwhale.widget.listener.main.favorite.FavoriteListener
 import com.example.bookwhale.widget.viewholder.ModelViewHolder
-import org.koin.android.ext.koin.androidApplication
 
 class FavoriteViewHolder(
     private val binding: ViewholderArticlelistBinding,
@@ -44,12 +42,12 @@ class FavoriteViewHolder(
             locationTextView.text = model.sellingLocation
             thumbNailImageView.load(model.articleImage.toString(), 4f, CenterCrop())
 
-            if(model.chatCount == 0) {
+            if (model.chatCount == 0) {
                 chatGroup.isGone = true
             } else {
                 chatGroup.isVisible = true
             }
-            if(model.favoriteCount == 0) {
+            if (model.favoriteCount == 0) {
                 heartGroup.isGone = true
             } else {
                 heartGroup.isVisible = true

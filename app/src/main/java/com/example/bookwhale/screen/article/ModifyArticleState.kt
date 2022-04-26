@@ -8,12 +8,12 @@ sealed class ModifyArticleState {
     object Loading : ModifyArticleState()
 
     data class LoadSuccess(
-        val article : DetailArticleModel
+        val article: DetailArticleModel
     ) : ModifyArticleState()
 
     object ModifySuccess : ModifyArticleState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : ModifyArticleState()
 }

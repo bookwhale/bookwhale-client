@@ -3,11 +3,11 @@ package com.example.bookwhale.data.repository.main
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.bookwhale.data.response.favorite.FavoriteDTO
 import com.example.bookwhale.data.network.ServerApiService
 import com.example.bookwhale.data.response.ErrorConverter
 import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.data.response.favorite.AddFavoriteDTO
+import com.example.bookwhale.data.response.favorite.FavoriteDTO
 import com.example.bookwhale.model.main.home.ArticleModel
 import com.example.bookwhale.widget.adapter.ArticlePagingSource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,12 +17,12 @@ import kotlinx.coroutines.withContext
 class ArticleRepositoryImpl(
     private val serverApiService: ServerApiService,
     private val ioDispatcher: CoroutineDispatcher
-): ArticleRepository {
+) : ArticleRepository {
     override suspend fun getFavoriteArticles(): NetworkResult<List<FavoriteDTO>> = withContext(ioDispatcher) {
 
         val response = serverApiService.getFavorites()
 
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 response.body()!!.let {
                     it.mapIndexed { index, data ->
@@ -48,14 +48,13 @@ class ArticleRepositoryImpl(
             val errorCode = ErrorConverter.convert(response.errorBody()?.string())
             NetworkResult.error(code = errorCode)
         }
-
     }
 
     override suspend fun addFavoriteArticle(addFavoriteDTO: AddFavoriteDTO): NetworkResult<Int> = withContext(ioDispatcher) {
 
         val response = serverApiService.addFavorites(addFavoriteDTO)
 
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 response.body()!!.favoriteId
             )
@@ -68,7 +67,7 @@ class ArticleRepositoryImpl(
     override suspend fun deleteFavoriteArticle(favoriteId: Int): NetworkResult<Boolean> = withContext(ioDispatcher) {
         val response = serverApiService.deleteFavorites(favoriteId)
 
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 true
             )
@@ -96,7 +95,7 @@ class ArticleRepositoryImpl(
     override suspend fun getMyArticles(): NetworkResult<List<ArticleModel>> = withContext(ioDispatcher) {
         val response = serverApiService.getMyArticles()
 
-        if(response.isSuccessful) {
+        if (response.isSuccessful) {
             NetworkResult.success(
                 response.body()!!.mapIndexed { index, data ->
                     ArticleModel(
@@ -118,6 +117,4 @@ class ArticleRepositoryImpl(
             NetworkResult.error(code = errorCode)
         }
     }
-
-
 }

@@ -11,7 +11,7 @@ import okhttp3.MultipartBody
 
 class PostArticleViewModel(
     private val postArticleRepository: PostArticleRepository
-): BaseViewModel() {
+) : BaseViewModel() {
 
     val postArticleStateLiveData = MutableLiveData<PostArticleState>(PostArticleState.Uninitialized)
 
@@ -20,7 +20,7 @@ class PostArticleViewModel(
         postArticleStateLiveData.value = PostArticleState.Loading
         val response = postArticleRepository.postArticle(files, articleDTO)
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             postArticleStateLiveData.value = PostArticleState.Success
         } else {
             postArticleStateLiveData.value = PostArticleState.Error(
@@ -28,5 +28,4 @@ class PostArticleViewModel(
             )
         }
     }
-
 }

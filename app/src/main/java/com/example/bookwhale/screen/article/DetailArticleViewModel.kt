@@ -1,6 +1,5 @@
 package com.example.bookwhale.screen.article
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.bookwhale.data.repository.article.DetailRepository
@@ -26,13 +25,13 @@ class DetailArticleViewModel(
     private val chatRepository: ChatRepository,
     private val modifyArticleRepository: ModifyArticleRepository,
     private val eventBus: EventBus
-): BaseViewModel() {
+) : BaseViewModel() {
 
     val detailArticleStateLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     private val detailLoadFavoriteLiveData = MutableLiveData<DetailArticleState>(DetailArticleState.Uninitialized)
     val loadChatListLiveData = MutableLiveData<Boolean>(false) // true = 이미 존재하는 채팅방
     val roomId = MutableLiveData<Int>(0)
-    private var _articleId : Int = 0
+    private var _articleId: Int = 0
 
     fun loadArticle(articleId: Int) = viewModelScope.launch {
 
@@ -42,14 +41,13 @@ class DetailArticleViewModel(
 
         val articleResponse = detailRepository.getDetailArticle(articleId)
 
-        if(articleResponse.status == NetworkResult.Status.SUCCESS) {
+        if (articleResponse.status == NetworkResult.Status.SUCCESS) {
             detailArticleStateLiveData.value = DetailArticleState.Success(
                 articleResponse.data!!
             )
         } else {
             detailArticleStateLiveData.value = DetailArticleState.Error(articleResponse.code)
         }
-
     }
 
     fun loadFavorites() = viewModelScope.launch {
@@ -81,18 +79,18 @@ class DetailArticleViewModel(
         }
     }
 
-
     fun addFavoriteAsync(articleId: Int): Deferred<Int> = viewModelScope.async {
-        val response = articleRepository.addFavoriteArticle(AddFavoriteDTO(
-            articleId = articleId
-        ))
+        val response = articleRepository.addFavoriteArticle(
+            AddFavoriteDTO(
+                articleId = articleId
+            )
+        )
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             response.data!!
         } else {
             0
         }
-
     }
 
     fun deleteFavoriteAsync(articleId: Int): Deferred<Boolean> = viewModelScope.async {
@@ -107,8 +105,7 @@ class DetailArticleViewModel(
             chatRepository.makeNewChat(makeChatDTO)
             loadChatListLiveData.value = false
             loadChatRoomList(makeChatDTO.articleId)
-        }
-        else {
+        } else {
             loadChatListLiveData.value = true
         }
     }
@@ -116,7 +113,7 @@ class DetailArticleViewModel(
     fun deleteArticle(articleId: Int) = viewModelScope.launch {
         val response = modifyArticleRepository.deleteArticle(articleId)
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             eventBus.produceEvent(Events.Deleted)
         } else {
             eventBus.produceEvent(Events.DeleteFail)
@@ -126,7 +123,7 @@ class DetailArticleViewModel(
     fun updateStatus(articleId: Int, category: ArticleStatusCategory) = viewModelScope.launch {
         val response = modifyArticleRepository.updateStatus(articleId, ArticleStatusDTO(category.status))
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             when (category) {
                 ArticleStatusCategory.RESERVED -> {
                     eventBus.produceEvent(Events.Reserved)
@@ -143,13 +140,13 @@ class DetailArticleViewModel(
         }
     }
 
-    private suspend fun loadChatRoomList(articleId: Int) : Boolean = viewModelScope.async {
+    private suspend fun loadChatRoomList(articleId: Int): Boolean = viewModelScope.async {
         val response = chatRepository.getChatList()
 
-        if(response.status == NetworkResult.Status.SUCCESS) {
+        if (response.status == NetworkResult.Status.SUCCESS) {
             val chatList = response.data!!
             chatList.forEach {
-                if(it.articleId == articleId) {
+                if (it.articleId == articleId) {
                     roomId.value = it.roomId
                     return@async true
                 }
@@ -160,5 +157,4 @@ class DetailArticleViewModel(
 
         return@async false
     }.await()
-
 }

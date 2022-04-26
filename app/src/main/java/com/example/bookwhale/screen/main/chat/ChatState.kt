@@ -9,11 +9,10 @@ sealed class ChatState {
     object Loading : ChatState()
 
     data class Success(
-        val chatList : List<ChatModel>
+        val chatList: List<ChatModel>
     ) : ChatState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : ChatState()
-
 }

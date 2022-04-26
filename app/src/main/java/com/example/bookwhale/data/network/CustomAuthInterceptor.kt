@@ -19,11 +19,9 @@ class CustomAuthInterceptor(
                 .build()
 
             chain.proceed(request)
-
         } catch (SocketTimeoutException: Exception) {
             Log.e("time is Out", "timeOut")
             chain.proceed(chain.request())
         }
     }
-
 }

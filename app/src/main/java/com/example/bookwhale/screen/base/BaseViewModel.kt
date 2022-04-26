@@ -12,16 +12,14 @@ import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-
-abstract class BaseViewModel: ViewModel() {
+abstract class BaseViewModel : ViewModel() {
 
     protected var stateBundle: Bundle? = null
 
-    open val myPreferenceManager = object: KoinComponent {val myPreferenceManager: MyPreferenceManager by inject()}.myPreferenceManager
-    open val loginRepository = object: KoinComponent {val loginRepository: LoginRepository by inject()}.loginRepository
+    open val myPreferenceManager = object : KoinComponent { val myPreferenceManager: MyPreferenceManager by inject() }.myPreferenceManager
+    open val loginRepository = object : KoinComponent { val loginRepository: LoginRepository by inject() }.loginRepository
 
     open fun fetchData(): Job = viewModelScope.launch {
-
     }
 
     open fun storeState(stateBundle: Bundle) {
@@ -29,10 +27,12 @@ abstract class BaseViewModel: ViewModel() {
     }
 
     fun getNewTokens() = viewModelScope.launch {
-        val response = loginRepository.getNewTokens(TokenRequestDTO(
-            apiToken = myPreferenceManager.getAccessToken()!!,
-            refreshToken = myPreferenceManager.getRefreshToken()!!
-        ))
+        val response = loginRepository.getNewTokens(
+            TokenRequestDTO(
+                apiToken = myPreferenceManager.getAccessToken()!!,
+                refreshToken = myPreferenceManager.getRefreshToken()!!
+            )
+        )
 
         if (response.status == NetworkResult.Status.SUCCESS) {
             myPreferenceManager.putAccessToken(response.data?.apiToken!!)
@@ -40,6 +40,5 @@ abstract class BaseViewModel: ViewModel() {
         } else {
             // error
         }
-
     }
 }

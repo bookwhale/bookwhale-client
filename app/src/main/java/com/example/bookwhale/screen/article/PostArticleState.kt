@@ -9,7 +9,6 @@ sealed class PostArticleState {
     object Success : PostArticleState()
 
     data class Error(
-        val code : String?
+        val code: String?
     ) : PostArticleState()
-
 }

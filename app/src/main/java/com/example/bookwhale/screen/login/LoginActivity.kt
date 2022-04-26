@@ -1,45 +1,33 @@
 package com.example.bookwhale.screen.login
 
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.example.bookwhale.BuildConfig
+import com.example.bookwhale.R
 import com.example.bookwhale.databinding.ActivityLoginBinding
 import com.example.bookwhale.screen.base.BaseActivity
-import org.koin.android.viewmodel.ext.android.viewModel
-import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.lifecycleScope
-import com.example.bookwhale.R
 import com.example.bookwhale.screen.main.MainActivity
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.Scopes
-import com.google.android.gms.common.SignInButton
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLogin.mOAuthLoginHandler
 import com.nhn.android.naverlogin.OAuthLoginHandler
-import com.nhn.android.naverlogin.data.OAuthLoginState
 import kotlinx.coroutines.launch
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.widget.Toast
-import com.example.bookwhale.BuildConfig
-import com.example.bookwhale.screen.article.PostArticleActivity
-
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
     override val viewModel by viewModel<LoginViewModel>()
 
     override fun getViewBinding(): ActivityLoginBinding = ActivityLoginBinding.inflate(layoutInflater)
 
-    private lateinit var mOAuthLoginModule : OAuthLogin
+    private lateinit var mOAuthLoginModule: OAuthLogin
 
     override fun initViews(): Unit = with(binding) {
 
@@ -74,16 +62,15 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
                 UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity, callback = callback)
             }
         }
-
     }
 
-    private val callback : (OAuthToken?, Throwable?) -> Unit = { token, error ->
+    private val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
-            Log.e("로그인 실패-","$error")
+            Log.e("로그인 실패-", "$error")
         } else if (token != null) {
             UserApiClient.instance.me { _, _ ->
                 viewModel.kakaoLogin(token.accessToken)
-                //viewModel?.addKakaoUser(token.accessToken, kakaoId)
+                // viewModel?.addKakaoUser(token.accessToken, kakaoId)
             }
             Log.d("로그인성공 - 토큰", token.accessToken)
         }
@@ -93,10 +80,7 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
 
         mOAuthLoginModule = OAuthLogin.getInstance()
         mOAuthLoginModule.init(
-            this@LoginActivity
-            ,getString(R.string.naver_client_id)
-            ,BuildConfig.NAVER_CLIENT_SECRET
-            ,getString(R.string.naver_client_name)
+            this@LoginActivity, getString(R.string.naver_client_id), BuildConfig.NAVER_CLIENT_SECRET, getString(R.string.naver_client_name)
         )
 
         naverLoginButton.setOnClickListener {
@@ -110,14 +94,11 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
                         lifecycleScope.launch {
                             viewModel.naverLogin(accessToken).join()
                         }
-
-                    }
-                    else {
+                    } else {
                         val errorCode: String = mOAuthLoginModule.getLastErrorCode(this@LoginActivity).code
                         val errorDesc = mOAuthLoginModule.getLastErrorDesc(this@LoginActivity)
                     }
                 }
-
             }
             mOAuthLoginModule.startOauthLoginActivity(this@LoginActivity, mOAuthLoginHandler)
         }
@@ -144,12 +125,10 @@ class LoginActivity : BaseActivity<LoginViewModel, ActivityLoginBinding>() {
         val intent = MainActivity.newIntent(this@LoginActivity)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
-
     }
     private fun handleError() {}
 
     companion object {
         fun newIntent(context: Context) = Intent(context, LoginActivity::class.java)
-
     }
 }

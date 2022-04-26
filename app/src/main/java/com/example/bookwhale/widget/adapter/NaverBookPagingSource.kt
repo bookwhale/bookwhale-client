@@ -42,5 +42,4 @@ class NaverBookPagingSource(
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
-
 }

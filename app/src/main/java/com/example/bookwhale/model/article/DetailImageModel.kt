@@ -6,5 +6,5 @@ import com.example.bookwhale.model.Model
 data class DetailImageModel(
     override val id: Long,
     override val type: CellType = CellType.DETAIL_IMAGE_LIST,
-    var articleImage : String?
+    var articleImage: String?
 ) : Model(id, type)
