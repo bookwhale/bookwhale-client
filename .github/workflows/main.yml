@@ -37,6 +37,12 @@ jobs:
         
       - name: Change Mode Executable gradlew
         run: chmod +x ./gradlew
+        
+      - name: Make GoogleService-json
+        env:
+          GOOGLE_SERVICE_JSON: ${{ secrets.GOOGLE_SERVICE_JSON }}
+        run: |
+          echo '${{ secrets.GOOGLE_SERVICE_JSON }}' > ./app/google-services.json
 
       - name: Access API_KEY
         env:
