@@ -42,7 +42,7 @@ jobs:
         env:
           GOOGLE_SERVICE_JSON: ${{ secrets.GOOGLE_SERVICE_JSON }}
         run: |
-          echo '${{ secrets.GOOGLE_SERVICE_JSON }}' > ./app/google-services.json
+          echo "$GOOGLE_SERVICE_JSON" > ./app/google-services.json
 
       - name: Access API_KEY
         env:
