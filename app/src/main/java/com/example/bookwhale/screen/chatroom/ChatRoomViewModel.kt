@@ -11,6 +11,8 @@ import com.example.bookwhale.data.response.NetworkResult
 import com.example.bookwhale.model.main.chat.ChatMessageModel
 import com.example.bookwhale.model.main.chat.ChatModel
 import com.example.bookwhale.screen.base.BaseViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -120,6 +122,16 @@ class ChatRoomViewModel(
         stompClient.send("/pub/chat/message", data.toString()).subscribe()
 
         socketState.value = SocketState.MsgSend
+    }
+
+    fun checkRoomStatusAsync(roomId: Int) : Deferred<Any> = viewModelScope.async {
+        val response = chatRepository.checkRoomStates(roomId)
+
+        if (response.status == NetworkResult.Status.SUCCESS) {
+            response.data!!.opponentDelete
+        } else {
+            ChatRoomState.Error(response.code!!)
+        }
     }
 
     fun exitChatRoom(roomId: Int) = viewModelScope.launch {

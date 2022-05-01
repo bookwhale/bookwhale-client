@@ -40,6 +40,7 @@ class ChatFragment : BaseFragment<MainViewModel, FragmentChatBinding>() {
         viewModel.loadChatList()
 
         recyclerView.adapter = adapter
+        recyclerView.itemAnimator = null
     }
 
     override fun onResume() {

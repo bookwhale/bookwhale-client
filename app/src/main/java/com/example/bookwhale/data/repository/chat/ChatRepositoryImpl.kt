@@ -114,6 +114,31 @@ class ChatRepositoryImpl(
         )
     }
 
+    override suspend fun checkRoomStates(roomId: Int): NetworkResult<ChatModel> = withContext(ioDispatcher) {
+        val response = serverApiService.checkRoomStatus(roomId)
+
+        if (response.isSuccessful) {
+            NetworkResult.success(
+                ChatModel(
+                    id = 1L,
+                    roomId = response.body()!!.roomId,
+                    articleId = response.body()!!.articleId,
+                    articleTitle = response.body()!!.articleTitle,
+                    articleImage = response.body()!!.articleImage,
+                    opponentIdentity = response.body()!!.opponentIdentity,
+                    opponentProfile = response.body()!!.opponentProfile,
+                    roomCreateAt = response.body()!!.roomCreateAt,
+                    lastContent = response.body()!!.lastContent,
+                    lastContentCreateAt = response.body()!!.lastContentCreateAt,
+                    opponentDelete = response.body()!!.opponentDelete
+                )
+            )
+        } else {
+            val errorCode = ErrorConverter.convert(response.errorBody()?.string())
+            NetworkResult.error(code = errorCode)
+        }
+    }
+
     override suspend fun deleteChatRoom(roomId: Int): NetworkResult<Boolean> = withContext(ioDispatcher) {
         val response = serverApiService.deleteChatRoom(roomId)
 
