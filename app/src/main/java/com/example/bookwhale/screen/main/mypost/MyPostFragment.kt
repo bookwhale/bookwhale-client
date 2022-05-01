@@ -38,6 +38,7 @@ class MyPostFragment : BaseFragment<MainViewModel, FragmentMypostBinding>() {
 
     override fun initViews(): Unit = with(binding) {
         recyclerView.adapter = adapter
+        recyclerView.itemAnimator = null
 
         viewModel.getMyArticles()
     }

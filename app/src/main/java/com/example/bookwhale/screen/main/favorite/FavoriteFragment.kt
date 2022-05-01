@@ -37,7 +37,7 @@ class FavoriteFragment : BaseFragment<MainViewModel, FragmentFavoriteBinding>() 
 
     override fun initViews(): Unit = with(binding) {
         recyclerView.adapter = adapter
-
+        recyclerView.itemAnimator = null
         viewModel.getFavorites()
     }
 

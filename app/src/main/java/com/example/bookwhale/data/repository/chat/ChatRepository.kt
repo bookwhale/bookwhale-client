@@ -17,5 +17,7 @@ interface ChatRepository {
 
     suspend fun getPreviousMessages(roomId: Int): NetworkResult<Flow<PagingData<ChatMessageModel>>>
 
+    suspend fun checkRoomStates(roomId: Int): NetworkResult<ChatModel>
+
     suspend fun deleteChatRoom(roomId: Int): NetworkResult<Boolean>
 }

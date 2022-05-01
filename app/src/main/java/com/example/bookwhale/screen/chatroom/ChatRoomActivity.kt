@@ -69,8 +69,18 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
         sendButton.setOnClickListener {
             roomId?.let {
                 lifecycleScope.launch {
-                    viewModel.sendMessage(it.toInt(), getMessageText()).join()
-                    recyclerView.scrollToPosition(0)
+                    when (val roomStatus = viewModel.checkRoomStatusAsync(it.toInt()).await()) {
+                        true -> { // true 이면 opponentDelete == true 즉 채팅방 나간상태
+                            Toast.makeText(this@ChatRoomActivity, getString(R.string.destroyChatRoom), Toast.LENGTH_SHORT).show()
+                        }
+                        false -> {
+                            viewModel.sendMessage(it.toInt(), getMessageText()).join()
+                            recyclerView.scrollToPosition(0)
+                        }
+                        else -> {
+                            handleError(ChatRoomState.Error(roomStatus as String))
+                        }
+                    }
                 }
             }
         }
@@ -93,6 +103,7 @@ class ChatRoomActivity : BaseActivity<ChatRoomViewModel, ActivityChatRoomBinding
             .setPositiveButton(resources.getString(R.string.confirm)) { _, _ ->
                 // Respond to positive button press
                 viewModel.exitChatRoom(roomId!!.toInt())
+                finish()
             }
             .show()
     }

@@ -42,6 +42,7 @@ class HomeFragment : BaseFragment<MainViewModel, FragmentHomeBinding>() {
         initButton()
 
         recyclerView.adapter = adapter
+        recyclerView.itemAnimator = null
 
         adapter.addLoadStateListener { loadState ->
             if (loadState.source.refresh is LoadState.NotLoading &&
