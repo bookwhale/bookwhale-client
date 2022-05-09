@@ -11,7 +11,8 @@ import com.example.bookwhale.R
 import com.example.bookwhale.data.preference.MyPreferenceManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
@@ -83,7 +84,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     // [END on_new_token]
 
     private fun messageToChannel(title: String?, message: String?, roomId: String?) {
-        GlobalScope.launch {
+
+        val scope = CoroutineScope(Dispatchers.Default)
+        scope.launch {
             messageChannel.trySendToChannel(title, message, roomId)
         }
     }

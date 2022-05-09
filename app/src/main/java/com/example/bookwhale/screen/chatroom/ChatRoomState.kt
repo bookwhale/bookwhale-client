@@ -8,6 +8,8 @@ sealed class ChatRoomState {
 
     object Success : ChatRoomState()
 
+    object Deleted : ChatRoomState()
+
     data class Error(
         val code: String?
     ) : ChatRoomState()
