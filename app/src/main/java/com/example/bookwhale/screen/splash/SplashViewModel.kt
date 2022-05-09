@@ -9,6 +9,10 @@ import com.example.bookwhale.screen.base.BaseViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
+/**
+ * Splash Api 사용으로 더이상 사용하지 않습니다.
+ */
+
 class SplashViewModel(
     private val myRepository: MyRepository
 ) : BaseViewModel() {

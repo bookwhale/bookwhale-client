@@ -8,6 +8,8 @@ sealed class LoginState {
 
     object Loading : LoginState()
 
+    object AutoSuccess : LoginState()
+
     data class Success(
         val apiTokens: LoginModel
     ) : LoginState()

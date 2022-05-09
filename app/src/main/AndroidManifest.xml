@@ -36,7 +36,7 @@
             android:name=".screen.article.DetailArticleActivity"
             android:exported="false" />
         <activity
-            android:name=".screen.login.LoginActivity"
+            android:name=".screen.splash.SplashActivity"
             android:exported="false" />
         <activity
             android:name=".screen.main.MainActivity"
@@ -57,7 +57,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".screen.splash.SplashActivity"
+            android:name=".screen.login.LoginActivity"
+            android:theme="@style/Theme.Bookwhale.Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
