@@ -124,7 +124,7 @@ class ChatRoomViewModel(
         socketState.value = SocketState.MsgSend
     }
 
-    fun checkRoomStatusAsync(roomId: Int) : Deferred<Any> = viewModelScope.async {
+    fun checkRoomStatusAsync(roomId: Int): Deferred<Any> = viewModelScope.async {
         val response = chatRepository.checkRoomStates(roomId)
 
         if (response.status == NetworkResult.Status.SUCCESS) {

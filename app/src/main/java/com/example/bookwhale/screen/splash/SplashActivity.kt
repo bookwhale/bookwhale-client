@@ -19,6 +19,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
+/**
+ * Splash Api 사용으로 더이상 사용하지 않습니다.
+ */
+
 class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     override val viewModel by viewModel<SplashViewModel>()
 

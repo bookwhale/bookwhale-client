@@ -283,6 +283,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
         const val ROOM_ID = "roomId"
         const val BACK_BTN_EXIT_TIMEOUT = 2000 // 연속된 Back 버튼의 시간 간격 (2초안에 백버튼 2번 클릭시 앱 종료)
         const val TAG = "MainActivity"
+        const val FCM_DATA_ROOM_ID = "roomId"
 
         const val NOTI_SUBSCRIBE = "Y"
         const val NOTI_UNSUBSCRIBE = "N"

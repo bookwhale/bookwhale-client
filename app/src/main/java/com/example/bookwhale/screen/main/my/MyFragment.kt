@@ -14,7 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.bookwhale.R
 import com.example.bookwhale.databinding.FragmentMyBinding
 import com.example.bookwhale.screen.base.BaseFragment
-import com.example.bookwhale.screen.splash.SplashActivity
+import com.example.bookwhale.screen.login.LoginActivity
 import com.example.bookwhale.util.PROFILE_IMAGEVIEW_RADIUS
 import com.example.bookwhale.util.load
 import gun0912.tedimagepicker.builder.TedImagePicker
@@ -144,7 +144,7 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     private fun handleWithDraw() {
         binding.progressBar.isGone = true
         viewModel.deleteSavedToken()
-        val intent = SplashActivity.newIntent(requireContext())
+        val intent = LoginActivity.newIntent(requireContext())
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         Toast.makeText(requireContext(), getString(R.string.success_withdraw), Toast.LENGTH_SHORT).show()
@@ -153,7 +153,7 @@ class MyFragment : BaseFragment<MyViewModel, FragmentMyBinding>() {
     private fun handleLogOut() {
         binding.progressBar.isGone = true
         viewModel.deleteSavedToken()
-        val intent = SplashActivity.newIntent(requireContext())
+        val intent = LoginActivity.newIntent(requireContext())
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
             Intent.FLAG_ACTIVITY_CLEAR_TASK or
             Intent.FLAG_ACTIVITY_CLEAR_TOP

@@ -26,7 +26,6 @@ class ChatViewHolder(
                 adapterListener.onClickItem(model)
             }
         }
-
     }
 
     override fun bindData(model: ChatModel) {

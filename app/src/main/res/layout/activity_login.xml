@@ -10,24 +10,24 @@
         android:id="@+id/logoImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_logo_big"
         android:layout_marginTop="96dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_logo_big"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/appNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/logoImageView"
-        app:layout_constraintEnd_toEndOf="@id/logoImageView"
-        app:layout_constraintTop_toBottomOf="@id/logoImageView"
         android:layout_marginTop="16dp"
         android:text="@string/appName_hangul"
-        android:textStyle="bold"
+        android:textColor="@color/primary_blue"
         android:textSize="36sp"
-        android:textColor="@color/primary_blue"/>
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/logoImageView"
+        app:layout_constraintStart_toStartOf="@id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@id/logoImageView" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/kakaoLoginButton"
@@ -35,44 +35,44 @@
         android:layout_height="50dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="62dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appNameTextView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="3dp"
-            android:elevation="8dp"
             android:background="@drawable/bg_kakaologin"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/kakaoLogoImageView"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_kakao"
-            android:elevation="8dp"
             android:layout_marginStart="20dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:elevation="8dp"
+            android:src="@drawable/ic_kakao"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="8dp"
             android:text="@string/kakao_login"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
-            android:elevation="8dp"
-            app:layout_constraintStart_toEndOf="@id/kakaoLogoImageView"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/kakaoLogoImageView"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -80,20 +80,20 @@
         android:id="@+id/naverLoginButton"
         android:layout_width="240dp"
         android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/kakaoLoginButton">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="3dp"
-            android:elevation="8dp"
             android:background="@drawable/bg_naverlogin"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -101,25 +101,25 @@
             android:id="@+id/naverLogoImageView"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_naver"
-            android:elevation="8dp"
             android:layout_marginStart="20dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:elevation="8dp"
+            android:src="@drawable/ic_naver"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="8dp"
             android:text="@string/naver_login"
+            android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
-            android:elevation="8dp"
-            app:layout_constraintStart_toEndOf="@id/naverLogoImageView"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/naverLogoImageView"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -127,30 +127,32 @@
         android:id="@+id/naverLogout"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:backgroundTint="@color/primary_blue"
         android:text="임시 네이버 로그아웃"
         android:textColor="@color/fix_white"
-        app:layout_constraintStart_toStartOf="@id/kakaoLoginButton"
         app:layout_constraintEnd_toEndOf="@id/kakaoLoginButton"
-        app:layout_constraintTop_toBottomOf="@id/naverLoginButton"/>
+        app:layout_constraintStart_toStartOf="@id/kakaoLoginButton"
+        app:layout_constraintTop_toBottomOf="@id/naverLoginButton" />
 
     <Button
         android:id="@+id/getKeyHashButton"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:backgroundTint="@color/primary_blue"
         android:text="카카오 로그인용 키해쉬 얻기"
         android:textColor="@color/fix_white"
-        app:layout_constraintStart_toStartOf="@id/kakaoLoginButton"
         app:layout_constraintEnd_toEndOf="@id/kakaoLoginButton"
-        app:layout_constraintTop_toBottomOf="@id/naverLogout"/>
+        app:layout_constraintStart_toStartOf="@id/kakaoLoginButton"
+        app:layout_constraintTop_toBottomOf="@id/naverLogout" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
