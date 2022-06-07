@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.RadioButton
@@ -80,7 +82,7 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
             resourcesProvider,
             adapterListener = object : PostImageListener {
                 override fun onClickItem(model: DetailImageModel) {
-                    //
+                    Unit
                 }
 
                 override fun onDeleteItem(model: DetailImageModel) {
@@ -155,32 +157,33 @@ class PostArticleActivity : BaseActivity<PostArticleViewModel, ActivityPostArtic
         TedImagePicker.with(this)
             .max(MAX_IMAGE_NUM - currentSize, getString(R.string.maxImageNum))
             .mediaType(MediaType.IMAGE)
-            .startMultiImage { uriList ->
-                val filePathColumn =
-                    arrayOf(
-                        MediaStore.MediaColumns.DATA
-                    )
+            .startMultiImage{ uriList ->
 
-                for (i in uriList.indices) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // API 29이상
+                    val filePathColumn =
+                        arrayOf(
+                            MediaStore.MediaColumns.DATA
+                        )
+                    for (i in uriList.indices) {
+                        val cursor: Cursor? = this.contentResolver.query(
+                            uriList[i],
+                            filePathColumn,
+                            null,
+                            null,
+                            null)
 
-                    val cursor: Cursor? = this.contentResolver.query(
-                        uriList[i],
-                        filePathColumn,
-                        null,
-                        null,
-                        null
-                    )
-
-                    cursor?.let {
-                        if (cursor.moveToFirst()) {
-                            val columnIndex: Int = cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
-                            val absolutePathOfImage: String = cursor.getString(columnIndex)
-
-                            imageUriList.add(Uri.parse(absolutePathOfImage))
-
-                            cursor.close()
+                        cursor?.let {
+                            if (cursor.moveToFirst()) {
+                                val columnIndex: Int = cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
+                                val absolutePathOfImage: String = cursor.getString(columnIndex)
+                                imageUriList.add(Uri.parse(absolutePathOfImage))
+                                cursor.close()
+                            }
                         }
+                        addRecyclerViewList(imageUriList)
                     }
+                } else {
+                    imageUriList.addAll(uriList)
                     addRecyclerViewList(imageUriList)
                 }
             }

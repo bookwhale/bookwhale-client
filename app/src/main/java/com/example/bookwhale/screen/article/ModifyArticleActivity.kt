@@ -3,7 +3,10 @@ package com.example.bookwhale.screen.article
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.RadioButton
@@ -134,34 +137,63 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
             .max(PostArticleActivity.MAX_IMAGE_NUM - currentSize, getString(R.string.maxImageNum))
             .mediaType(MediaType.IMAGE)
             .startMultiImage { uriList ->
-                val filePathColumn =
-                    arrayOf(
-                        MediaStore.MediaColumns.DATA
-                    )
 
-                for (i in uriList.indices) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // API 29이상
+                    val filePathColumn =
+                        arrayOf(
+                            MediaStore.MediaColumns.DATA
+                        )
+                    for (i in uriList.indices) {
+                        val cursor: Cursor? = this.contentResolver.query(
+                            uriList[i],
+                            filePathColumn,
+                            null,
+                            null,
+                            null)
 
-                    val cursor: Cursor? = this.contentResolver.query(
-                        uriList[i],
-                        filePathColumn,
-                        null,
-                        null,
-                        null
-                    )
-
-                    cursor?.let {
-                        if (cursor.moveToFirst()) {
-                            val columnIndex: Int =
-                                cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
-                            val absolutePathOfImage: String = cursor.getString(columnIndex)
-
-                            imageUriList.add(absolutePathOfImage)
-
-                            cursor.close()
+                        cursor?.let {
+                            if (cursor.moveToFirst()) {
+                                val columnIndex: Int = cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
+                                val absolutePathOfImage: String = cursor.getString(columnIndex)
+                                imageUriList.add(Uri.parse(absolutePathOfImage).toString())
+                                cursor.close()
+                            }
                         }
+                        addRecyclerViewList(imageUriList)
                     }
+                } else {
+                    imageUriList.addAll(uriList.map { it.path.toString() })
                     addRecyclerViewList(imageUriList)
                 }
+
+//                val filePathColumn =
+//                    arrayOf(
+//                        MediaStore.MediaColumns.DATA
+//                    )
+//
+//                for (i in uriList.indices) {
+//
+//                    val cursor: Cursor? = this.contentResolver.query(
+//                        uriList[i],
+//                        filePathColumn,
+//                        null,
+//                        null,
+//                        null
+//                    )
+//
+//                    cursor?.let {
+//                        if (cursor.moveToFirst()) {
+//                            val columnIndex: Int =
+//                                cursor.getColumnIndex(MediaStore.MediaColumns.DATA)
+//                            val absolutePathOfImage: String = cursor.getString(columnIndex)
+//
+//                            imageUriList.add(absolutePathOfImage)
+//
+//                            cursor.close()
+//                        }
+//                    }
+//                    addRecyclerViewList(imageUriList)
+//                }
             }
     }
 
@@ -333,8 +365,7 @@ class ModifyArticleActivity : BaseActivity<ModifyArticleViewModel, ActivityModif
             if (element.articleImage?.contains("https") == false) {
                 val file = File(element.articleImage!!)
                 val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-                val body: MultipartBody.Part =
-                    MultipartBody.Part.createFormData("images", file.name, requestBody)
+                val body: MultipartBody.Part = MultipartBody.Part.createFormData("images", file.name, requestBody)
                 files.add(body)
             }
         }
